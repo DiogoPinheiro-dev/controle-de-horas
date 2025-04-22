@@ -11,7 +11,6 @@ namespace server.Services
         public RecursoService(AppDbContext dbContext)
         {
             this.dbContext = dbContext;
-
         }
 
         public async Task CriarRecurso(Recurso recurso)
@@ -19,11 +18,13 @@ namespace server.Services
             dbContext.Recursos.Add(recurso);
             await dbContext.SaveChangesAsync();
         }
+
         public async Task AtualizarRecurso(Recurso recurso)
         {
             dbContext.Entry(recurso).State = EntityState.Modified;
             await dbContext.SaveChangesAsync();
         }
+        
         public async Task DeletarRecurso(Recurso recurso)
         {
             dbContext.Recursos.Remove(recurso);
@@ -33,84 +34,76 @@ namespace server.Services
         public async Task<List<Recurso>> ObterTodosRecursos()
         {
             return await dbContext.Recursos.ToListAsync();
-
         }
 
-        // public async Task<Recurso> ObterRecursoPorId(Guid Id)
-        // {
-        //     return await dbContext.Recursos.FindAsync(Id);
-        // }
+        public async Task<Recurso> ObterRecursoPorId(Guid Id)
+        {
+            return await dbContext.Recursos.FindAsync(Id);
+        }
 
-        // public async Task<IEnumerable<Recurso>> ObterRecursoPorEmail(string Email)
-        // {
-        //     IEnumerable<Recurso> recursos;
+        public async Task<List<Recurso>> ObterRecursoPorEmail(string Email)
+        {
+            List<Recurso> recursos;
 
-        //     if (!string.IsNullOrWhiteSpace(Email))
-        //     {
-        //         recursos = await dbContext.Recursos.Where(r => r.Email.Contains(Email)).ToListAsync();
+            if (!string.IsNullOrWhiteSpace(Email))
+            {
+                recursos = await dbContext.Recursos.Where(r => r.Email.Contains(Email)).ToListAsync();
+            }
+            else
+            {
+                recursos = await ObterTodosRecursos();
+            }
 
-        //     }
-        //     else
-        //     {
-        //         recursos = await ObterTodosRecursos();
-        //     }
+            return recursos;
+        }
 
-        //     return recursos;
-        // }
 
-    
-        // public async Task<IEnumerable<Recurso>> ObterRecursoPorNome(string Nome)
-        // {
-        //     IEnumerable<Recurso> recursos;
+        public async Task<List<Recurso>> ObterRecursoPorNome(string Nome)
+        {
+            List<Recurso> recursos;
 
-        //     if (!string.IsNullOrWhiteSpace(Nome))
-        //     {
-        //         recursos = await dbContext.Recursos.Where(r => r.Nome.Contains(Nome)).ToListAsync();
+            if (!string.IsNullOrWhiteSpace(Nome))
+            {
+                recursos = await dbContext.Recursos.Where(r => r.Nome.Contains(Nome)).ToListAsync();
+            }
+            else
+            {
+                recursos = await ObterTodosRecursos();
+            }
 
-        //     }
-        //     else
-        //     {
-        //         recursos = await ObterTodosRecursos();
-        //     }
+            return recursos;
+        }
 
-        //     return recursos;
-        // }
+        public async Task<List<Recurso>> ObterRecursoPorTelefone(string Telefone)
+        {
+            List<Recurso> recursos;
 
-        // public async Task<IEnumerable<Recurso>> ObterRecursoPorTelefone(string Telefone)
-        // {
-        //     IEnumerable<Recurso> recursos;
+            if (!string.IsNullOrWhiteSpace(Telefone))
+            {
+                recursos = await dbContext.Recursos.Where(r => r.Telefone.Contains(Telefone)).ToListAsync();
+            }
+            else
+            {
+                recursos = await ObterTodosRecursos();
+            }
 
-        //     if (!string.IsNullOrWhiteSpace(Telefone))
-        //     {
-        //         recursos = await dbContext.Recursos.Where(r => r.Telefone.Contains(Telefone)).ToListAsync();
+            return recursos;
+        }
 
-        //     }
-        //     else
-        //     {
-        //         recursos = await ObterTodosRecursos();
-        //     }
+        public async Task<List<Recurso>> ObterRecursoPorTipo(string Tipo)
+        {
+            List<Recurso> recursos;
 
-        //     return recursos;
-        // }
+            if (!string.IsNullOrWhiteSpace(Tipo))
+            {
+                recursos = await dbContext.Recursos.Where(r => r.Tipo.Contains(Tipo)).ToListAsync();
+            }
+            else
+            {
+                recursos = await ObterTodosRecursos();
+            }
 
-        // public async Task<IEnumerable<Recurso>> ObterRecursoPorTipo(string Tipo)
-        // {
-        //     IEnumerable<Recurso> recursos;
-
-        //     if (!string.IsNullOrWhiteSpace(Tipo))
-        //     {
-        //         recursos = await dbContext.Recursos.Where(r => r.Tipo.Contains(Tipo)).ToListAsync();
-
-        //     }
-        //     else
-        //     {
-        //         recursos = await ObterTodosRecursos();
-        //     }
-
-        //     return recursos;
-        // }
-
-        
+            return recursos;
+        }
     }
-
 }

@@ -9,11 +9,11 @@ namespace server.Services
         Task DeletarRecurso(Recurso recurso);
 
         Task<List<Recurso>> ObterTodosRecursos();
-        // Task<Recurso> ObterRecursoPorId(Guid id);
+        Task<Recurso> ObterRecursoPorId(Guid id);
 
-        // Task<IEnumerable<Recurso>> ObterRecursoPorNome(string nome);
-        // Task<IEnumerable<Recurso>> ObterRecursoPorEmail(string email);
-        // Task<IEnumerable<Recurso>> ObterRecursoPorTelefone(string telefone);
-        // Task<IEnumerable<Recurso>> ObterRecursoPorTipo(string tipo);
+        Task<List<Recurso>> ObterRecursoPorNome(string nome);
+        Task<List<Recurso>> ObterRecursoPorEmail(string email);
+        Task<List<Recurso>> ObterRecursoPorTelefone(string telefone);
+        Task<List<Recurso>> ObterRecursoPorTipo(string tipo);
     }
 }
