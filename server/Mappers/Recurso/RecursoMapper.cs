@@ -16,7 +16,7 @@ namespace server.Mappers
             };
         }
 
-        public static Recurso DtoDaCriacaoDoRecurso(this AtualizarECriarRecursoDto recursoDto)
+        public static Recurso DtoDaCriacaoDoRecurso(this CriarRecursoDto recursoDto)
         {
             return new Recurso
             {
@@ -27,7 +27,7 @@ namespace server.Mappers
             };
         }
 
-        public static Recurso DtoDaAtualizacaoDoRecurso(this AtualizarECriarRecursoDto recursoDto)
+        public static Recurso DtoDaAtualizacaoDoRecurso(this AtualizarRecursoDto recursoDto)
         {
             return new Recurso
             {

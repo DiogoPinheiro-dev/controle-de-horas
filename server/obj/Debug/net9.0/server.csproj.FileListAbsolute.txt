@@ -331,3 +331,7 @@ D:\Codigos\Cs\POO\controle-de-horas\server\obj\Debug\net9.0\refint\server.dll
 D:\Codigos\Cs\POO\controle-de-horas\server\obj\Debug\net9.0\server.pdb
 D:\Codigos\Cs\POO\controle-de-horas\server\obj\Debug\net9.0\server.genruntimeconfig.cache
 D:\Codigos\Cs\POO\controle-de-horas\server\obj\Debug\net9.0\ref\server.dll
+D:\Codigos\Cs\POO\controle-de-horas\server\bin\Debug\net9.0\Microsoft.AspNetCore.JsonPatch.dll
+D:\Codigos\Cs\POO\controle-de-horas\server\bin\Debug\net9.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+D:\Codigos\Cs\POO\controle-de-horas\server\bin\Debug\net9.0\Newtonsoft.Json.dll
+D:\Codigos\Cs\POO\controle-de-horas\server\bin\Debug\net9.0\Newtonsoft.Json.Bson.dll

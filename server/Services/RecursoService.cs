@@ -19,12 +19,46 @@ namespace server.Services
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task AtualizarRecurso(Recurso recurso)
+        public async Task AtualizarRecurso(Recurso recurso, Recurso modeloDeRecurso)
         {
-            dbContext.Entry(recurso).State = EntityState.Modified;
+            if (modeloDeRecurso.Nome != null)
+                recurso.Nome = modeloDeRecurso.Nome;
+            else
+                recurso.Nome = recurso.Nome;
+
+            if (modeloDeRecurso.Email != null)
+                recurso.Email = modeloDeRecurso.Email;
+            else
+                recurso.Email = recurso.Email;
+
+            if (modeloDeRecurso.Telefone != null)
+                recurso.Telefone = modeloDeRecurso.Telefone;
+            else
+                recurso.Telefone = recurso.Telefone;
+
+            if (modeloDeRecurso.Tipo != null)
+                recurso.Tipo = modeloDeRecurso.Tipo;
+            else
+                recurso.Tipo = recurso.Tipo;
+
+            if (modeloDeRecurso.Tarefas != null)
+                recurso.Tarefas = modeloDeRecurso.Tarefas;
+            else
+                recurso.Tarefas = recurso.Tarefas;
+
+            if (modeloDeRecurso.SubTarefas != null)
+                recurso.SubTarefas = modeloDeRecurso.SubTarefas;
+            else
+                recurso.SubTarefas = recurso.SubTarefas;
+
+            if (modeloDeRecurso.Apontamentos != null)
+                recurso.Apontamentos = modeloDeRecurso.Apontamentos;
+            else
+                recurso.Apontamentos = recurso.Apontamentos;
+
             await dbContext.SaveChangesAsync();
         }
-        
+
         public async Task DeletarRecurso(Recurso recurso)
         {
             dbContext.Recursos.Remove(recurso);
@@ -47,7 +81,13 @@ namespace server.Services
 
             if (!string.IsNullOrWhiteSpace(Email))
             {
-                recursos = await dbContext.Recursos.Where(r => r.Email.Contains(Email)).ToListAsync();
+                recursos = await dbContext
+                    .Recursos
+                    .Where(
+                        r => r
+                            .Email
+                            .Contains(Email)
+                    ).ToListAsync();
             }
             else
             {
@@ -64,7 +104,13 @@ namespace server.Services
 
             if (!string.IsNullOrWhiteSpace(Nome))
             {
-                recursos = await dbContext.Recursos.Where(r => r.Nome.Contains(Nome)).ToListAsync();
+                recursos = await dbContext
+                    .Recursos
+                    .Where(
+                        r => r
+                            .Nome
+                            .Contains(Nome)
+                    ).ToListAsync();
             }
             else
             {
@@ -80,7 +126,13 @@ namespace server.Services
 
             if (!string.IsNullOrWhiteSpace(Telefone))
             {
-                recursos = await dbContext.Recursos.Where(r => r.Telefone.Contains(Telefone)).ToListAsync();
+                recursos = await dbContext
+                    .Recursos
+                    .Where(
+                        r => r
+                            .Telefone
+                            .Contains(Telefone)
+                    ).ToListAsync();
             }
             else
             {
@@ -96,7 +148,13 @@ namespace server.Services
 
             if (!string.IsNullOrWhiteSpace(Tipo))
             {
-                recursos = await dbContext.Recursos.Where(r => r.Tipo.Contains(Tipo)).ToListAsync();
+                recursos = await dbContext
+                    .Recursos
+                    .Where(
+                        r => r
+                            .Tipo
+                            .Contains(Tipo)
+                    ).ToListAsync();
             }
             else
             {

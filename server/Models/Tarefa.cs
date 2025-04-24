@@ -1,18 +1,19 @@
 using Microsoft.EntityFrameworkCore;
 
 namespace server.Models{
-    [PrimaryKey(nameof(TarefaId))]
+    [PrimaryKey(nameof(EmailCoordenador), nameof(TarefaId))]
     public class Tarefa{
         public Guid TarefaId { get; set; }
-        public required string DescricaoTarefa { get; set; }
-
-        public Projeto? Projeto { get; set; }
+        public string? DescricaoTarefa { get; set; }
 
         public ICollection<SubTarefa>? SubTarefas { get; set; }
 
-        public Recurso? Coordenador { get; set; }
+        public string? EmailCoordenador { get; set; }
 
-        public required DateTime DataInicio { get; set; }     
-        public DateTime? DataFim { get; set; }        
+        public DateTime DataInicio { get; set; }     
+        public DateTime DataFim { get; set; }     
+        
+        public Projeto? Projeto { get; set; }   
+        public Recurso? Coordenador { get; set; }
    }
 }

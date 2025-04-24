@@ -1,8 +1,5 @@
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using server.Db;
 using server.Dto;
 using server.Mappers;
 using server.Models;
@@ -21,9 +18,9 @@ namespace server.Controllers
             this.service = service;
 
         }
-        
+
         [HttpPost]
-        public async Task<ActionResult> CriarRecurso([FromBody] AtualizarECriarRecursoDto recursoDto)
+        public async Task<ActionResult> CriarRecurso([FromBody] CriarRecursoDto recursoDto)
         {
             try
             {
@@ -78,27 +75,36 @@ namespace server.Controllers
             }
         }
 
-        [HttpPut]
-        public async Task<ActionResult> AtualizarRecurso([FromBody] AtualizarECriarRecursoDto recursoDto)
+        [HttpPatch]
+        [Route("{id}")]
+        public async Task<ActionResult> AtualizarRecurso([FromRoute] Guid id, [FromBody] AtualizarRecursoDto recursoDto)
         {
             try
             {
-                if (recursoDto == null)
+                // if (patchDoc == null)
+                // {
+                //     return BadRequest();
+                // }
+
+                var recurso = await service.ObterRecursoPorId(id);
+
+                if (recurso == null)
                 {
-                    return NoContent();
+                    return NotFound();
                 }
+
+                // patchDoc.ApplyTo(recurso, ModelState);
 
                 var modeloDeRecurso = recursoDto.DtoDaAtualizacaoDoRecurso();
 
-                if (modeloDeRecurso == null)
+                if (!TryValidateModel(modeloDeRecurso))
                 {
-                    return StatusCode(500);
+                    return BadRequest(ModelState);
                 }
 
-                await service.AtualizarRecurso(modeloDeRecurso);
+                await service.AtualizarRecurso(recurso, modeloDeRecurso);
 
-                return Ok(modeloDeRecurso);
-
+                return Ok(recurso);
             }
             catch
             {

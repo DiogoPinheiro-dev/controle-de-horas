@@ -5,7 +5,7 @@ namespace server.Services
     public interface IRecursoService
     {
         Task CriarRecurso(Recurso recurso);
-        Task AtualizarRecurso(Recurso recurso);
+        Task AtualizarRecurso(Recurso recurso, Recurso modeloDeRecurso);
         Task DeletarRecurso(Recurso recurso);
 
         Task<List<Recurso>> ObterTodosRecursos();

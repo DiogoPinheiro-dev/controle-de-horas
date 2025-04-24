@@ -24,61 +24,58 @@ namespace server.Migrations
 
             modelBuilder.Entity("server.Models.Apontamento", b =>
                 {
-                    b.Property<Guid>("ApontamentoId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("OS")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime?>("DataFim")
+                    b.Property<Guid>("ApontamentoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DataFim")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DataInicio")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Descricao")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HorasApontadas")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HorasFinalizadas")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("RecursoEmail")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<Guid?>("RecursoId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("ApontamentoId", "OS");
+                    b.HasKey("OS", "ApontamentoId");
 
-                    b.HasIndex("RecursoId");
+                    b.HasIndex("RecursoEmail", "RecursoId");
 
                     b.ToTable("Apontamentos");
                 });
 
             modelBuilder.Entity("server.Models.Cliente", b =>
                 {
-                    b.Property<Guid>("ClienteId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid>("ClienteId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("EmpresaId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Nome")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Telefone")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ClienteId");
+                    b.HasKey("Email", "ClienteId");
 
                     b.HasIndex("EmpresaId");
 
@@ -92,7 +89,6 @@ namespace server.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Nome")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("EmpresaId");
@@ -106,10 +102,13 @@ namespace server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("ClienteEmail")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<Guid?>("ClienteId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("DataFim")
+                    b.Property<DateTime>("DataFim")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DataIni")
@@ -118,45 +117,48 @@ namespace server.Migrations
                     b.Property<string>("Descricao")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("EmailCliente")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EmailGerente")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("GerenteEmail")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<Guid?>("GerenteRecursoId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Nome")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ProjetoId");
 
-                    b.HasIndex("ClienteId");
+                    b.HasIndex("ClienteEmail", "ClienteId");
 
-                    b.HasIndex("GerenteRecursoId");
+                    b.HasIndex("GerenteEmail", "GerenteRecursoId");
 
                     b.ToTable("Projeto");
                 });
 
             modelBuilder.Entity("server.Models.Recurso", b =>
                 {
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<Guid>("RecursoId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Nome")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Telefone")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Tipo")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("RecursoId");
+                    b.HasKey("Email", "RecursoId");
 
                     b.ToTable("Recursos");
                 });
@@ -185,14 +187,19 @@ namespace server.Migrations
 
             modelBuilder.Entity("server.Models.SubTarefa", b =>
                 {
-                    b.Property<Guid>("IdSubTarefa")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("IdTarefa")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SubTarefaId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AnalistaEmail")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<Guid?>("AnalistaRecursoId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("DataFim")
+                    b.Property<DateTime>("DataFim")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DataIni")
@@ -201,45 +208,52 @@ namespace server.Migrations
                     b.Property<string>("DescricaoSubTarefa")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("TarefaEmailCoordenador")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<Guid?>("TarefaId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("IdSubTarefa");
+                    b.HasKey("IdTarefa", "SubTarefaId");
 
-                    b.HasIndex("AnalistaRecursoId");
+                    b.HasIndex("AnalistaEmail", "AnalistaRecursoId");
 
-                    b.HasIndex("TarefaId");
+                    b.HasIndex("TarefaEmailCoordenador", "TarefaId");
 
                     b.ToTable("SubTarefas");
                 });
 
             modelBuilder.Entity("server.Models.Tarefa", b =>
                 {
+                    b.Property<string>("EmailCoordenador")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<Guid>("TarefaId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CoordenadorEmail")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<Guid?>("CoordenadorRecursoId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("DataFim")
+                    b.Property<DateTime>("DataFim")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DataInicio")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DescricaoTarefa")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("ProjetoId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("TarefaId");
-
-                    b.HasIndex("CoordenadorRecursoId");
+                    b.HasKey("EmailCoordenador", "TarefaId");
 
                     b.HasIndex("ProjetoId");
+
+                    b.HasIndex("CoordenadorEmail", "CoordenadorRecursoId");
 
                     b.ToTable("Tarefas");
                 });
@@ -248,7 +262,7 @@ namespace server.Migrations
                 {
                     b.HasOne("server.Models.Recurso", "Recurso")
                         .WithMany("Apontamentos")
-                        .HasForeignKey("RecursoId");
+                        .HasForeignKey("RecursoEmail", "RecursoId");
 
                     b.Navigation("Recurso");
                 });
@@ -266,11 +280,11 @@ namespace server.Migrations
                 {
                     b.HasOne("server.Models.Cliente", "Cliente")
                         .WithMany()
-                        .HasForeignKey("ClienteId");
+                        .HasForeignKey("ClienteEmail", "ClienteId");
 
                     b.HasOne("server.Models.Recurso", "Gerente")
                         .WithMany("Projetos")
-                        .HasForeignKey("GerenteRecursoId");
+                        .HasForeignKey("GerenteEmail", "GerenteRecursoId");
 
                     b.Navigation("Cliente");
 
@@ -290,11 +304,11 @@ namespace server.Migrations
                 {
                     b.HasOne("server.Models.Recurso", "Analista")
                         .WithMany("SubTarefas")
-                        .HasForeignKey("AnalistaRecursoId");
+                        .HasForeignKey("AnalistaEmail", "AnalistaRecursoId");
 
                     b.HasOne("server.Models.Tarefa", "Tarefa")
                         .WithMany("SubTarefas")
-                        .HasForeignKey("TarefaId");
+                        .HasForeignKey("TarefaEmailCoordenador", "TarefaId");
 
                     b.Navigation("Analista");
 
@@ -303,13 +317,13 @@ namespace server.Migrations
 
             modelBuilder.Entity("server.Models.Tarefa", b =>
                 {
-                    b.HasOne("server.Models.Recurso", "Coordenador")
-                        .WithMany("Tarefas")
-                        .HasForeignKey("CoordenadorRecursoId");
-
                     b.HasOne("server.Models.Projeto", "Projeto")
                         .WithMany("Tarefas")
                         .HasForeignKey("ProjetoId");
+
+                    b.HasOne("server.Models.Recurso", "Coordenador")
+                        .WithMany("Tarefas")
+                        .HasForeignKey("CoordenadorEmail", "CoordenadorRecursoId");
 
                     b.Navigation("Coordenador");
 

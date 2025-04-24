@@ -2,7 +2,7 @@ using server.Models;
 
 namespace server.Dto
 {
-    public class AtualizarECriarRecursoDto
+    public class CriarRecursoDto
     {
         public required string Nome { get; set; }
         public required string Tipo { get; set; }

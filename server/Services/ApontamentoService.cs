@@ -42,7 +42,13 @@ namespace server.Services
 
             if (!string.IsNullOrWhiteSpace(nome))
             {
-                apontamento = await dbContext.Apontamentos.Where(r => r.Descricao.Contains(nome)).ToListAsync();
+                apontamento = await dbContext
+                    .Apontamentos
+                    .Where(
+                        r => r
+                            .Descricao
+                            .Contains(nome)
+                    ).ToListAsync();
 
             }
             else
@@ -59,7 +65,13 @@ namespace server.Services
 
             if (!string.IsNullOrWhiteSpace(OS))
             {
-                apontamento = await dbContext.Apontamentos.Where(r => r.OS.Contains(OS)).ToListAsync();
+                apontamento = await dbContext
+                    .Apontamentos
+                    .Where(
+                        r => r
+                            .OS
+                            .Contains(OS)
+                    ).ToListAsync();
 
             }
             else
@@ -74,7 +86,12 @@ namespace server.Services
         {
             IEnumerable<Apontamento> apontamento;
 
-            apontamento = await dbContext.Apontamentos.Where(a => a.DataInicio == dataIni && a.DataFim == dataFim).ToListAsync();
+            apontamento = await dbContext
+                .Apontamentos
+                .Where(
+                    a => a
+                        .DataInicio == dataIni && a.DataFim == dataFim
+                ).ToListAsync();
 
             return apontamento;
         }
