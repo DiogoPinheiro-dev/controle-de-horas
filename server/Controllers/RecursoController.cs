@@ -77,23 +77,16 @@ namespace server.Controllers
 
         [HttpPatch]
         [Route("{id}")]
-        public async Task<ActionResult> AtualizarRecurso([FromRoute] Guid id, [FromBody] AtualizarRecursoDto recursoDto)
+        public async Task<ActionResult> AtualizarRecurso([FromRoute] int id, [FromBody] AtualizarRecursoDto recursoDto)
         {
             try
             {
-                // if (patchDoc == null)
-                // {
-                //     return BadRequest();
-                // }
-
                 var recurso = await service.ObterRecursoPorId(id);
 
                 if (recurso == null)
                 {
                     return NotFound();
                 }
-
-                // patchDoc.ApplyTo(recurso, ModelState);
 
                 var modeloDeRecurso = recursoDto.DtoDaAtualizacaoDoRecurso();
 
@@ -131,7 +124,7 @@ namespace server.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Recurso>> RecursoPorId(Guid id)
+        public async Task<ActionResult<Recurso>> RecursoPorId(int id)
         {
             try
             {
@@ -142,6 +135,7 @@ namespace server.Controllers
             catch
             {
                 throw;
+
             }
         }
     }

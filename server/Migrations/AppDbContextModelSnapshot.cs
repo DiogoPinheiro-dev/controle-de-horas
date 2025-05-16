@@ -27,8 +27,8 @@ namespace server.Migrations
                     b.Property<string>("OS")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid>("ApontamentoId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("ApontamentoId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("DataFim")
                         .HasColumnType("datetime2");
@@ -37,21 +37,30 @@ namespace server.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Descricao")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HorasApontadas")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HorasFinalizadas")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RecursoEmail")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid?>("RecursoId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("RecursoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubTarefaId")
+                        .HasColumnType("int");
 
                     b.HasKey("OS", "ApontamentoId");
+
+                    b.HasIndex("SubTarefaId");
 
                     b.HasIndex("RecursoEmail", "RecursoId");
 
@@ -63,16 +72,18 @@ namespace server.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid>("ClienteId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("ClienteId")
+                        .HasColumnType("int");
 
-                    b.Property<Guid?>("EmpresaId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("EmpresaId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Nome")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Telefone")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Email", "ClienteId");
@@ -84,11 +95,14 @@ namespace server.Migrations
 
             modelBuilder.Entity("server.Models.Empresa", b =>
                 {
-                    b.Property<Guid>("EmpresaId")
+                    b.Property<int>("EmpresaId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmpresaId"));
 
                     b.Property<string>("Nome")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("EmpresaId");
@@ -98,15 +112,21 @@ namespace server.Migrations
 
             modelBuilder.Entity("server.Models.Projeto", b =>
                 {
-                    b.Property<Guid>("ProjetoId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("ProjetoId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("ClienteEmail")
+                    b.Property<string>("EmailCliente")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid?>("ClienteId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("EmailGerente")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ClienteEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("ClienteId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("DataFim")
                         .HasColumnType("datetime2");
@@ -115,28 +135,30 @@ namespace server.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Descricao")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("EmailCliente")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EmailGerente")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("GerenteEmail")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<Guid?>("GerenteRecursoId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("EmpresaId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Nome")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ProjetoId");
+                    b.Property<string>("RecursoEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("RecursoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProjetoId", "EmailCliente", "EmailGerente");
+
+                    b.HasIndex("EmpresaId");
 
                     b.HasIndex("ClienteEmail", "ClienteId");
 
-                    b.HasIndex("GerenteEmail", "GerenteRecursoId");
+                    b.HasIndex("RecursoEmail", "RecursoId");
 
                     b.ToTable("Projeto");
                 });
@@ -146,37 +168,48 @@ namespace server.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid>("RecursoId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("RecursoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EmpresaId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Nome")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Telefone")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Tipo")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Email", "RecursoId");
+
+                    b.HasIndex("EmpresaId");
 
                     b.ToTable("Recursos");
                 });
 
             modelBuilder.Entity("server.Models.Servico", b =>
                 {
-                    b.Property<Guid>("ServicoId")
+                    b.Property<int>("ServicoId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ServicoId"));
 
                     b.Property<decimal>("Custo")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Descricao")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("EmpresaId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("EmpresaId")
+                        .HasColumnType("int");
 
                     b.HasKey("ServicoId");
 
@@ -187,17 +220,11 @@ namespace server.Migrations
 
             modelBuilder.Entity("server.Models.SubTarefa", b =>
                 {
-                    b.Property<Guid>("IdTarefa")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("SubTarefaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("SubTarefaId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("AnalistaEmail")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<Guid?>("AnalistaRecursoId")
-                        .HasColumnType("uniqueidentifier");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SubTarefaId"));
 
                     b.Property<DateTime>("DataFim")
                         .HasColumnType("datetime2");
@@ -206,17 +233,26 @@ namespace server.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DescricaoSubTarefa")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TarefaEmailCoordenador")
+                    b.Property<string>("RecursoEmail")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid?>("TarefaId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("RecursoId")
+                        .HasColumnType("int");
 
-                    b.HasKey("IdTarefa", "SubTarefaId");
+                    b.Property<string>("TarefaEmailCoordenador")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.HasIndex("AnalistaEmail", "AnalistaRecursoId");
+                    b.Property<int>("TarefaId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SubTarefaId");
+
+                    b.HasIndex("RecursoEmail", "RecursoId");
 
                     b.HasIndex("TarefaEmailCoordenador", "TarefaId");
 
@@ -228,14 +264,8 @@ namespace server.Migrations
                     b.Property<string>("EmailCoordenador")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid>("TarefaId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CoordenadorEmail")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<Guid?>("CoordenadorRecursoId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("TarefaId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("DataFim")
                         .HasColumnType("datetime2");
@@ -244,118 +274,151 @@ namespace server.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DescricaoTarefa")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("ProjetoId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("ProjetoEmailCliente")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProjetoEmailGerente")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("ProjetoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RecursoEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("RecursoId")
+                        .HasColumnType("int");
 
                     b.HasKey("EmailCoordenador", "TarefaId");
 
-                    b.HasIndex("ProjetoId");
+                    b.HasIndex("RecursoEmail", "RecursoId");
 
-                    b.HasIndex("CoordenadorEmail", "CoordenadorRecursoId");
+                    b.HasIndex("ProjetoId", "ProjetoEmailCliente", "ProjetoEmailGerente");
 
                     b.ToTable("Tarefas");
                 });
 
             modelBuilder.Entity("server.Models.Apontamento", b =>
                 {
+                    b.HasOne("server.Models.SubTarefa", "SubTarefa")
+                        .WithMany()
+                        .HasForeignKey("SubTarefaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("server.Models.Recurso", "Recurso")
-                        .WithMany("Apontamentos")
-                        .HasForeignKey("RecursoEmail", "RecursoId");
+                        .WithMany()
+                        .HasForeignKey("RecursoEmail", "RecursoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Recurso");
+
+                    b.Navigation("SubTarefa");
                 });
 
             modelBuilder.Entity("server.Models.Cliente", b =>
                 {
                     b.HasOne("server.Models.Empresa", "Empresa")
-                        .WithMany("Clientes")
-                        .HasForeignKey("EmpresaId");
+                        .WithMany()
+                        .HasForeignKey("EmpresaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Empresa");
                 });
 
             modelBuilder.Entity("server.Models.Projeto", b =>
                 {
+                    b.HasOne("server.Models.Empresa", "Empresa")
+                        .WithMany()
+                        .HasForeignKey("EmpresaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("server.Models.Cliente", "Cliente")
                         .WithMany()
-                        .HasForeignKey("ClienteEmail", "ClienteId");
+                        .HasForeignKey("ClienteEmail", "ClienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("server.Models.Recurso", "Gerente")
-                        .WithMany("Projetos")
-                        .HasForeignKey("GerenteEmail", "GerenteRecursoId");
+                    b.HasOne("server.Models.Recurso", "Recurso")
+                        .WithMany()
+                        .HasForeignKey("RecursoEmail", "RecursoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Cliente");
 
-                    b.Navigation("Gerente");
+                    b.Navigation("Empresa");
+
+                    b.Navigation("Recurso");
+                });
+
+            modelBuilder.Entity("server.Models.Recurso", b =>
+                {
+                    b.HasOne("server.Models.Empresa", "Empresa")
+                        .WithMany()
+                        .HasForeignKey("EmpresaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Empresa");
                 });
 
             modelBuilder.Entity("server.Models.Servico", b =>
                 {
                     b.HasOne("server.Models.Empresa", "Empresa")
-                        .WithMany("Servicos")
-                        .HasForeignKey("EmpresaId");
+                        .WithMany()
+                        .HasForeignKey("EmpresaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Empresa");
                 });
 
             modelBuilder.Entity("server.Models.SubTarefa", b =>
                 {
-                    b.HasOne("server.Models.Recurso", "Analista")
-                        .WithMany("SubTarefas")
-                        .HasForeignKey("AnalistaEmail", "AnalistaRecursoId");
+                    b.HasOne("server.Models.Recurso", "Recurso")
+                        .WithMany()
+                        .HasForeignKey("RecursoEmail", "RecursoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("server.Models.Tarefa", "Tarefa")
-                        .WithMany("SubTarefas")
-                        .HasForeignKey("TarefaEmailCoordenador", "TarefaId");
+                        .WithMany()
+                        .HasForeignKey("TarefaEmailCoordenador", "TarefaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Analista");
+                    b.Navigation("Recurso");
 
                     b.Navigation("Tarefa");
                 });
 
             modelBuilder.Entity("server.Models.Tarefa", b =>
                 {
+                    b.HasOne("server.Models.Recurso", "Recurso")
+                        .WithMany()
+                        .HasForeignKey("RecursoEmail", "RecursoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("server.Models.Projeto", "Projeto")
-                        .WithMany("Tarefas")
-                        .HasForeignKey("ProjetoId");
-
-                    b.HasOne("server.Models.Recurso", "Coordenador")
-                        .WithMany("Tarefas")
-                        .HasForeignKey("CoordenadorEmail", "CoordenadorRecursoId");
-
-                    b.Navigation("Coordenador");
+                        .WithMany()
+                        .HasForeignKey("ProjetoId", "ProjetoEmailCliente", "ProjetoEmailGerente")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Projeto");
-                });
 
-            modelBuilder.Entity("server.Models.Empresa", b =>
-                {
-                    b.Navigation("Clientes");
-
-                    b.Navigation("Servicos");
-                });
-
-            modelBuilder.Entity("server.Models.Projeto", b =>
-                {
-                    b.Navigation("Tarefas");
-                });
-
-            modelBuilder.Entity("server.Models.Recurso", b =>
-                {
-                    b.Navigation("Apontamentos");
-
-                    b.Navigation("Projetos");
-
-                    b.Navigation("SubTarefas");
-
-                    b.Navigation("Tarefas");
-                });
-
-            modelBuilder.Entity("server.Models.Tarefa", b =>
-                {
-                    b.Navigation("SubTarefas");
+                    b.Navigation("Recurso");
                 });
 #pragma warning restore 612, 618
         }

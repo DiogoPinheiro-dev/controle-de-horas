@@ -1,11 +1,15 @@
-namespace server.Models{
-    public class Servico{
-        public Guid ServicoId { get; set; }
+using Microsoft.EntityFrameworkCore;
+
+namespace server.Models
+{
+    [PrimaryKey(nameof(ServicoId))]
+    public class Servico
+    {
+        public int ServicoId { get; set; }
         public decimal Custo { get; set; }
-        public string? Descricao { get; set; }
+        public string Descricao { get; set; } = string.Empty;
 
-        public Empresa? Empresa { get; set; }
-        
+        public required Empresa Empresa { get; set; }
+
     }
-
 }

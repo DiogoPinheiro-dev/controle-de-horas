@@ -1,56 +1,38 @@
 using server.Dto;
 using server.Models;
 
-namespace server.Mappers
-{
-    public static class RecursoMapper
-    {
-        public static RecursoDto DtoDeRecurso(this Recurso modeloDoRecurso)
-        {
-            return new RecursoDto
-            {
-                RecursoId = modeloDoRecurso.RecursoId,
-                Nome = modeloDoRecurso.Nome,
-                Tipo = modeloDoRecurso.Tipo,
-                Email = modeloDoRecurso.Email
-            };
-        }
-
-        public static Recurso DtoDaCriacaoDoRecurso(this CriarRecursoDto recursoDto)
-        {
-            return new Recurso
-            {
-                Nome = recursoDto.Nome,
-                Tipo = recursoDto.Tipo,
-                Email = recursoDto.Email,
-                Telefone = recursoDto.Telefone
-            };
-        }
-
-        public static Recurso DtoDaAtualizacaoDoRecurso(this AtualizarRecursoDto recursoDto)
-        {
-            return new Recurso
-            {
+namespace server.Mappers {
+    public static class RecursoMapper {
+        public static Recurso DtoDaCriacaoDoRecurso(this CriarRecursoDto recursoDto) {
+            return new Recurso {
+                RecursoId = 0,
                 Nome = recursoDto.Nome,
                 Tipo = recursoDto.Tipo,
                 Email = recursoDto.Email,
                 Telefone = recursoDto.Telefone,
-                Projetos = recursoDto.Projetos,
-                Tarefas = recursoDto.Tarefas,
-                SubTarefas = recursoDto.SubTarefas,
-                Apontamentos = recursoDto.Apontamentos
+                Empresa = recursoDto.Empresa,
             };
         }
 
-        public static Recurso DtoDaDelecaoDoRecurso(this DeletarRecursoDto recursoDto)
-        {
-            return new Recurso
-            {
-                RecursoId = recursoDto.RecursoId,
+        public static Recurso DtoDaAtualizacaoDoRecurso(this AtualizarRecursoDto recursoDto) {
+            return new Recurso {
+                RecursoId = 0,
                 Nome = recursoDto.Nome,
                 Tipo = recursoDto.Tipo,
                 Email = recursoDto.Email,
-                Telefone = recursoDto.Telefone
+                Telefone = recursoDto.Telefone,
+                Empresa = recursoDto.Empresa,
+            };
+        }
+
+        public static Recurso DtoDaDelecaoDoRecurso(this DeletarRecursoDto recursoDto) {
+            return new Recurso {
+                RecursoId = recursoDto.RecursoId,
+                Nome = "",
+                Tipo = "",
+                Email = "",
+                Telefone = "",
+                Empresa = null
             };
         }
     }

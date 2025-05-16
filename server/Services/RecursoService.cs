@@ -41,21 +41,6 @@ namespace server.Services
             else
                 recurso.Tipo = recurso.Tipo;
 
-            if (modeloDeRecurso.Tarefas != null)
-                recurso.Tarefas = modeloDeRecurso.Tarefas;
-            else
-                recurso.Tarefas = recurso.Tarefas;
-
-            if (modeloDeRecurso.SubTarefas != null)
-                recurso.SubTarefas = modeloDeRecurso.SubTarefas;
-            else
-                recurso.SubTarefas = recurso.SubTarefas;
-
-            if (modeloDeRecurso.Apontamentos != null)
-                recurso.Apontamentos = modeloDeRecurso.Apontamentos;
-            else
-                recurso.Apontamentos = recurso.Apontamentos;
-
             await dbContext.SaveChangesAsync();
         }
 
@@ -70,7 +55,7 @@ namespace server.Services
             return await dbContext.Recursos.ToListAsync();
         }
 
-        public async Task<Recurso> ObterRecursoPorId(Guid Id)
+        public async Task<Recurso> ObterRecursoPorId(int Id)
         {
             return await dbContext.Recursos.FindAsync(Id);
         }

@@ -9,7 +9,7 @@ namespace server.Services
         Task DeletarRecurso(Recurso recurso);
 
         Task<List<Recurso>> ObterTodosRecursos();
-        Task<Recurso> ObterRecursoPorId(Guid id);
+        Task<Recurso> ObterRecursoPorId(int id);
 
         Task<List<Recurso>> ObterRecursoPorNome(string nome);
         Task<List<Recurso>> ObterRecursoPorEmail(string email);
