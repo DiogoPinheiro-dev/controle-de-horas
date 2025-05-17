@@ -1,6 +1,5 @@
-using server.Models;
-
-namespace server.Dto {
+namespace server.Dto
+{
     public class AtualizarRecursoDto
     {
         public string Nome { get; set; } = string.Empty;

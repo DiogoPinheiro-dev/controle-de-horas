@@ -59,7 +59,6 @@ namespace server.Services
         {
             return await dbContext.Recursos.FindAsync(Id);
         }
-
         public async Task<List<Recurso>> ObterRecursoPorEmail(string Email)
         {
             List<Recurso> recursos;
