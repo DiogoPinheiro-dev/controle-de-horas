@@ -9,19 +9,18 @@ namespace server.Mappers {
                 Nome = recursoDto.Nome,
                 Tipo = recursoDto.Tipo,
                 Email = recursoDto.Email,
-                Telefone = recursoDto.Telefone,
-                Empresa = recursoDto.Empresa,
+                Telefone = recursoDto.Telefone
             };
         }
 
         public static Recurso DtoDaAtualizacaoDoRecurso(this AtualizarRecursoDto recursoDto) {
-            return new Recurso {
+            return new Recurso
+            {
                 RecursoId = 0,
                 Nome = recursoDto.Nome,
                 Tipo = recursoDto.Tipo,
                 Email = recursoDto.Email,
-                Telefone = recursoDto.Telefone,
-                Empresa = recursoDto.Empresa,
+                Telefone = recursoDto.Telefone
             };
         }
 
@@ -31,8 +30,7 @@ namespace server.Mappers {
                 Nome = "",
                 Tipo = "",
                 Email = "",
-                Telefone = "",
-                Empresa = null
+                Telefone = ""
             };
         }
     }

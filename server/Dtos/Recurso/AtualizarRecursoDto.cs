@@ -7,6 +7,7 @@ namespace server.Dto {
         public string Tipo { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Telefone { get; set; } = string.Empty;
-        public Empresa Empresa { get; set; }
+        public int EmpresaId { get; set; }
+
     }
 }

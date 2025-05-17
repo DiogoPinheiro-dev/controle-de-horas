@@ -7,8 +7,7 @@ namespace server.Dto {
         public required string Tipo { get; set; }
         public required string Email { get; set; }
         public required string Telefone { get; set; }
-        
-        public required Empresa Empresa { get; set; }
+        public required int EmpresaId { get; set; }
 
     }
 }
