@@ -45,27 +45,26 @@ namespace server.Controllers
             }
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> DeletarRecurso([FromBody] DeletarRecursoDto recursoDto)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletarRecurso([FromRoute] int id)
         {
             try
             {
-                if (recursoDto == null)
+                if (id <= 0)
                 {
                     return NoContent();
                 }
 
-                var modeloDeRecurso = recursoDto.DtoDaDelecaoDoRecurso();
+                var recurso = RecursoPorId(id).Result.Value;
 
-                if (modeloDeRecurso == null)
+                if (recurso == null)
                 {
-                    return StatusCode(500);
+                    return NotFound();
                 }
 
-                await service.DeletarRecurso(modeloDeRecurso);
+                await service.DeletarRecurso(recurso);
 
-                return Ok(modeloDeRecurso);
-
+                return Ok(recurso);
             }
             catch
             {
@@ -79,7 +78,7 @@ namespace server.Controllers
         {
             try
             {
-                var recurso = await service.ObterRecursoPorId(id);
+                var recurso = RecursoPorId(id).Result.Value;
 
                 if (recurso == null)
                 {

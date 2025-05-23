@@ -64,41 +64,37 @@ namespace server.Services
         {
             List<Apontamento> apontamento;
 
-            if (!string.IsNullOrWhiteSpace(OS))
-            {
-                apontamento = await dbContext
-                    .Apontamentos
-                    .Where(
-                        r => r
-                            .OS
-                            .Contains(OS)
-                    ).ToListAsync();
-
-            }
-            else
-            {
-                apontamento = await ObterTodosApontamentos();
-            }
+            apontamento = await dbContext
+                .Apontamentos
+                .Where(
+                    r => r
+                        .OS
+                        .Contains(OS)
+                ).ToListAsync();
 
             return apontamento;
         }
 
         public async Task<List<Apontamento>> ObterApontamentosPorData(DateOnly dataIni, DateOnly dataFim)
         {
-            List<Apontamento> apontamento;
+            List<Apontamento> apontamentos;
 
-            apontamento = await dbContext
-                .Apontamentos
-                .Where(
-                    a => a.DataInicio == dataIni && a.DataFim == dataFim && a.DataInicio <= a.DataFim
-                ).ToListAsync();
 
-            return apontamento;
+            apontamentos = await dbContext
+                            .Apontamentos
+                            .Where(
+                                a => a.DataInicio == dataIni && a.DataFim == dataFim && a.DataInicio <= a.DataFim
+                            ).ToListAsync();
+
+
+            return apontamentos;
         }
 
         public async Task<Apontamento> ObterApontamentoPorId(int id)
-        { 
-            return await dbContext.Apontamentos.FindAsync(id);
+        {
+            var apontamento = await dbContext.Apontamentos.FindAsync(id);
+
+            return apontamento;
         }
     }
 

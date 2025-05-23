@@ -55,17 +55,17 @@ namespace server.Controllers
                     return NoContent();
                 }
 
-                var apontamento = await ObterApontamentoPorId(id);
+                var apontamento = ObterApontamentoPorId(id).Result.Value;
 
-                if (apontamento.Value == null)
+                if (apontamento == null)
                 {
                     return NotFound();
                 }
 
                 if (apontamentoDto == null)
-                    {
-                        return NoContent();
-                    }
+                {
+                    return NoContent();
+                }
 
                 var apontamentoBody = apontamentoDto.DtoDaAtualizacaoDoApontamento();
 
@@ -74,7 +74,7 @@ namespace server.Controllers
                     return BadRequest();
                 }
 
-                await service.AtualizarApontamento(apontamento.Value, apontamentoBody);
+                await service.AtualizarApontamento(apontamento, apontamentoBody);
 
                 return Ok(apontamento);
             }
@@ -85,12 +85,59 @@ namespace server.Controllers
 
         }
 
-        [HttpGet]
+        [HttpDelete]
         [Route("{id}")]
+        public async Task<ActionResult> DeletarApontamento([FromRoute] int id)
+        {
+            try
+            {
+                if (id <= 0)
+                {
+                    return NoContent();
+                }
+
+                var apontamento = ObterApontamentoPorId(id).Result.Value;
+
+                if (apontamento == null)
+                {
+                    return NotFound();
+                }
+                await service.DeletarApontamento(apontamento);
+
+                return Ok(apontamento);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<List<Apontamento>>> ObterTodosApontamentos()
+        {
+            try
+            {
+                List<Apontamento> apontamentos = await service.ObterTodosApontamentos();
+
+                return Ok(apontamentos);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("ById/{id}")]
         public async Task<ActionResult<Apontamento>> ObterApontamentoPorId([FromRoute] int id)
         {
             try
             {
+                if (id <= 0)
+                {
+                    return NoContent();
+                }
+
                 var apontamento = await service.ObterApontamentoPorId(id);
 
                 return Ok(apontamento);
@@ -101,5 +148,75 @@ namespace server.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("ByOs/{os}")]
+        public async Task<ActionResult<List<Apontamento>>> ObterApontamentoPorOs([FromRoute] string os)
+        {
+            try
+            {
+                List<Apontamento> apontamentos;
+
+                if (os == string.Empty)
+                {
+                    apontamentos = ObterTodosApontamentos().Result.Value;
+
+                    if (apontamentos == null)
+                    {
+                        return BadRequest();
+                    }
+                }
+                else
+                {
+                    apontamentos = await service.ObterApontamentoPorOS(os.Trim());
+
+                    if (apontamentos == null)
+                    {
+                        return NotFound();
+                    }
+                }
+
+                return Ok(apontamentos);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("ByData/{dataini}:{datafim}")]
+        public async Task<ActionResult<List<Apontamento>>> ObterApontamentoDeAte([FromRoute] DateOnly dataIni, DateOnly dataFim)
+        {
+            try
+            {
+                List<Apontamento> apontamentos;
+
+                if (dataIni.Equals(null) || dataFim.Equals(null))
+                {
+                    return NoContent();
+                }
+
+                if (dataIni <= dataFim)
+                {
+                    apontamentos = await service.ObterApontamentosPorData(dataIni, dataFim);
+                }
+                else
+                {
+                    apontamentos = ObterTodosApontamentos().Result.Value;
+                }
+
+                if (apontamentos == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(apontamentos);
+
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }
