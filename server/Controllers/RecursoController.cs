@@ -78,6 +78,11 @@ namespace server.Controllers
         {
             try
             {
+                if (id <= 0)
+                {
+                    return NoContent();
+                }
+                
                 var recurso = RecursoPorId(id).Result.Value;
 
                 if (recurso == null)

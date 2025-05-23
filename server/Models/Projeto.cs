@@ -9,8 +9,8 @@ namespace server.Models
         public string? Descricao { get; set; } 
         public string? Nome { get; set; } 
 
-        public DateOnly DataIni { get; set; }
-        public DateOnly DataFim { get; set; }
+        public string? DataIni { get; set; }
+        public string? DataFim { get; set; }
 
         public Recurso? Gerente { get; set; }
     }

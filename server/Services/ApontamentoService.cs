@@ -26,22 +26,22 @@ namespace server.Services
             else
                 Apontamento.Descricao = Apontamento.Descricao;
 
-            if (Body.HorasApontadas != null)
+            if (Body.HorasApontadas > 0)
                 Apontamento.HorasApontadas = Body.HorasApontadas;
             else
                 Apontamento.HorasApontadas = Apontamento.HorasApontadas;
 
-            if (Body.HorasFinalizadas != null)
+            if (Body.HorasFinalizadas > 0)
                 Apontamento.HorasFinalizadas = Body.HorasFinalizadas;
             else
                 Apontamento.HorasFinalizadas = Apontamento.HorasFinalizadas;
 
-            if (Body.DataInicio.CompareTo(null) == 0)
+            if (Body.DataInicio != null)
                 Apontamento.DataInicio = Body.DataInicio;
             else
                 Apontamento.DataInicio = Apontamento.DataInicio;
 
-            if (Body.DataFim.CompareTo(null) == 0)
+            if (Body.DataFim != null)
                 Apontamento.DataFim = Body.DataFim;
             else
                 Apontamento.DataFim = Apontamento.DataFim;
@@ -75,26 +75,23 @@ namespace server.Services
             return apontamento;
         }
 
-        public async Task<List<Apontamento>> ObterApontamentosPorData(DateOnly dataIni, DateOnly dataFim)
+        public async Task<List<Apontamento>> ObterApontamentosPorData(int dataIni, int dataFim)
         {
             List<Apontamento> apontamentos;
 
-
-            apontamentos = await dbContext
-                            .Apontamentos
-                            .Where(
-                                a => a.DataInicio == dataIni && a.DataFim == dataFim && a.DataInicio <= a.DataFim
-                            ).ToListAsync();
-
+            apontamentos = await (
+                dbContext
+                    .Apontamentos
+                        .Where(a => a.DataInicio >= dataIni && a.DataFim <= dataFim)
+                        .ToListAsync()
+            );
 
             return apontamentos;
         }
 
         public async Task<Apontamento> ObterApontamentoPorId(int id)
         {
-            var apontamento = await dbContext.Apontamentos.FindAsync(id);
-
-            return apontamento;
+            return await dbContext.Apontamentos.FindAsync(id);
         }
     }
 

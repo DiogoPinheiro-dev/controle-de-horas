@@ -33,9 +33,7 @@ namespace server.Mappers
                 ApontamentoId = 0,
                 OS = "",
                 Descricao = apontamentoDto.Descricao,
-                HorasApontadas = apontamentoDto.HorasApontadas,
                 HorasFinalizadas = apontamentoDto.HorasFinalizadas,
-                DataInicio = apontamentoDto.DataInicio,
                 DataFim = apontamentoDto.DataFim
             };
         }

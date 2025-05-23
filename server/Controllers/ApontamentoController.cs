@@ -1,3 +1,4 @@
+using System.Globalization;
 using Microsoft.AspNetCore.Mvc;
 using server.Dto;
 using server.Interfaces;
@@ -55,7 +56,7 @@ namespace server.Controllers
                     return NoContent();
                 }
 
-                var apontamento = ObterApontamentoPorId(id).Result.Value;
+                var apontamento = await service.ObterApontamentoPorId(id);
 
                 if (apontamento == null)
                 {
@@ -96,7 +97,7 @@ namespace server.Controllers
                     return NoContent();
                 }
 
-                var apontamento = ObterApontamentoPorId(id).Result.Value;
+                var apontamento = await service.ObterApontamentoPorId(id);
 
                 if (apontamento == null)
                 {
@@ -140,6 +141,11 @@ namespace server.Controllers
 
                 var apontamento = await service.ObterApontamentoPorId(id);
 
+                if (apontamento == null)
+                {
+                    return NotFound();
+                }
+
                 return Ok(apontamento);
             }
             catch
@@ -158,7 +164,7 @@ namespace server.Controllers
 
                 if (os == string.Empty)
                 {
-                    apontamentos = ObterTodosApontamentos().Result.Value;
+                    apontamentos = await service.ObterTodosApontamentos();
 
                     if (apontamentos == null)
                     {
@@ -184,17 +190,19 @@ namespace server.Controllers
         }
 
         [HttpGet]
-        [Route("ByData/{dataini}:{datafim}")]
-        public async Task<ActionResult<List<Apontamento>>> ObterApontamentoDeAte([FromRoute] DateOnly dataIni, DateOnly dataFim)
+        [Route("ByData/{deAte}")]
+        public async Task<ActionResult<List<Apontamento>>> ObterApontamentoDeAte([FromRoute] string deAte) // "aaaammdd aaaammdd"
         {
             try
             {
                 List<Apontamento> apontamentos;
+                string[] data;
+                int dataIni, dataFim;
 
-                if (dataIni.Equals(null) || dataFim.Equals(null))
-                {
-                    return NoContent();
-                }
+                data = deAte.Split(" ");
+
+                dataIni = int.Parse(data[0]);
+                dataFim = int.Parse(data[1]);
 
                 if (dataIni <= dataFim)
                 {
@@ -202,7 +210,7 @@ namespace server.Controllers
                 }
                 else
                 {
-                    apontamentos = ObterTodosApontamentos().Result.Value;
+                    apontamentos = await service.ObterTodosApontamentos();
                 }
 
                 if (apontamentos == null)

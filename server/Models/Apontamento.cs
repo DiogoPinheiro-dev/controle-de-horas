@@ -6,11 +6,11 @@ namespace server.Models
         public required string OS { get; set; }
         public string? Descricao { get; set; } 
 
-        public string? HorasApontadas { get; set; }
-        public string? HorasFinalizadas { get; set; }
+        public int HorasApontadas { get; set; }
+        public int HorasFinalizadas { get; set; }
 
-        public DateOnly DataInicio { get; set; }
-        public DateOnly DataFim { get; set; }
+        public int DataInicio { get; set; }
+        public int DataFim { get; set; }
 
         public SubTarefa? SubTarefa { get; set; }
     }
