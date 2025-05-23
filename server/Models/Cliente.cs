@@ -6,8 +6,8 @@ namespace server.Models
     public class Cliente
     {
         public required int ClienteId { get; set; }
-        public string Nome { get; set; } = string.Empty;
-        public required string Email { get; set; } = string.Empty;
-        public string Telefone { get; set; } = string.Empty;
+        public string? Nome { get; set; }
+        public required string Email { get; set; }
+        public string? Telefone { get; set; }
     }
 }

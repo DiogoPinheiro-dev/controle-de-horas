@@ -1,6 +1,6 @@
 using server.Models;
 
-namespace server.Services
+namespace server.Interfaces
 {
     public interface ITarefaService
     {

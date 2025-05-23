@@ -30,22 +30,19 @@ namespace server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApontamentoId"));
 
-                    b.Property<DateTime>("DataFim")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("DataFim")
+                        .HasColumnType("date");
 
-                    b.Property<DateTime>("DataInicio")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("DataInicio")
+                        .HasColumnType("date");
 
                     b.Property<string>("Descricao")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HorasApontadas")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HorasFinalizadas")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OS")
@@ -71,11 +68,9 @@ namespace server.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Nome")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Telefone")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Email");
@@ -92,7 +87,6 @@ namespace server.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmpresaId"));
 
                     b.Property<string>("Nome")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("EmpresaId");
@@ -172,21 +166,19 @@ namespace server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProjetoId"));
 
-                    b.Property<DateTime>("DataFim")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("DataFim")
+                        .HasColumnType("date");
 
-                    b.Property<DateTime>("DataIni")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("DataIni")
+                        .HasColumnType("date");
 
                     b.Property<string>("Descricao")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("GerenteRecursoId")
                         .HasColumnType("int");
 
                     b.Property<string>("Nome")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ProjetoId");
@@ -243,15 +235,12 @@ namespace server.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nome")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Telefone")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Tipo")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("RecursoId");
@@ -301,7 +290,6 @@ namespace server.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Descricao")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ServicoId");
@@ -317,14 +305,13 @@ namespace server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SubTarefaId"));
 
-                    b.Property<DateTime>("DataFim")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("DataFim")
+                        .HasColumnType("date");
 
-                    b.Property<DateTime>("DataIni")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("DataIni")
+                        .HasColumnType("date");
 
                     b.Property<string>("DescricaoSubTarefa")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("TarefaId")
@@ -348,14 +335,13 @@ namespace server.Migrations
                     b.Property<int?>("CoordenadorRecursoId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("DataFim")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("DataFim")
+                        .HasColumnType("date");
 
-                    b.Property<DateTime>("DataInicio")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("DataInicio")
+                        .HasColumnType("date");
 
                     b.Property<string>("DescricaoTarefa")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("TarefaId");

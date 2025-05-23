@@ -6,6 +6,6 @@ namespace server.Models
     public class Empresa
     {
         public required int EmpresaId { get; set; }
-        public string Nome { get; set; } = string.Empty;
+        public string? Nome { get; set; }
     }
 }

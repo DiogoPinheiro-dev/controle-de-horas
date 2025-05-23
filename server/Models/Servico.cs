@@ -4,6 +4,6 @@ namespace server.Models
     {
         public int ServicoId { get; set; }
         public decimal Custo { get; set; }
-        public string Descricao { get; set; } = string.Empty;
+        public string? Descricao { get; set; } 
     }
 }
