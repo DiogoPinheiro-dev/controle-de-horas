@@ -21,7 +21,7 @@ namespace server.Services
         }
         public async Task AtualizarApontamento(Apontamento Apontamento, Apontamento Body)
         {
-            if (Body.Descricao != string.Empty)
+            if (Body.Descricao != null)
                 Apontamento.Descricao = Body.Descricao;
             else
                 Apontamento.Descricao = Apontamento.Descricao;

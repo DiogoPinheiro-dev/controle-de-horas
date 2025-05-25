@@ -9,7 +9,6 @@ namespace server.Mappers
         {
             return new Empresa
             {
-                EmpresaId = 0,
                 Nome = EmpresaDto.Nome,
             };
         }
@@ -26,7 +25,6 @@ namespace server.Mappers
         {
             return new Empresa
             {
-                EmpresaId = 0,
                 Nome = EmpresaDto.Nome,
             };
         }

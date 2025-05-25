@@ -20,27 +20,27 @@ namespace server.Services
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task AtualizarRecurso(Recurso recurso, Recurso body)
+        public async Task AtualizarRecurso(Recurso Recurso, Recurso Body)
         {
-            if (body.Nome != string.Empty)
-                recurso.Nome = body.Nome;
+            if (Body.Nome != null)
+                Recurso.Nome = Body.Nome;
             else
-                recurso.Nome = recurso.Nome;
+                Recurso.Nome = Recurso.Nome;
 
-            if (body.Email != string.Empty)
-                recurso.Email = body.Email;
+            if (Body.Nome != null)
+                Recurso.Email = Body.Email;
             else
-                recurso.Email = recurso.Email;
+                Recurso.Email = Recurso.Email;
 
-            if (body.Telefone != string.Empty)
-                recurso.Telefone = body.Telefone;
+            if (Body.Nome != null)
+                Recurso.Telefone = Body.Telefone;
             else
-                recurso.Telefone = recurso.Telefone;
+                Recurso.Telefone = Recurso.Telefone;
 
-            if (body.Tipo != string.Empty)
-                recurso.Tipo = body.Tipo;
+            if (Body.Nome != null)
+                Recurso.Tipo = Body.Tipo;
             else
-                recurso.Tipo = recurso.Tipo;
+                Recurso.Tipo = Recurso.Tipo;
 
             await dbContext.SaveChangesAsync();
         }

@@ -9,7 +9,6 @@ namespace server.Mappers
         {
             return new Apontamento
             {
-                ApontamentoId = 0,
                 OS = apontamentoDto.OS,
                 Descricao = apontamentoDto.Descricao,
                 HorasApontadas = apontamentoDto.HorasApontadas,
@@ -30,7 +29,6 @@ namespace server.Mappers
         {
             return new Apontamento
             {
-                ApontamentoId = 0,
                 OS = "",
                 Descricao = apontamentoDto.Descricao,
                 HorasFinalizadas = apontamentoDto.HorasFinalizadas,

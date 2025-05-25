@@ -165,24 +165,19 @@ namespace server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProjetoId"));
 
-                    b.Property<string>("DataFim")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("DataFim")
+                        .HasColumnType("int");
 
-                    b.Property<string>("DataIni")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("DataIni")
+                        .HasColumnType("int");
 
                     b.Property<string>("Descricao")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("GerenteRecursoId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Nome")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ProjetoId");
-
-                    b.HasIndex("GerenteRecursoId");
 
                     b.ToTable("Projetos");
                 });
@@ -429,15 +424,6 @@ namespace server.Migrations
                     b.Navigation("Empresa");
 
                     b.Navigation("Servico");
-                });
-
-            modelBuilder.Entity("server.Models.Projeto", b =>
-                {
-                    b.HasOne("server.Models.Recurso", "Gerente")
-                        .WithMany()
-                        .HasForeignKey("GerenteRecursoId");
-
-                    b.Navigation("Gerente");
                 });
 
             modelBuilder.Entity("server.Models.ProjetoCliente", b =>

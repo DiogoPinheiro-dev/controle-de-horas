@@ -9,7 +9,6 @@ namespace server.Mappers
         {
             return new Recurso
             {
-                RecursoId = 0,
                 Nome = recursoDto.Nome,
                 Tipo = recursoDto.Tipo,
                 Email = recursoDto.Email,
@@ -21,7 +20,6 @@ namespace server.Mappers
         {
             return new Recurso
             {
-                RecursoId = 0,
                 Nome = recursoDto.Nome,
                 Tipo = recursoDto.Tipo,
                 Email = recursoDto.Email,
@@ -34,10 +32,7 @@ namespace server.Mappers
             return new Recurso
             {
                 RecursoId = recursoDto.RecursoId,
-                Nome = "",
-                Tipo = "",
-                Email = "",
-                Telefone = ""
+                Email = ""
             };
         }
     }

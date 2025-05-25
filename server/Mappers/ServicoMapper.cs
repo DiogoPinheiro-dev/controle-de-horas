@@ -9,7 +9,6 @@ namespace server.Mappers
         {
             return new Servico
             {
-                ServicoId = 0,
                 Descricao = ServicoDto.Descricao,
                 Custo = ServicoDto.Custo,
             };
@@ -27,7 +26,6 @@ namespace server.Mappers
         {
             return new Servico
             {
-                ServicoId = 0,
                 Descricao = ServicoDto.Descricao,
                 Custo = ServicoDto.Custo
             };

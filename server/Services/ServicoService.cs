@@ -21,7 +21,7 @@ namespace server.Services
         }
         public async Task AtualizarServico(Servico Servico, Servico Body)
         {
-            if (Body.Descricao != string.Empty)
+            if (Body.Descricao != null)
                 Servico.Descricao = Body.Descricao;
             else
                 Servico.Descricao = Servico.Descricao;

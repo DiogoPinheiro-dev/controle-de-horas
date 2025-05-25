@@ -21,17 +21,17 @@ namespace server.Services
         }
         public async Task AtualizarCliente(Cliente Cliente, Cliente Body)
         {
-            if (Body.Nome != string.Empty)
+            if (Body.Nome != null)
                 Cliente.Nome = Body.Nome;
             else
                 Cliente.Nome = Cliente.Nome;
 
-            if (Body.Telefone != string.Empty)
+            if (Body.Telefone != null)
                 Cliente.Telefone = Body.Telefone;
             else
                 Cliente.Telefone = Cliente.Telefone;
 
-            if (Body.Email != string.Empty)
+            if (Body.Email != null)
                 Cliente.Email = Body.Email;
             else
                 Cliente.Email = Cliente.Email;

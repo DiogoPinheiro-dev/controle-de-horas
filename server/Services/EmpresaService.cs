@@ -21,7 +21,7 @@ namespace server.Services
         }
         public async Task AtualizarEmpresa(Empresa Empresa, Empresa Body)
         {
-            if (Body.Nome != string.Empty)
+            if (Body.Nome != null || Body.Nome != "")
                 Empresa.Nome = Body.Nome;
             else
                 Empresa.Nome = Empresa.Nome;

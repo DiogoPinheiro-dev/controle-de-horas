@@ -9,7 +9,6 @@ namespace server.Mappers
         {
             return new Cliente
             {
-                ClienteId = 0,
                 Email = ClienteDto.Email,
                 Nome = ClienteDto.Nome,
                 Telefone = ClienteDto.Telefone
@@ -29,7 +28,6 @@ namespace server.Mappers
         {
             return new Cliente
             {
-                ClienteId = 0,
                 Email = "",
                 Nome = ClienteDto.Nome,
                 Telefone = ClienteDto.Telefone,
