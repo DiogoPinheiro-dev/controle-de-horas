@@ -31,10 +31,10 @@ namespace server.Services
             else
                 Projeto.Nome = Projeto.Nome;
 
-            if (Body.DataIni > 0)
-                Projeto.DataIni = Body.DataIni;
+            if (Body.DataInicio > 0)
+                Projeto.DataInicio = Body.DataInicio;
             else
-                Projeto.DataIni = Projeto.DataIni;
+                Projeto.DataInicio = Projeto.DataInicio;
 
             if (Body.DataFim > 0)
                 Projeto.DataFim = Body.DataFim;
@@ -90,7 +90,7 @@ namespace server.Services
             projeto = await (
                 dbContext
                     .Projetos
-                        .Where(a => a.DataIni >= dataIni && a.DataFim <= dataFim)
+                        .Where(a => a.DataInicio >= dataIni && a.DataFim <= dataFim)
                         .ToListAsync()
             );
 

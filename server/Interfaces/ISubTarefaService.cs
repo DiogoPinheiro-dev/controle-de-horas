@@ -5,12 +5,13 @@ namespace server.Interfaces
     public interface ISubTarefaService
     {
         Task CriarSubTarefa(SubTarefa SubTarefa);
-        Task AtualizarSubTarefa(SubTarefa SubTarefa);
+        Task AtualizarSubTarefa(SubTarefa SubTarefa, SubTarefa Body);
         Task DeletarSubTarefa(SubTarefa SubTarefa);
 
-        Task<IEnumerable<SubTarefa>> ObterTodosSubTarefas();
-        Task<IEnumerable<SubTarefa>> ObterSubTarefaPorNome(string nome);
+        Task<SubTarefa> ObterSubTarefaPorId(int id);
+        Task<List<SubTarefa>> ObterTodasSubTarefas();
+        Task<List<SubTarefa>> ObterSubTarefaPorDescricao(string Descricao);
         
-        Task<IEnumerable<SubTarefa>> ObterSubTarefasPorDataInicio(DateTime dataIni, DateTime dataFim);
+        Task<List<SubTarefa>> ObterSubTarefasPorData(int dataIni, int dataFim);
     }
 }

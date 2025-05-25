@@ -1,4 +1,3 @@
-using System.Globalization;
 using Microsoft.AspNetCore.Mvc;
 using server.Dtos.Servico;
 using server.Interfaces;

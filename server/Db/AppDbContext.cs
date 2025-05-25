@@ -18,9 +18,6 @@ namespace server.Db
         public DbSet<EmpresaProjeto> Empresa_Projeto { get; set; }
         public DbSet<EmpresaRecurso> Empresa_Recurso { get; set; }
         public DbSet<EmpresaServico> Empresa_Servico { get; set; }
-        public DbSet<ProjetoCliente> Projeto_Cliente { get; set; }
-        public DbSet<ProjetoTarefa> Projeto_Tarefa { get; set; }
-        public DbSet<RecursoSubTarefa> Recurso_SubTarefa { get; set; }
-        public DbSet<RecursoApontamento> Recurso_Apontamento { get; set; }
+        public DbSet<ProjetoCliente> Projeto_Cliente { get; set; } 
     }
 }

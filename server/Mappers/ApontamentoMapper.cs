@@ -13,6 +13,8 @@ namespace server.Mappers
                 Descricao = apontamentoDto.Descricao,
                 HorasApontadas = apontamentoDto.HorasApontadas,
                 DataInicio = apontamentoDto.DataInicio,
+                IdAnalista = apontamentoDto.IdAnalista,
+                IdSubTarefa = apontamentoDto.IdSubTarefa
             };
         }
 
@@ -21,6 +23,7 @@ namespace server.Mappers
             return new Apontamento
             {
                 ApontamentoId = apontamentoDto.ApontamentoId,
+                IdSubTarefa = apontamentoDto.IdSubTarefa,
                 OS = "",
             };
         }
@@ -32,7 +35,8 @@ namespace server.Mappers
                 OS = "",
                 Descricao = apontamentoDto.Descricao,
                 HorasFinalizadas = apontamentoDto.HorasFinalizadas,
-                DataFim = apontamentoDto.DataFim
+                DataFim = apontamentoDto.DataFim,
+                IdAnalista = apontamentoDto.IdAnalista,
             };
         }
     }

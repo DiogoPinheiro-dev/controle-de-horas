@@ -44,16 +44,17 @@ namespace server.Migrations
                     b.Property<int>("HorasFinalizadas")
                         .HasColumnType("int");
 
+                    b.Property<int>("IdAnalista")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdSubTarefa")
+                        .HasColumnType("int");
+
                     b.Property<string>("OS")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("SubTarefaId")
-                        .HasColumnType("int");
-
                     b.HasKey("ApontamentoId");
-
-                    b.HasIndex("SubTarefaId");
 
                     b.ToTable("Apontamentos");
                 });
@@ -168,11 +169,14 @@ namespace server.Migrations
                     b.Property<int>("DataFim")
                         .HasColumnType("int");
 
-                    b.Property<int>("DataIni")
+                    b.Property<int>("DataInicio")
                         .HasColumnType("int");
 
                     b.Property<string>("Descricao")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("IdGerente")
+                        .HasColumnType("int");
 
                     b.Property<string>("Nome")
                         .HasColumnType("nvarchar(max)");
@@ -195,21 +199,6 @@ namespace server.Migrations
                     b.HasIndex("ClienteId");
 
                     b.ToTable("Projeto_Cliente");
-                });
-
-            modelBuilder.Entity("server.Models.ProjetoTarefa", b =>
-                {
-                    b.Property<int>("ProjetoId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TarefaId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProjetoId", "TarefaId");
-
-                    b.HasIndex("TarefaId");
-
-                    b.ToTable("Projeto_Tarefa");
                 });
 
             modelBuilder.Entity("server.Models.Recurso", b =>
@@ -236,36 +225,6 @@ namespace server.Migrations
                     b.HasKey("RecursoId");
 
                     b.ToTable("Recursos");
-                });
-
-            modelBuilder.Entity("server.Models.RecursoApontamento", b =>
-                {
-                    b.Property<int>("RecursoId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ApontamentoId")
-                        .HasColumnType("int");
-
-                    b.HasKey("RecursoId", "ApontamentoId");
-
-                    b.HasIndex("ApontamentoId");
-
-                    b.ToTable("Recurso_Apontamento");
-                });
-
-            modelBuilder.Entity("server.Models.RecursoSubTarefa", b =>
-                {
-                    b.Property<int>("RecursoId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SubTarefaId")
-                        .HasColumnType("int");
-
-                    b.HasKey("RecursoId", "SubTarefaId");
-
-                    b.HasIndex("SubTarefaId");
-
-                    b.ToTable("Recurso_SubTarefa");
                 });
 
             modelBuilder.Entity("server.Models.Servico", b =>
@@ -295,21 +254,22 @@ namespace server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SubTarefaId"));
 
-                    b.Property<string>("DataFim")
+                    b.Property<int>("DataFim")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DataInicio")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Descricao")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("DataIni")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("IdAnalista")
+                        .HasColumnType("int");
 
-                    b.Property<string>("DescricaoSubTarefa")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("TarefaId")
+                    b.Property<int>("IdTarefa")
                         .HasColumnType("int");
 
                     b.HasKey("SubTarefaId");
-
-                    b.HasIndex("TarefaId");
 
                     b.ToTable("SubTarefas");
                 });
@@ -331,18 +291,15 @@ namespace server.Migrations
                     b.Property<string>("Descricao")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("IdCoordenador")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdProjeto")
+                        .HasColumnType("int");
+
                     b.HasKey("TarefaId");
 
                     b.ToTable("Tarefas");
-                });
-
-            modelBuilder.Entity("server.Models.Apontamento", b =>
-                {
-                    b.HasOne("server.Models.SubTarefa", "SubTarefa")
-                        .WithMany()
-                        .HasForeignKey("SubTarefaId");
-
-                    b.Navigation("SubTarefa");
                 });
 
             modelBuilder.Entity("server.Models.EmpresaCliente", b =>
@@ -438,72 +395,6 @@ namespace server.Migrations
                     b.Navigation("Cliente");
 
                     b.Navigation("Projeto");
-                });
-
-            modelBuilder.Entity("server.Models.ProjetoTarefa", b =>
-                {
-                    b.HasOne("server.Models.Projeto", "Projeto")
-                        .WithMany()
-                        .HasForeignKey("ProjetoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("server.Models.Tarefa", "Tarefa")
-                        .WithMany()
-                        .HasForeignKey("TarefaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Projeto");
-
-                    b.Navigation("Tarefa");
-                });
-
-            modelBuilder.Entity("server.Models.RecursoApontamento", b =>
-                {
-                    b.HasOne("server.Models.Apontamento", "Apontamento")
-                        .WithMany()
-                        .HasForeignKey("ApontamentoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("server.Models.Recurso", "Recurso")
-                        .WithMany()
-                        .HasForeignKey("RecursoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Apontamento");
-
-                    b.Navigation("Recurso");
-                });
-
-            modelBuilder.Entity("server.Models.RecursoSubTarefa", b =>
-                {
-                    b.HasOne("server.Models.Recurso", "Recurso")
-                        .WithMany()
-                        .HasForeignKey("RecursoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("server.Models.SubTarefa", "SubTarefa")
-                        .WithMany()
-                        .HasForeignKey("SubTarefaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Recurso");
-
-                    b.Navigation("SubTarefa");
-                });
-
-            modelBuilder.Entity("server.Models.SubTarefa", b =>
-                {
-                    b.HasOne("server.Models.Tarefa", "Tarefa")
-                        .WithMany()
-                        .HasForeignKey("TarefaId");
-
-                    b.Navigation("Tarefa");
                 });
 #pragma warning restore 612, 618
         }

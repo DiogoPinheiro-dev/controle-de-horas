@@ -10,7 +10,9 @@ namespace server.Mappers
             return new Tarefa
             {
                 Descricao = TarefaDto.Descricao,
-                DataInicio = TarefaDto.DataInicio
+                DataInicio = TarefaDto.DataInicio,
+                IdProjeto = TarefaDto.IdProjeto,
+                IdCoordenador = TarefaDto.IdCoordenador,
             };
         }
 

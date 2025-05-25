@@ -11,7 +11,8 @@ namespace server.Mappers
             {
                 Descricao = ProjetoDto.Descricao,
                 Nome = ProjetoDto.Nome,
-                DataIni = ProjetoDto.DataIni
+                DataInicio = ProjetoDto.DataIni,
+                IdGerente = ProjetoDto.IdGerente
             };
         }
 
@@ -20,7 +21,6 @@ namespace server.Mappers
             return new Projeto
             {
                 ProjetoId = ProjetoDto.ProjetoId
-
             };
         }
 

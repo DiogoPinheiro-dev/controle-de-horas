@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 namespace server.Models
 {
     public class Apontamento
@@ -13,7 +12,8 @@ namespace server.Models
         public int DataInicio { get; set; }
         public int DataFim { get; set; }
 
-        public SubTarefa? SubTarefa { get; set; }
+        public int IdSubTarefa { get; set; }
+        public int IdAnalista { get; set; }
     }
 
 }
