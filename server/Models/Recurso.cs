@@ -2,7 +2,7 @@ namespace server.Models
 {
     public class Recurso
     {
-        public required int RecursoId { get; set; }
+        public int RecursoId { get; set; }
         public string? Nome { get; set; }
         public string? Tipo { get; set; }
         public required string Email { get; set; }

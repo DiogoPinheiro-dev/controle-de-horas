@@ -11,8 +11,8 @@ using server.Db;
 namespace server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250523173131_SetupDB-05")]
-    partial class SetupDB05
+    [Migration("20250525132710_SetupDB-01")]
+    partial class SetupDB01
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -63,11 +63,15 @@ namespace server.Migrations
 
             modelBuilder.Entity("server.Models.Cliente", b =>
                 {
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int>("ClienteId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClienteId"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nome")
                         .HasColumnType("nvarchar(max)");
@@ -75,7 +79,7 @@ namespace server.Migrations
                     b.Property<string>("Telefone")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Email");
+                    b.HasKey("ClienteId");
 
                     b.ToTable("Clientes");
                 });
@@ -104,13 +108,9 @@ namespace server.Migrations
                     b.Property<int>("ClienteId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ClienteEmail")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("EmpresaId", "ClienteId");
 
-                    b.HasIndex("ClienteEmail");
+                    b.HasIndex("ClienteId");
 
                     b.ToTable("Empresa_Cliente");
                 });
@@ -198,13 +198,9 @@ namespace server.Migrations
                     b.Property<int>("ClienteId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ClienteEmail")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("ProjetoId", "ClienteId");
 
-                    b.HasIndex("ClienteEmail");
+                    b.HasIndex("ClienteId");
 
                     b.ToTable("Projeto_Cliente");
                 });
@@ -366,7 +362,7 @@ namespace server.Migrations
                 {
                     b.HasOne("server.Models.Cliente", "Cliente")
                         .WithMany()
-                        .HasForeignKey("ClienteEmail")
+                        .HasForeignKey("ClienteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -451,7 +447,7 @@ namespace server.Migrations
                 {
                     b.HasOne("server.Models.Cliente", "Cliente")
                         .WithMany()
-                        .HasForeignKey("ClienteEmail")
+                        .HasForeignKey("ClienteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

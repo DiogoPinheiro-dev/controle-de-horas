@@ -1,10 +1,11 @@
+using System.ComponentModel.DataAnnotations;
 namespace server.Models
 {
     public class Apontamento
     {
-        public required int ApontamentoId { get; set; }
+        public int ApontamentoId { get; set; }
         public required string OS { get; set; }
-        public string? Descricao { get; set; } 
+        public string? Descricao { get; set; }
 
         public int HorasApontadas { get; set; }
         public int HorasFinalizadas { get; set; }

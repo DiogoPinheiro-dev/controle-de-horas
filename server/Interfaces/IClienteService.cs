@@ -5,12 +5,13 @@ namespace server.Interfaces
     public interface IClienteService
     {
         Task CriarCliente(Cliente cliente);
-        Task AtualizarCliente(Cliente cliente);
+        Task AtualizarCliente(Cliente cliente, Cliente body);
         Task DeletarCliente(Cliente cliente);
 
-        Task<IEnumerable<Cliente>> ObterTodosClientes();
-        Task<IEnumerable<Cliente>> ObterClientePorNome(string nome);
-        Task<IEnumerable<Cliente>> ObterClientePorEmail(string email);
-        Task<IEnumerable<Cliente>> ObterClientePorTelefone(string telefone);
+        Task<List<Cliente>> ObterTodosClientes();
+        Task<Cliente> ObterClientePorId(int id);
+        Task<List<Cliente>> ObterClientePorNome(string nome);
+        Task<List<Cliente>> ObterClientePorEmail(string email);
+        Task<List<Cliente>> ObterClientePorTelefone(string telefone);
     }
 }

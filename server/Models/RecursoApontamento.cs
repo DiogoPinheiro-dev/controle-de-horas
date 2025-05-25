@@ -8,7 +8,7 @@ namespace server.Models
         public int RecursoId { get; set; }
         public int ApontamentoId { get; set; }
 
-        public required Apontamento Apontamento { get; set; }
-        public required Recurso Recurso { get; set; }
+        public Apontamento? Apontamento { get; set; }
+        public Recurso? Recurso { get; set; }
     }
 }

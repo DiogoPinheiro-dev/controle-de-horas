@@ -21,30 +21,30 @@ namespace server.Services
         }
         public async Task AtualizarApontamento(Apontamento Apontamento, Apontamento Body)
         {
-            if (Body.Descricao != null)
+            if (Body.Descricao != string.Empty)
                 Apontamento.Descricao = Body.Descricao;
             else
                 Apontamento.Descricao = Apontamento.Descricao;
 
-            if (Body.HorasApontadas > 0)
-                Apontamento.HorasApontadas = Body.HorasApontadas;
-            else
+            if (Body.HorasApontadas < 0)
                 Apontamento.HorasApontadas = Apontamento.HorasApontadas;
-
-            if (Body.HorasFinalizadas > 0)
-                Apontamento.HorasFinalizadas = Body.HorasFinalizadas;
             else
+                Apontamento.HorasApontadas = Body.HorasApontadas;
+
+            if (Body.HorasFinalizadas < 0)
                 Apontamento.HorasFinalizadas = Apontamento.HorasFinalizadas;
-
-            if (Body.DataInicio != null)
-                Apontamento.DataInicio = Body.DataInicio;
             else
+                Apontamento.HorasFinalizadas = Body.HorasFinalizadas;
+
+            if (Body.DataInicio < 0)
                 Apontamento.DataInicio = Apontamento.DataInicio;
-
-            if (Body.DataFim != null)
-                Apontamento.DataFim = Body.DataFim;
             else
+                Apontamento.DataInicio = Body.DataInicio;
+
+            if (Body.DataFim < 0)
                 Apontamento.DataFim = Apontamento.DataFim;
+            else
+                Apontamento.DataFim = Body.DataFim;
 
             await dbContext.SaveChangesAsync();
         }

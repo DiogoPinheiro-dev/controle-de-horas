@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -15,14 +14,15 @@ namespace server.Migrations
                 name: "Clientes",
                 columns: table => new
                 {
-                    Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ClienteId = table.Column<int>(type: "int", nullable: false),
-                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Telefone = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ClienteId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Telefone = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Clientes", x => x.Email);
+                    table.PrimaryKey("PK_Clientes", x => x.ClienteId);
                 });
 
             migrationBuilder.CreateTable(
@@ -31,7 +31,7 @@ namespace server.Migrations
                 {
                     EmpresaId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -44,10 +44,10 @@ namespace server.Migrations
                 {
                     RecursoId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Tipo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Tipo = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Telefone = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Telefone = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -61,7 +61,7 @@ namespace server.Migrations
                     ServicoId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Custo = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -73,17 +73,16 @@ namespace server.Migrations
                 columns: table => new
                 {
                     EmpresaId = table.Column<int>(type: "int", nullable: false),
-                    ClienteId = table.Column<int>(type: "int", nullable: false),
-                    ClienteEmail = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    ClienteId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Empresa_Cliente", x => new { x.EmpresaId, x.ClienteId });
                     table.ForeignKey(
-                        name: "FK_Empresa_Cliente_Clientes_ClienteEmail",
-                        column: x => x.ClienteEmail,
+                        name: "FK_Empresa_Cliente_Clientes_ClienteId",
+                        column: x => x.ClienteId,
                         principalTable: "Clientes",
-                        principalColumn: "Email",
+                        principalColumn: "ClienteId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Empresa_Cliente_Empresas_EmpresaId",
@@ -123,10 +122,10 @@ namespace server.Migrations
                 {
                     ProjetoId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DataIni = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DataFim = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DataIni = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DataFim = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     GerenteRecursoId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -145,9 +144,9 @@ namespace server.Migrations
                 {
                     TarefaId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DescricaoTarefa = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DataInicio = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DataFim = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DescricaoTarefa = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DataInicio = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DataFim = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CoordenadorRecursoId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -213,17 +212,16 @@ namespace server.Migrations
                 columns: table => new
                 {
                     ProjetoId = table.Column<int>(type: "int", nullable: false),
-                    ClienteId = table.Column<int>(type: "int", nullable: false),
-                    ClienteEmail = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    ClienteId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Projeto_Cliente", x => new { x.ProjetoId, x.ClienteId });
                     table.ForeignKey(
-                        name: "FK_Projeto_Cliente_Clientes_ClienteEmail",
-                        column: x => x.ClienteEmail,
+                        name: "FK_Projeto_Cliente_Clientes_ClienteId",
+                        column: x => x.ClienteId,
                         principalTable: "Clientes",
-                        principalColumn: "Email",
+                        principalColumn: "ClienteId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Projeto_Cliente_Projetos_ProjetoId",
@@ -263,9 +261,9 @@ namespace server.Migrations
                 {
                     SubTarefaId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DescricaoSubTarefa = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DataIni = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DataFim = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DescricaoSubTarefa = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DataIni = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DataFim = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TarefaId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -285,11 +283,11 @@ namespace server.Migrations
                     ApontamentoId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     OS = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    HorasApontadas = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    HorasFinalizadas = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DataInicio = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DataFim = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HorasApontadas = table.Column<int>(type: "int", nullable: false),
+                    HorasFinalizadas = table.Column<int>(type: "int", nullable: false),
+                    DataInicio = table.Column<int>(type: "int", nullable: false),
+                    DataFim = table.Column<int>(type: "int", nullable: false),
                     SubTarefaId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -356,9 +354,9 @@ namespace server.Migrations
                 column: "SubTarefaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Empresa_Cliente_ClienteEmail",
+                name: "IX_Empresa_Cliente_ClienteId",
                 table: "Empresa_Cliente",
-                column: "ClienteEmail");
+                column: "ClienteId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Empresa_Projeto_ProjetoId",
@@ -376,9 +374,9 @@ namespace server.Migrations
                 column: "ServicoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Projeto_Cliente_ClienteEmail",
+                name: "IX_Projeto_Cliente_ClienteId",
                 table: "Projeto_Cliente",
-                column: "ClienteEmail");
+                column: "ClienteId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Projeto_Tarefa_TarefaId",

@@ -8,7 +8,7 @@ namespace server.Models
         public int ProjetoId { get; set; }
         public int TarefaId { get; set; }
 
-        public required Projeto Projeto { get; set; }
-        public required Tarefa Tarefa { get; set; }
+        public Projeto? Projeto { get; set; }
+        public Tarefa? Tarefa { get; set; }
     }
 }

@@ -163,7 +163,7 @@ namespace server.Controllers
                     return BadRequest();
                 }
 
-                var recursos = await service.ObterRecursoPorEmail(email);
+                var recursos = await service.ObterRecursoPorEmail(email.Trim());
 
                 if (recursos == null)
                 {
@@ -188,7 +188,7 @@ namespace server.Controllers
                     return BadRequest();
                 }
 
-                var recurso = await service.ObterRecursoPorNome(nome);
+                var recurso = await service.ObterRecursoPorNome(nome.Trim());
 
                 if (recurso == null)
                 {
@@ -235,7 +235,7 @@ namespace server.Controllers
                     tel = ddd + operadora_e_numero;
                 }
 
-                var recursos = await service.ObterRecursoPorTelefone(tel);
+                var recursos = await service.ObterRecursoPorTelefone(tel.Trim());
 
                 if (recursos == null)
                 {
@@ -260,7 +260,7 @@ namespace server.Controllers
                     return BadRequest();
                 }
 
-                var recursos = await service.ObterRecursoPorTipo(tipo);
+                var recursos = await service.ObterRecursoPorTipo(tipo.Trim());
 
                 if (recursos == null)
                 {

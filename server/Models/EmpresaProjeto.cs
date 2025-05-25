@@ -8,7 +8,7 @@ namespace server.Models
         public int EmpresaId { get; set; }
         public int ProjetoId { get; set; }
 
-        public required Empresa Empresa { get; set; }
-        public required Projeto Projeto { get; set; }
+        public Empresa? Empresa { get; set; }
+        public Projeto? Projeto { get; set; }
     }
 }

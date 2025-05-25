@@ -20,25 +20,25 @@ namespace server.Services
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task AtualizarRecurso(Recurso recurso, Recurso modeloDeRecurso)
+        public async Task AtualizarRecurso(Recurso recurso, Recurso body)
         {
-            if (modeloDeRecurso.Nome != null)
-                recurso.Nome = modeloDeRecurso.Nome;
+            if (body.Nome != string.Empty)
+                recurso.Nome = body.Nome;
             else
                 recurso.Nome = recurso.Nome;
 
-            if (modeloDeRecurso.Email != null)
-                recurso.Email = modeloDeRecurso.Email;
+            if (body.Email != string.Empty)
+                recurso.Email = body.Email;
             else
                 recurso.Email = recurso.Email;
 
-            if (modeloDeRecurso.Telefone != null)
-                recurso.Telefone = modeloDeRecurso.Telefone;
+            if (body.Telefone != string.Empty)
+                recurso.Telefone = body.Telefone;
             else
                 recurso.Telefone = recurso.Telefone;
 
-            if (modeloDeRecurso.Tipo != null)
-                recurso.Tipo = modeloDeRecurso.Tipo;
+            if (body.Tipo != string.Empty)
+                recurso.Tipo = body.Tipo;
             else
                 recurso.Tipo = recurso.Tipo;
 
@@ -64,20 +64,9 @@ namespace server.Services
         {
             List<Recurso> recursos;
 
-            if (!string.IsNullOrWhiteSpace(Email))
-            {
-                recursos = await dbContext
-                    .Recursos
-                    .Where(
-                        r => r
-                            .Email
-                            .Contains(Email)
-                    ).ToListAsync();
-            }
-            else
-            {
-                recursos = await ObterTodosRecursos();
-            }
+            recursos = await dbContext
+                .Recursos
+                .Where(r => r.Email.Contains(Email)).ToListAsync();
 
             return recursos;
         }
@@ -87,20 +76,9 @@ namespace server.Services
         {
             List<Recurso> recursos;
 
-            if (!string.IsNullOrWhiteSpace(Nome))
-            {
-                recursos = await dbContext
-                    .Recursos
-                    .Where(
-                        r => r
-                            .Nome
-                            .Contains(Nome)
-                    ).ToListAsync();
-            }
-            else
-            {
-                recursos = await ObterTodosRecursos();
-            }
+            recursos = await dbContext
+                .Recursos
+                .Where(r => r.Nome.Contains(Nome)).ToListAsync();
 
             return recursos;
         }
@@ -109,20 +87,11 @@ namespace server.Services
         {
             List<Recurso> recursos;
 
-            if (!string.IsNullOrWhiteSpace(Telefone))
-            {
-                recursos = await dbContext
-                    .Recursos
-                    .Where(
-                        r => r
-                            .Telefone
-                            .Contains(Telefone)
-                    ).ToListAsync();
-            }
-            else
-            {
-                recursos = await ObterTodosRecursos();
-            }
+
+            recursos = await dbContext
+                .Recursos
+                .Where(r => r.Telefone.Contains(Telefone)).ToListAsync();
+
 
             return recursos;
         }
@@ -131,20 +100,9 @@ namespace server.Services
         {
             List<Recurso> recursos;
 
-            if (!string.IsNullOrWhiteSpace(Tipo))
-            {
-                recursos = await dbContext
+            recursos = await dbContext
                     .Recursos
-                    .Where(
-                        r => r
-                            .Tipo
-                            .Contains(Tipo)
-                    ).ToListAsync();
-            }
-            else
-            {
-                recursos = await ObterTodosRecursos();
-            }
+                    .Where(r => r.Tipo.Contains(Tipo)).ToListAsync();
 
             return recursos;
         }
