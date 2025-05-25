@@ -5,7 +5,7 @@ using server.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// builder.Services.AddScoped<IEmpresaService, EmpresaService>();
+builder.Services.AddScoped<IEmpresaService, EmpresaService>();
 builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<IRecursoService, RecursoService>();
 
