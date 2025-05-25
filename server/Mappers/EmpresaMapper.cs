@@ -1,4 +1,4 @@
-using server.Dto;
+using server.Dtos.Empresa;
 using server.Models;
 
 namespace server.Mappers

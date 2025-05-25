@@ -1,6 +1,6 @@
 using System.Globalization;
 using Microsoft.AspNetCore.Mvc;
-using server.Dto;
+using server.Dtos.Apontamento;
 using server.Interfaces;
 using server.Mappers;
 using server.Models;

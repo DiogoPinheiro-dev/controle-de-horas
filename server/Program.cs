@@ -12,7 +12,7 @@ builder.Services.AddScoped<IRecursoService, RecursoService>();
 builder.Services.AddScoped<IServicoService, ServicoService>();
 
 builder.Services.AddScoped<IProjetoService, ProjetoService>();
-// builder.Services.AddScoped<ITarefaService, TarefaService>();
+builder.Services.AddScoped<ITarefaService, TarefaService>();
 // builder.Services.AddScoped<ISubTarefaService, SubTarefaService>();
 builder.Services.AddScoped<IApontamentoService, ApontamentoService>();
 

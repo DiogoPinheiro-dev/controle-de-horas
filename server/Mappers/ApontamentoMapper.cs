@@ -1,4 +1,4 @@
-using server.Dto;
+using server.Dtos.Apontamento;
 using server.Models;
 
 namespace server.Mappers

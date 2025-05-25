@@ -1,4 +1,4 @@
-namespace server.Dto
+namespace server.Dtos.Cliente
 {
     public class DeletarClienteDto
     { 

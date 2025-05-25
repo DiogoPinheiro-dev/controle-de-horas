@@ -322,21 +322,16 @@ namespace server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TarefaId"));
 
-                    b.Property<int?>("CoordenadorRecursoId")
+                    b.Property<int>("DataFim")
                         .HasColumnType("int");
 
-                    b.Property<string>("DataFim")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("DataInicio")
+                        .HasColumnType("int");
 
-                    b.Property<string>("DataInicio")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DescricaoTarefa")
+                    b.Property<string>("Descricao")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("TarefaId");
-
-                    b.HasIndex("CoordenadorRecursoId");
 
                     b.ToTable("Tarefas");
                 });
@@ -509,15 +504,6 @@ namespace server.Migrations
                         .HasForeignKey("TarefaId");
 
                     b.Navigation("Tarefa");
-                });
-
-            modelBuilder.Entity("server.Models.Tarefa", b =>
-                {
-                    b.HasOne("server.Models.Recurso", "Coordenador")
-                        .WithMany()
-                        .HasForeignKey("CoordenadorRecursoId");
-
-                    b.Navigation("Coordenador");
                 });
 #pragma warning restore 612, 618
         }
