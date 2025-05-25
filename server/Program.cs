@@ -9,7 +9,7 @@ builder.Services.AddScoped<IEmpresaService, EmpresaService>();
 builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<IRecursoService, RecursoService>();
 
-// builder.Services.AddScoped<IServicoService, ServicoService>();
+builder.Services.AddScoped<IServicoService, ServicoService>();
 
 // builder.Services.AddScoped<IProjetoService, ProjetoService>();
 // builder.Services.AddScoped<ITarefaService, TarefaService>();
