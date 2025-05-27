@@ -11,8 +11,8 @@ using server.Db;
 namespace server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250527153907_SetupDB-06")]
-    partial class SetupDB06
+    [Migration("20250527161420_Setup_DB_V1")]
+    partial class Setup_DB_V1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,62 +24,6 @@ namespace server.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ClienteEmpresa", b =>
-                {
-                    b.Property<int>("ClientesClienteId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("EmpresasEmpresaId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ClientesClienteId", "EmpresasEmpresaId");
-
-                    b.HasIndex("EmpresasEmpresaId");
-
-                    b.ToTable("ClienteEmpresa");
-                });
-
-            modelBuilder.Entity("EmpresaServico", b =>
-                {
-                    b.Property<int>("EmpresasEmpresaId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ServicosServicoId")
-                        .HasColumnType("int");
-
-                    b.HasKey("EmpresasEmpresaId", "ServicosServicoId");
-
-                    b.HasIndex("ServicosServicoId");
-
-                    b.ToTable("EmpresaServico");
-                });
-
-            modelBuilder.Entity("server.Models.Analista", b =>
-                {
-                    b.Property<int>("AnalistaId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AnalistaId"));
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("RecursoId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("SubTarefaId")
-                        .HasColumnType("int");
-
-                    b.HasKey("AnalistaId");
-
-                    b.HasIndex("RecursoId");
-
-                    b.HasIndex("SubTarefaId");
-
-                    b.ToTable("Analista");
-                });
-
             modelBuilder.Entity("server.Models.Apontamento", b =>
                 {
                     b.Property<int>("ApontamentoId")
@@ -87,9 +31,6 @@ namespace server.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApontamentoId"));
-
-                    b.Property<int?>("AnalistaId")
-                        .HasColumnType("int");
 
                     b.Property<int>("DataFim")
                         .HasColumnType("int");
@@ -106,17 +47,17 @@ namespace server.Migrations
                     b.Property<int>("HorasFinalizadas")
                         .HasColumnType("int");
 
-                    b.Property<int>("OS")
+                    b.Property<int>("IdAnalista")
                         .HasColumnType("int");
 
-                    b.Property<int>("SubTarefaId")
+                    b.Property<int>("IdSubTarefa")
                         .HasColumnType("int");
+
+                    b.Property<string>("OS")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ApontamentoId");
-
-                    b.HasIndex("AnalistaId");
-
-                    b.HasIndex("SubTarefaId");
 
                     b.ToTable("Apontamentos");
                 });
@@ -142,27 +83,6 @@ namespace server.Migrations
                     b.HasKey("ClienteId");
 
                     b.ToTable("Clientes");
-                });
-
-            modelBuilder.Entity("server.Models.Coordenador", b =>
-                {
-                    b.Property<int>("CoordenadorId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CoordenadorId"));
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("RecursoId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CoordenadorId");
-
-                    b.HasIndex("RecursoId");
-
-                    b.ToTable("Coordenador");
                 });
 
             modelBuilder.Entity("server.Models.Empresa", b =>
@@ -241,27 +161,6 @@ namespace server.Migrations
                     b.ToTable("Empresa_Servico");
                 });
 
-            modelBuilder.Entity("server.Models.Gerente", b =>
-                {
-                    b.Property<int>("GerenteId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GerenteId"));
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("RecursoId")
-                        .HasColumnType("int");
-
-                    b.HasKey("GerenteId");
-
-                    b.HasIndex("RecursoId");
-
-                    b.ToTable("Gerente");
-                });
-
             modelBuilder.Entity("server.Models.Projeto", b =>
                 {
                     b.Property<int>("ProjetoId")
@@ -269,9 +168,6 @@ namespace server.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProjetoId"));
-
-                    b.Property<int?>("ClienteId")
-                        .HasColumnType("int");
 
                     b.Property<int>("DataFim")
                         .HasColumnType("int");
@@ -282,17 +178,13 @@ namespace server.Migrations
                     b.Property<string>("Descricao")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("GerenteId")
+                    b.Property<int>("IdGerente")
                         .HasColumnType("int");
 
                     b.Property<string>("Nome")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ProjetoId");
-
-                    b.HasIndex("ClienteId");
-
-                    b.HasIndex("GerenteId");
 
                     b.ToTable("Projetos");
                 });
@@ -331,7 +223,7 @@ namespace server.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Tipo")
-                        .HasColumnType("nvarchar(1)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("RecursoId");
 
@@ -374,12 +266,13 @@ namespace server.Migrations
                     b.Property<string>("Descricao")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TarefaId")
+                    b.Property<int>("IdAnalista")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdTarefa")
                         .HasColumnType("int");
 
                     b.HasKey("SubTarefaId");
-
-                    b.HasIndex("TarefaId");
 
                     b.ToTable("SubTarefas");
                 });
@@ -392,9 +285,6 @@ namespace server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TarefaId"));
 
-                    b.Property<int>("CoordenadorId")
-                        .HasColumnType("int");
-
                     b.Property<int>("DataFim")
                         .HasColumnType("int");
 
@@ -404,81 +294,15 @@ namespace server.Migrations
                     b.Property<string>("Descricao")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProjetoId")
+                    b.Property<int>("IdCoordenador")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdProjeto")
                         .HasColumnType("int");
 
                     b.HasKey("TarefaId");
 
-                    b.HasIndex("CoordenadorId");
-
-                    b.HasIndex("ProjetoId");
-
                     b.ToTable("Tarefas");
-                });
-
-            modelBuilder.Entity("ClienteEmpresa", b =>
-                {
-                    b.HasOne("server.Models.Cliente", null)
-                        .WithMany()
-                        .HasForeignKey("ClientesClienteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("server.Models.Empresa", null)
-                        .WithMany()
-                        .HasForeignKey("EmpresasEmpresaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("EmpresaServico", b =>
-                {
-                    b.HasOne("server.Models.Empresa", null)
-                        .WithMany()
-                        .HasForeignKey("EmpresasEmpresaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("server.Models.Servico", null)
-                        .WithMany()
-                        .HasForeignKey("ServicosServicoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("server.Models.Analista", b =>
-                {
-                    b.HasOne("server.Models.Recurso", null)
-                        .WithMany("Analistas")
-                        .HasForeignKey("RecursoId");
-
-                    b.HasOne("server.Models.SubTarefa", null)
-                        .WithMany("Analistas")
-                        .HasForeignKey("SubTarefaId");
-                });
-
-            modelBuilder.Entity("server.Models.Apontamento", b =>
-                {
-                    b.HasOne("server.Models.Analista", "Analista")
-                        .WithMany("Apontamentos")
-                        .HasForeignKey("AnalistaId");
-
-                    b.HasOne("server.Models.SubTarefa", "SubTarefa")
-                        .WithMany()
-                        .HasForeignKey("SubTarefaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Analista");
-
-                    b.Navigation("SubTarefa");
-                });
-
-            modelBuilder.Entity("server.Models.Coordenador", b =>
-                {
-                    b.HasOne("server.Models.Recurso", null)
-                        .WithMany("Coordenadores")
-                        .HasForeignKey("RecursoId");
                 });
 
             modelBuilder.Entity("server.Models.EmpresaCliente", b =>
@@ -557,28 +381,6 @@ namespace server.Migrations
                     b.Navigation("Servico");
                 });
 
-            modelBuilder.Entity("server.Models.Gerente", b =>
-                {
-                    b.HasOne("server.Models.Recurso", null)
-                        .WithMany("Gerentes")
-                        .HasForeignKey("RecursoId");
-                });
-
-            modelBuilder.Entity("server.Models.Projeto", b =>
-                {
-                    b.HasOne("server.Models.Cliente", "Cliente")
-                        .WithMany()
-                        .HasForeignKey("ClienteId");
-
-                    b.HasOne("server.Models.Gerente", "Gerente")
-                        .WithMany("Projetos")
-                        .HasForeignKey("GerenteId");
-
-                    b.Navigation("Cliente");
-
-                    b.Navigation("Gerente");
-                });
-
             modelBuilder.Entity("server.Models.ProjetoCliente", b =>
                 {
                     b.HasOne("server.Models.Cliente", "Cliente")
@@ -596,70 +398,6 @@ namespace server.Migrations
                     b.Navigation("Cliente");
 
                     b.Navigation("Projeto");
-                });
-
-            modelBuilder.Entity("server.Models.SubTarefa", b =>
-                {
-                    b.HasOne("server.Models.Tarefa", "Tarefa")
-                        .WithMany("SubTarefas")
-                        .HasForeignKey("TarefaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Tarefa");
-                });
-
-            modelBuilder.Entity("server.Models.Tarefa", b =>
-                {
-                    b.HasOne("server.Models.Coordenador", "Coordenador")
-                        .WithMany("Tarefas")
-                        .HasForeignKey("CoordenadorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("server.Models.Projeto", "Projeto")
-                        .WithMany()
-                        .HasForeignKey("ProjetoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Coordenador");
-
-                    b.Navigation("Projeto");
-                });
-
-            modelBuilder.Entity("server.Models.Analista", b =>
-                {
-                    b.Navigation("Apontamentos");
-                });
-
-            modelBuilder.Entity("server.Models.Coordenador", b =>
-                {
-                    b.Navigation("Tarefas");
-                });
-
-            modelBuilder.Entity("server.Models.Gerente", b =>
-                {
-                    b.Navigation("Projetos");
-                });
-
-            modelBuilder.Entity("server.Models.Recurso", b =>
-                {
-                    b.Navigation("Analistas");
-
-                    b.Navigation("Coordenadores");
-
-                    b.Navigation("Gerentes");
-                });
-
-            modelBuilder.Entity("server.Models.SubTarefa", b =>
-                {
-                    b.Navigation("Analistas");
-                });
-
-            modelBuilder.Entity("server.Models.Tarefa", b =>
-                {
-                    b.Navigation("SubTarefas");
                 });
 #pragma warning restore 612, 618
         }
