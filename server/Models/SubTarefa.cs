@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace server.Models
 {
     public class SubTarefa
@@ -7,7 +9,13 @@ namespace server.Models
         public int DataInicio { get; set; }
         public int DataFim { get; set; }
 
-        public int IdTarefa { get; set; }
-        public int IdAnalista { get; set; }
+        // public int ApontamentoId { get; set; }
+        public List<Apontamento>? Apontamentos { get; set; }
+
+        public int TarefaId { get; set; }
+        public Tarefa? Tarefa { get; set; }
+
+        public int AnalistaId { get; set; }
+        public Analista? Analista { get; set; }
     }
 }

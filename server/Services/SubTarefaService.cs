@@ -26,20 +26,20 @@ namespace server.Services
             else
                 SubTarefa.Descricao = SubTarefa.Descricao;
                 
-            if (Body.IdAnalista > 0)
-                SubTarefa.IdAnalista = Body.IdAnalista;
+            if (Body.AnalistaId > 0)
+                SubTarefa.AnalistaId = Body.AnalistaId;
             else
-                SubTarefa.IdAnalista = SubTarefa.IdAnalista;
-
-            if (Body.DataInicio > 0)
-                SubTarefa.DataInicio = Body.DataInicio;
-            else
-                SubTarefa.DataInicio = SubTarefa.DataInicio;
+                SubTarefa.AnalistaId = SubTarefa.AnalistaId;
 
             if (Body.DataFim > 0)
                 SubTarefa.DataFim = Body.DataFim;
             else
                 SubTarefa.DataFim = SubTarefa.DataFim;
+
+            // if (Body.ApontamentoId > 0)
+            //     SubTarefa.ApontamentoId = Body.ApontamentoId;
+            // else
+            //     SubTarefa.ApontamentoId = Body.ApontamentoId;
 
             await dbContext.SaveChangesAsync();
         }

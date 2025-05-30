@@ -31,28 +31,28 @@ namespace server.Services
 
         public async Task DeletarRelacaoEmpresaServico(EmpresaServico empresaServico)
         {
-            dbContext.Empresa_Servico.Remove(empresaServico);
+            dbContext.EmpresaServicos.Remove(empresaServico);
             await dbContext.SaveChangesAsync();
         }
 
         public async Task<EmpresaServico> ObterRelacoesPorIdDaEmpresa(int idEmpresa)
         {
-            return await dbContext.Empresa_Servico.FindAsync(idEmpresa);
+            return await dbContext.EmpresaServicos.FindAsync(idEmpresa);
         }
 
         public async Task<EmpresaServico> ObterRelacoesPorIdDoServico(int idServico)
         {
-            return await dbContext.Empresa_Servico.FindAsync(idServico);
+            return await dbContext.EmpresaServicos.FindAsync(idServico);
         }
 
         public async Task<List<EmpresaServico>> ObterTodasRelacoes()
         {
-            return await dbContext.Empresa_Servico.ToListAsync();
+            return await dbContext.EmpresaServicos.ToListAsync();
         }
 
         public async Task RelacionarEmpresaServico(EmpresaServico empresaServico)
         {
-            await dbContext.Empresa_Servico.AddAsync(empresaServico);
+            await dbContext.EmpresaServicos.AddAsync(empresaServico);
             await dbContext.SaveChangesAsync();
         }
     }

@@ -2,10 +2,9 @@ namespace server.Dtos.Recurso
 {
     public class CriarRecursoDto
     {
-        public required string Nome { get; set; }
-        public required string Tipo { get; set; }
-        public required string Email { get; set; }
-        public required string Telefone { get; set; }
-
+        public string? Nome { get; set; }
+        public string? Tipo { get; set; }
+        public string? Email { get; set; }
+        public string? Telefone { get; set; }
     }
 }

@@ -189,19 +189,12 @@ namespace server.Controllers
         }
 
         [HttpGet]
-        [Route("ByData/{deAte}")]
-        public async Task<ActionResult<List<Apontamento>>> ObterApontamentoDeAte([FromRoute] string deAte) // "aaaammdd aaaammdd"
+        [Route("ByData/{dataIni}/{dataFim}")]
+        public async Task<ActionResult<List<Apontamento>>> ObterApontamentoDeAte([FromRoute] int dataIni, [FromRoute] int dataFim)
         {
             try
             {
                 List<Apontamento> apontamentos;
-                string[] data;
-                int dataIni, dataFim;
-
-                data = deAte.Split(" ");
-
-                dataIni = int.Parse(data[0]);
-                dataFim = int.Parse(data[1]);
 
                 if (dataIni <= dataFim)
                 {

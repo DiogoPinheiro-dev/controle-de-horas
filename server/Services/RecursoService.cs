@@ -41,7 +41,7 @@ namespace server.Services
                 Recurso.Tipo = Body.Tipo;
             else
                 Recurso.Tipo = Recurso.Tipo;
-
+                
             await dbContext.SaveChangesAsync();
         }
 

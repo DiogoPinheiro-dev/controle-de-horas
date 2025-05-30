@@ -21,10 +21,15 @@ namespace server.Services
         }
         public async Task AtualizarEmpresa(Empresa Empresa, Empresa Body)
         {
-            if (Body.Nome != null || Body.Nome != "")
+            if (Body.Nome != null)
                 Empresa.Nome = Body.Nome;
             else
                 Empresa.Nome = Empresa.Nome;
+
+            // if (Body.ProjetoId > 0)
+            //     Empresa.ProjetoId = Body.ProjetoId;
+            // else
+            //     Empresa.ProjetoId = Empresa.ProjetoId;
 
             await dbContext.SaveChangesAsync();
         }

@@ -26,30 +26,25 @@ namespace server.Services
             else
                 Apontamento.Descricao = Apontamento.Descricao;
 
-            if (Body.IdAnalista > 0)
-                Apontamento.IdAnalista = Body.IdAnalista;
+            if (Body.AnalistaId > 0)
+                Apontamento.AnalistaId = Body.AnalistaId;
             else
-                Apontamento.Descricao = Apontamento.Descricao;
-
-            if (Body.HorasApontadas > 0)
-                Apontamento.HorasApontadas = Body.HorasApontadas;
-            else
-                Apontamento.HorasApontadas = Apontamento.HorasApontadas;
+                Apontamento.AnalistaId = Apontamento.AnalistaId;
 
             if (Body.HorasFinalizadas > 0)
                 Apontamento.HorasFinalizadas = Body.HorasFinalizadas;
             else
                 Apontamento.HorasFinalizadas = Apontamento.HorasFinalizadas;
 
-            if (Body.DataInicio > 0)
-                Apontamento.DataInicio = Body.DataInicio;
-            else
-                Apontamento.DataInicio = Apontamento.DataInicio;
-
             if (Body.DataFim > 0)
                 Apontamento.DataFim = Body.DataFim;
             else
                 Apontamento.DataFim = Apontamento.DataFim;
+
+            if (Body.ApontamentoId > 0)
+                Apontamento.ApontamentoId = Body.ApontamentoId;
+            else
+                Apontamento.ApontamentoId = Apontamento.ApontamentoId;
 
             await dbContext.SaveChangesAsync();
         }

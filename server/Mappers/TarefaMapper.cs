@@ -11,8 +11,8 @@ namespace server.Mappers
             {
                 Descricao = TarefaDto.Descricao,
                 DataInicio = TarefaDto.DataInicio,
-                IdProjeto = TarefaDto.IdProjeto,
-                IdCoordenador = TarefaDto.IdCoordenador,
+                ProjetoId = TarefaDto.IdProjeto,
+                CoordenadorId = TarefaDto.IdCoordenador
             };
         }
 
@@ -20,7 +20,8 @@ namespace server.Mappers
         {
             return new Tarefa
             {
-                TarefaId = TarefaDto.TarefaId
+                TarefaId = TarefaDto.TarefaId,
+                ProjetoId = TarefaDto.IdProjeto
             };
         }
 
@@ -29,8 +30,8 @@ namespace server.Mappers
             return new Tarefa
             {
                 Descricao = TarefaDto.Descricao,
-                DataInicio = TarefaDto.DataInicio,
-                DataFim = TarefaDto.DataFim
+                DataFim = TarefaDto.DataFim,
+                // SubTarefaId = TarefaDto.IdSubTarefa
             };
         }
     }

@@ -31,10 +31,10 @@ namespace server.Services
             else
                 Cliente.Telefone = Cliente.Telefone;
 
-            if (Body.Email != null)
-                Cliente.Email = Body.Email;
-            else
-                Cliente.Email = Cliente.Email;
+            // if (Body.ProjetoId > 0)
+            //     Cliente.ProjetoId = Body.ProjetoId;
+            // else
+            //     Cliente.ProjetoId = Cliente.ProjetoId;
 
             await dbContext.SaveChangesAsync();
         }

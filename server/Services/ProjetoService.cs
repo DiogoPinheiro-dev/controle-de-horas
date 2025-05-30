@@ -31,15 +31,30 @@ namespace server.Services
             else
                 Projeto.Nome = Projeto.Nome;
 
-            if (Body.DataInicio > 0)
-                Projeto.DataInicio = Body.DataInicio;
-            else
-                Projeto.DataInicio = Projeto.DataInicio;
+            // if (Body.TarefaId > 0)
+            //     Projeto.TarefaId = Body.TarefaId;
+            // else
+            //     Projeto.TarefaId = Projeto.TarefaId;
 
             if (Body.DataFim > 0)
                 Projeto.DataFim = Body.DataFim;
             else
                 Projeto.DataFim = Projeto.DataFim;
+
+            // if (Body.GerenteId > 0)
+            //     Projeto.GerenteId = Body.GerenteId;
+            // else
+            //     Projeto.GerenteId = Projeto.GerenteId;
+            
+            if (Body.EmpresaId > 0)
+                Projeto.EmpresaId = Body.EmpresaId;
+            else
+                Projeto.EmpresaId = Projeto.EmpresaId;
+                
+            if (Body.ClienteId > 0)
+                Projeto.ClienteId = Body.ClienteId;
+            else
+                Projeto.ClienteId = Projeto.ClienteId;
 
             await dbContext.SaveChangesAsync();
         }

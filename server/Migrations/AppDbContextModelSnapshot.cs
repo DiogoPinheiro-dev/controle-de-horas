@@ -21,6 +21,27 @@ namespace server.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("server.Models.Analista", b =>
+                {
+                    b.Property<int>("AnalistaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AnalistaId"));
+
+                    b.Property<string>("Nome")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RecursoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AnalistaId");
+
+                    b.HasIndex("RecursoId");
+
+                    b.ToTable("Analistas");
+                });
+
             modelBuilder.Entity("server.Models.Apontamento", b =>
                 {
                     b.Property<int>("ApontamentoId")
@@ -28,6 +49,9 @@ namespace server.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApontamentoId"));
+
+                    b.Property<int>("AnalistaId")
+                        .HasColumnType("int");
 
                     b.Property<int>("DataFim")
                         .HasColumnType("int");
@@ -44,17 +68,18 @@ namespace server.Migrations
                     b.Property<int>("HorasFinalizadas")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdAnalista")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdSubTarefa")
-                        .HasColumnType("int");
-
                     b.Property<string>("OS")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("SubTarefaId")
+                        .HasColumnType("int");
+
                     b.HasKey("ApontamentoId");
+
+                    b.HasIndex("AnalistaId");
+
+                    b.HasIndex("SubTarefaId");
 
                     b.ToTable("Apontamentos");
                 });
@@ -80,6 +105,27 @@ namespace server.Migrations
                     b.HasKey("ClienteId");
 
                     b.ToTable("Clientes");
+                });
+
+            modelBuilder.Entity("server.Models.Coordenador", b =>
+                {
+                    b.Property<int>("CoordenadorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CoordenadorId"));
+
+                    b.Property<string>("Nome")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RecursoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CoordenadorId");
+
+                    b.HasIndex("RecursoId");
+
+                    b.ToTable("Coordenadores");
                 });
 
             modelBuilder.Entity("server.Models.Empresa", b =>
@@ -110,22 +156,7 @@ namespace server.Migrations
 
                     b.HasIndex("ClienteId");
 
-                    b.ToTable("Empresa_Cliente");
-                });
-
-            modelBuilder.Entity("server.Models.EmpresaProjeto", b =>
-                {
-                    b.Property<int>("EmpresaId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProjetoId")
-                        .HasColumnType("int");
-
-                    b.HasKey("EmpresaId", "ProjetoId");
-
-                    b.HasIndex("ProjetoId");
-
-                    b.ToTable("Empresa_Projeto");
+                    b.ToTable("EmpresaClientes");
                 });
 
             modelBuilder.Entity("server.Models.EmpresaRecurso", b =>
@@ -140,7 +171,7 @@ namespace server.Migrations
 
                     b.HasIndex("RecursoId");
 
-                    b.ToTable("Empresa_Recurso");
+                    b.ToTable("EmpresaRecursos");
                 });
 
             modelBuilder.Entity("server.Models.EmpresaServico", b =>
@@ -155,7 +186,28 @@ namespace server.Migrations
 
                     b.HasIndex("ServicoId");
 
-                    b.ToTable("Empresa_Servico");
+                    b.ToTable("EmpresaServicos");
+                });
+
+            modelBuilder.Entity("server.Models.Gerente", b =>
+                {
+                    b.Property<int>("GerenteId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GerenteId"));
+
+                    b.Property<string>("Nome")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RecursoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("GerenteId");
+
+                    b.HasIndex("RecursoId");
+
+                    b.ToTable("Gerentes");
                 });
 
             modelBuilder.Entity("server.Models.Projeto", b =>
@@ -166,6 +218,9 @@ namespace server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProjetoId"));
 
+                    b.Property<int>("ClienteId")
+                        .HasColumnType("int");
+
                     b.Property<int>("DataFim")
                         .HasColumnType("int");
 
@@ -175,7 +230,10 @@ namespace server.Migrations
                     b.Property<string>("Descricao")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("IdGerente")
+                    b.Property<int>("EmpresaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GerenteId")
                         .HasColumnType("int");
 
                     b.Property<string>("Nome")
@@ -183,22 +241,13 @@ namespace server.Migrations
 
                     b.HasKey("ProjetoId");
 
-                    b.ToTable("Projetos");
-                });
-
-            modelBuilder.Entity("server.Models.ProjetoCliente", b =>
-                {
-                    b.Property<int>("ProjetoId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ClienteId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProjetoId", "ClienteId");
-
                     b.HasIndex("ClienteId");
 
-                    b.ToTable("Projeto_Cliente");
+                    b.HasIndex("EmpresaId");
+
+                    b.HasIndex("GerenteId");
+
+                    b.ToTable("Projetos");
                 });
 
             modelBuilder.Entity("server.Models.Recurso", b =>
@@ -254,6 +303,9 @@ namespace server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SubTarefaId"));
 
+                    b.Property<int>("AnalistaId")
+                        .HasColumnType("int");
+
                     b.Property<int>("DataFim")
                         .HasColumnType("int");
 
@@ -263,13 +315,14 @@ namespace server.Migrations
                     b.Property<string>("Descricao")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("IdAnalista")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdTarefa")
+                    b.Property<int>("TarefaId")
                         .HasColumnType("int");
 
                     b.HasKey("SubTarefaId");
+
+                    b.HasIndex("AnalistaId");
+
+                    b.HasIndex("TarefaId");
 
                     b.ToTable("SubTarefas");
                 });
@@ -282,6 +335,9 @@ namespace server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TarefaId"));
 
+                    b.Property<int>("CoordenadorId")
+                        .HasColumnType("int");
+
                     b.Property<int>("DataFim")
                         .HasColumnType("int");
 
@@ -291,29 +347,71 @@ namespace server.Migrations
                     b.Property<string>("Descricao")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("IdCoordenador")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdProjeto")
+                    b.Property<int>("ProjetoId")
                         .HasColumnType("int");
 
                     b.HasKey("TarefaId");
 
+                    b.HasIndex("CoordenadorId");
+
+                    b.HasIndex("ProjetoId");
+
                     b.ToTable("Tarefas");
+                });
+
+            modelBuilder.Entity("server.Models.Analista", b =>
+                {
+                    b.HasOne("server.Models.Recurso", "Recurso")
+                        .WithMany("Analistas")
+                        .HasForeignKey("RecursoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Recurso");
+                });
+
+            modelBuilder.Entity("server.Models.Apontamento", b =>
+                {
+                    b.HasOne("server.Models.Analista", "Analista")
+                        .WithMany("Apontamentos")
+                        .HasForeignKey("AnalistaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("server.Models.SubTarefa", "SubTarefa")
+                        .WithMany("Apontamentos")
+                        .HasForeignKey("SubTarefaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Analista");
+
+                    b.Navigation("SubTarefa");
+                });
+
+            modelBuilder.Entity("server.Models.Coordenador", b =>
+                {
+                    b.HasOne("server.Models.Recurso", "Recurso")
+                        .WithMany("Coordenadores")
+                        .HasForeignKey("RecursoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Recurso");
                 });
 
             modelBuilder.Entity("server.Models.EmpresaCliente", b =>
                 {
                     b.HasOne("server.Models.Cliente", "Cliente")
-                        .WithMany()
+                        .WithMany("EmpresaClientes")
                         .HasForeignKey("ClienteId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("server.Models.Empresa", "Empresa")
-                        .WithMany()
+                        .WithMany("EmpresaClientes")
                         .HasForeignKey("EmpresaId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Cliente");
@@ -321,37 +419,18 @@ namespace server.Migrations
                     b.Navigation("Empresa");
                 });
 
-            modelBuilder.Entity("server.Models.EmpresaProjeto", b =>
-                {
-                    b.HasOne("server.Models.Empresa", "Empresa")
-                        .WithMany()
-                        .HasForeignKey("EmpresaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("server.Models.Projeto", "Projeto")
-                        .WithMany()
-                        .HasForeignKey("ProjetoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Empresa");
-
-                    b.Navigation("Projeto");
-                });
-
             modelBuilder.Entity("server.Models.EmpresaRecurso", b =>
                 {
                     b.HasOne("server.Models.Empresa", "Empresa")
-                        .WithMany()
+                        .WithMany("EmpresaRecursos")
                         .HasForeignKey("EmpresaId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("server.Models.Recurso", "Recurso")
-                        .WithMany()
+                        .WithMany("EmpresaRecursos")
                         .HasForeignKey("RecursoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Empresa");
@@ -362,15 +441,15 @@ namespace server.Migrations
             modelBuilder.Entity("server.Models.EmpresaServico", b =>
                 {
                     b.HasOne("server.Models.Empresa", "Empresa")
-                        .WithMany()
+                        .WithMany("EmpresaServicos")
                         .HasForeignKey("EmpresaId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("server.Models.Servico", "Servico")
-                        .WithMany()
+                        .WithMany("EmpresaServicos")
                         .HasForeignKey("ServicoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Empresa");
@@ -378,23 +457,146 @@ namespace server.Migrations
                     b.Navigation("Servico");
                 });
 
-            modelBuilder.Entity("server.Models.ProjetoCliente", b =>
+            modelBuilder.Entity("server.Models.Gerente", b =>
                 {
-                    b.HasOne("server.Models.Cliente", "Cliente")
-                        .WithMany()
-                        .HasForeignKey("ClienteId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("server.Models.Recurso", "Recurso")
+                        .WithMany("Gerentes")
+                        .HasForeignKey("RecursoId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("server.Models.Projeto", "Projeto")
-                        .WithMany()
-                        .HasForeignKey("ProjetoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.Navigation("Recurso");
+                });
+
+            modelBuilder.Entity("server.Models.Projeto", b =>
+                {
+                    b.HasOne("server.Models.Cliente", "Cliente")
+                        .WithMany("Projetos")
+                        .HasForeignKey("ClienteId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("server.Models.Empresa", "Empresa")
+                        .WithMany("Projetos")
+                        .HasForeignKey("EmpresaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("server.Models.Gerente", "Gerente")
+                        .WithMany("Projetos")
+                        .HasForeignKey("GerenteId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Cliente");
 
+                    b.Navigation("Empresa");
+
+                    b.Navigation("Gerente");
+                });
+
+            modelBuilder.Entity("server.Models.SubTarefa", b =>
+                {
+                    b.HasOne("server.Models.Analista", "Analista")
+                        .WithMany("SubTarefas")
+                        .HasForeignKey("AnalistaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("server.Models.Tarefa", "Tarefa")
+                        .WithMany("SubTarefas")
+                        .HasForeignKey("TarefaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Analista");
+
+                    b.Navigation("Tarefa");
+                });
+
+            modelBuilder.Entity("server.Models.Tarefa", b =>
+                {
+                    b.HasOne("server.Models.Coordenador", "Coordenador")
+                        .WithMany("Tarefas")
+                        .HasForeignKey("CoordenadorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("server.Models.Projeto", "Projeto")
+                        .WithMany("Tarefas")
+                        .HasForeignKey("ProjetoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Coordenador");
+
                     b.Navigation("Projeto");
+                });
+
+            modelBuilder.Entity("server.Models.Analista", b =>
+                {
+                    b.Navigation("Apontamentos");
+
+                    b.Navigation("SubTarefas");
+                });
+
+            modelBuilder.Entity("server.Models.Cliente", b =>
+                {
+                    b.Navigation("EmpresaClientes");
+
+                    b.Navigation("Projetos");
+                });
+
+            modelBuilder.Entity("server.Models.Coordenador", b =>
+                {
+                    b.Navigation("Tarefas");
+                });
+
+            modelBuilder.Entity("server.Models.Empresa", b =>
+                {
+                    b.Navigation("EmpresaClientes");
+
+                    b.Navigation("EmpresaRecursos");
+
+                    b.Navigation("EmpresaServicos");
+
+                    b.Navigation("Projetos");
+                });
+
+            modelBuilder.Entity("server.Models.Gerente", b =>
+                {
+                    b.Navigation("Projetos");
+                });
+
+            modelBuilder.Entity("server.Models.Projeto", b =>
+                {
+                    b.Navigation("Tarefas");
+                });
+
+            modelBuilder.Entity("server.Models.Recurso", b =>
+                {
+                    b.Navigation("Analistas");
+
+                    b.Navigation("Coordenadores");
+
+                    b.Navigation("EmpresaRecursos");
+
+                    b.Navigation("Gerentes");
+                });
+
+            modelBuilder.Entity("server.Models.Servico", b =>
+                {
+                    b.Navigation("EmpresaServicos");
+                });
+
+            modelBuilder.Entity("server.Models.SubTarefa", b =>
+                {
+                    b.Navigation("Apontamentos");
+                });
+
+            modelBuilder.Entity("server.Models.Tarefa", b =>
+                {
+                    b.Navigation("SubTarefas");
                 });
 #pragma warning restore 612, 618
         }

@@ -11,7 +11,8 @@ namespace server.Mappers
             {
                 Email = ClienteDto.Email,
                 Nome = ClienteDto.Nome,
-                Telefone = ClienteDto.Telefone
+                Telefone = ClienteDto.Telefone,
+                // ProjetoId = ClienteDto.IdProjeto
             };
         }
 
@@ -31,6 +32,7 @@ namespace server.Mappers
                 Email = "",
                 Nome = ClienteDto.Nome,
                 Telefone = ClienteDto.Telefone,
+                // ProjetoId = ClienteDto.IdProjeto
             };
         }
     }
