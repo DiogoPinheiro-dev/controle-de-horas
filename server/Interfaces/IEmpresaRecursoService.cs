@@ -8,8 +8,10 @@ namespace server.Interfaces
         public Task AlterarRelacaoEmpresaRecurso(EmpresaRecurso empresaRecurso, EmpresaRecurso Body);
         public Task DeletarRelacaoEmpresaRecurso(EmpresaRecurso empresaRecurso);
 
-        public Task<EmpresaRecurso> ObterRelacoesPorIdDaEmpresa(int idEmpresa);
-        public Task<EmpresaRecurso> ObterRelacoesPorIdDoRecurso(int idRecurso);
+        public Task<List<EmpresaRecurso>> ObterRelacoesPorIdDaEmpresa(int idEmpresa);
+        public Task<List<EmpresaRecurso>> ObterRelacoesPorIdDoRecurso(int idRecurso);
+        
+        public Task<EmpresaRecurso> ObterRelacaoPorId(int idRecurso, int idEmpresa);
 
         public Task<List<EmpresaRecurso>> ObterTodasRelacoes();
     }

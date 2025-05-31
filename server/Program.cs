@@ -16,6 +16,10 @@ builder.Services.AddScoped<ITarefaService, TarefaService>();
 builder.Services.AddScoped<ISubTarefaService, SubTarefaService>();
 builder.Services.AddScoped<IApontamentoService, ApontamentoService>();
 
+builder.Services.AddScoped<IEmpresaClienteService, EmpresaClienteService>();
+builder.Services.AddScoped<IEmpresaRecursoService, EmpresaRecursoService>();
+builder.Services.AddScoped<IEmpresaServicoService, EmpresaServicoService>();
+
 // Add services to the container.
 builder.Services.AddControllers();
 

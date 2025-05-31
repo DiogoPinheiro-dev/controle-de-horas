@@ -5,54 +5,65 @@ using server.Models;
 
 namespace server.Services
 {
-    public class EmpresaClienteService : IEmpresaClienteService
+    public class EmpresaClienteService(AppDbContext dbContext) : IEmpresaClienteService
     {
-        private readonly AppDbContext dbContext;
+        private readonly AppDbContext dbContext = dbContext;
 
-        public EmpresaClienteService(AppDbContext dbContext)
-        {
-            this.dbContext = dbContext;
-        }
-
-        public async Task AlterarRelacaoEmpresaCliente(EmpresaCliente empresaCliente, EmpresaCliente Body)
+        public async Task AlterarRelacaoEmpresaCliente(EmpresaCliente EmpresaCliente, EmpresaCliente Body)
         {
             if (Body.ClienteId <= 0)
-                empresaCliente.ClienteId = empresaCliente.ClienteId;
+                EmpresaCliente.ClienteId = EmpresaCliente.ClienteId;
             else
-                empresaCliente.ClienteId = Body.ClienteId;
+                EmpresaCliente.ClienteId = Body.ClienteId;
 
             if (Body.EmpresaId <= 0)
-                empresaCliente.EmpresaId = empresaCliente.EmpresaId;
+                EmpresaCliente.EmpresaId = EmpresaCliente.EmpresaId;
             else
-                empresaCliente.EmpresaId = Body.EmpresaId;
+                EmpresaCliente.EmpresaId = Body.EmpresaId;
 
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task DeletarRelacaoEmpresaCliente(EmpresaCliente empresaCliente)
+        public async Task DeletarRelacaoEmpresaCliente(EmpresaCliente EmpresaCliente)
         {
-            dbContext.EmpresaClientes.Remove(empresaCliente);
+            dbContext.EmpresaClientes.Remove(EmpresaCliente);
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task<EmpresaCliente> ObterRelacoesPorIdDaEmpresa(int idEmpresa)
+        public async Task<List<EmpresaCliente>> ObterRelacoesPorIdDaEmpresa(int idEmpresa)
         {
-            return await dbContext.EmpresaClientes.FindAsync(idEmpresa);
+            List<EmpresaCliente> EmpresaClientes;
+
+            EmpresaClientes = await dbContext.EmpresaClientes.Where(er => er.EmpresaId == idEmpresa).ToListAsync();
+
+            return EmpresaClientes;
         }
 
-        public async Task<EmpresaCliente> ObterRelacoesPorIdDoCliente(int idCliente)
+        public async Task<List<EmpresaCliente>> ObterRelacoesPorIdDoCliente(int idCliente)
         {
-            return await dbContext.EmpresaClientes.FindAsync(idCliente);
+            List<EmpresaCliente> EmpresaClientes;
+
+            EmpresaClientes = await dbContext.EmpresaClientes.Where(er => er.ClienteId == idCliente).ToListAsync();
+
+            return EmpresaClientes;
         }
 
+        public async Task<EmpresaCliente> ObterRelacaoPorId(int idCliente, int idEmpresa)
+        {
+            EmpresaCliente EmpresaCliente;
+
+            EmpresaCliente = await dbContext.EmpresaClientes.Where(er => er.EmpresaId == idEmpresa && er.ClienteId == idCliente).FirstAsync();
+
+            return EmpresaCliente;
+        }
         public async Task<List<EmpresaCliente>> ObterTodasRelacoes()
         {
             return await dbContext.EmpresaClientes.ToListAsync();
         }
 
-        public async Task RelacionarEmpresaCliente(EmpresaCliente empresaCliente)
+        public async Task RelacionarEmpresaCliente(EmpresaCliente EmpresaCliente)
         {
-            await dbContext.EmpresaClientes.AddAsync(empresaCliente);
+            await dbContext.EmpresaClientes.AddAsync(EmpresaCliente);
             await dbContext.SaveChangesAsync();
         }
     }
