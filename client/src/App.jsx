@@ -1,11 +1,11 @@
-import './App.css'
+import { Outlet } from "react-router-dom"
 
-function App() {
-  return (
-    <>
-      <p>AAAA</p> 
-    </>
-  )
+const App = () => {
+    return(
+        <>
+            <Outlet />
+        </>
+    )
 }
 
 export default App
