@@ -5,6 +5,18 @@ namespace server.Mappers
 {
     public static class ClienteMapper
     {
+        public static ClienteDto DtoDoCliente(this Cliente cliente)
+        {
+            return new ClienteDto
+            {
+                Email = cliente.Email,
+                Nome = cliente.Nome,
+                Telefone = cliente.Telefone,
+                ProjetoId = cliente.ProjetoId,
+                IdEmpresa = cliente.IdEmpresa
+            };
+        }
+
         public static Cliente DtoDaCriacaoDoCliente(this CriarClienteDto ClienteDto)
         {
             return new Cliente
@@ -12,7 +24,7 @@ namespace server.Mappers
                 Email = ClienteDto.Email,
                 Nome = ClienteDto.Nome,
                 Telefone = ClienteDto.Telefone,
-                // ProjetoId = ClienteDto.IdProjeto
+                IdEmpresa = ClienteDto.IdEmpresa
             };
         }
 
@@ -21,6 +33,7 @@ namespace server.Mappers
             return new Cliente
             {
                 ClienteId = ClienteDto.ClienteId,
+                IdEmpresa = ClienteDto.IdEmpresa,
                 Email = ""
             };
         }
@@ -32,7 +45,8 @@ namespace server.Mappers
                 Email = "",
                 Nome = ClienteDto.Nome,
                 Telefone = ClienteDto.Telefone,
-                // ProjetoId = ClienteDto.IdProjeto
+                ProjetoId = ClienteDto.IdProjeto,
+                IdEmpresa = ClienteDto.IdEmpresa
             };
         }
     }

@@ -5,19 +5,35 @@ using server.Interfaces;
 
 namespace server.Services
 {
-    public class ServicoService : IServicoService
+    public class ServicoService(AppDbContext dbContext) : IServicoService
     {
-        private readonly AppDbContext dbContext;
+        private readonly AppDbContext dbContext = dbContext;
 
-        public ServicoService(AppDbContext dbContext)
+        public async Task CriarServico(Servico servico)
         {
-            this.dbContext = dbContext;
-        }
+            await dbContext.Database.BeginTransactionAsync();
 
-        public async Task CriarServico(Servico Servico)
-        {
-            dbContext.Servicos.Add(Servico);
+            var empresa = await dbContext.Empresas.FindAsync(servico.IdEmpresa);
+
+            if (empresa == null)
+            {
+                await dbContext.Database.RollbackTransactionAsync();
+                throw new Exception("Empresa não encontrada.");
+            }
+
+            await dbContext.Servicos.AddAsync(servico);
             await dbContext.SaveChangesAsync();
+
+            EmpresaServico es = new()
+            {
+                EmpresaId = empresa.EmpresaId,
+                ServicoId = servico.ServicoId
+            };
+
+            await dbContext.EmpresaServicos.AddAsync(es);
+            await dbContext.SaveChangesAsync();
+
+            await dbContext.Database.CommitTransactionAsync();
         }
         public async Task AtualizarServico(Servico Servico, Servico Body)
         {
@@ -31,10 +47,45 @@ namespace server.Services
             else
                 Servico.Custo = Body.Custo;
 
-            await dbContext.SaveChangesAsync();
+            if (Body.IdEmpresa > 0)
+            {
+                var empresaAtu = await dbContext.Empresas.FindAsync(Servico.IdEmpresa);
+                var empresaNova = await dbContext.Empresas.FindAsync(Body.IdEmpresa);
+
+                if (empresaNova == null || empresaAtu == null)
+                {
+                    throw new Exception("Empresa nao encontrada.");
+                }
+                else
+                {
+                    var esAtu = await dbContext.EmpresaServicos.FindAsync(empresaAtu.EmpresaId, Body.ServicoId);
+
+                    dbContext.EmpresaServicos.Remove(esAtu);
+                    await dbContext.SaveChangesAsync();
+
+                    dbContext.EmpresaServicos.Add(new EmpresaServico()
+                    {
+                        EmpresaId = Body.IdEmpresa,
+                        ServicoId = Body.ServicoId,
+                    });
+                    await dbContext.SaveChangesAsync();
+                }
+            }
         }
         public async Task DeletarServico(Servico Servico)
         {
+            var empresaServico = dbContext.EmpresaServicos.Find(Servico.IdEmpresa, Servico.ServicoId);
+
+            if (empresaServico != null)
+            {
+                dbContext.EmpresaServicos.Remove(empresaServico);
+            }
+            else
+            {
+                throw new Exception("Relação Empresa-Serviço não encontrada.");
+            }
+            await dbContext.SaveChangesAsync();
+
             dbContext.Servicos.Remove(Servico);
             await dbContext.SaveChangesAsync();
         }

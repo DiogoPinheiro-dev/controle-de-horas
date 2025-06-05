@@ -8,14 +8,9 @@ namespace server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ServicoController : ControllerBase
+    public class ServicoController(IServicoService service) : ControllerBase
     {
-        private readonly IServicoService service;
-
-        public ServicoController(IServicoService service)
-        {
-            this.service = service;
-        }
+        private readonly IServicoService service = service;
 
         [HttpPost]
         public async Task<ActionResult> CriarServico([FromBody] CriarServicoDto ServicoDto)
@@ -36,7 +31,7 @@ namespace server.Controllers
 
                 await service.CriarServico(Servico);
 
-                return Ok(Servico);
+                return Ok(Servico.DtoDoServico());
             }
             catch
             {
@@ -76,7 +71,7 @@ namespace server.Controllers
 
                 await service.AtualizarServico(Servico, ServicoBody);
 
-                return Ok(Servico);
+                return Ok(Servico.DtoDoServico());
             }
             catch
             {
@@ -104,7 +99,7 @@ namespace server.Controllers
                 }
                 await service.DeletarServico(Servico);
 
-                return Ok(Servico);
+                return Ok(Servico.DtoDoServico());
             }
             catch
             {
@@ -118,8 +113,12 @@ namespace server.Controllers
             try
             {
                 List<Servico> Servicos = await service.ObterTodosServicos();
+                List<ServicoDto> ServicosDtos = [];
 
-                return Ok(Servicos);
+                foreach (var Servico in Servicos)
+                    ServicosDtos.Add(Servico.DtoDoServico());
+
+                return Ok(ServicosDtos);
             }
             catch
             {
@@ -145,7 +144,7 @@ namespace server.Controllers
                     return NotFound();
                 }
 
-                return Ok(Servico);
+                return Ok(Servico.DtoDoServico());
             }
             catch
             {
@@ -160,6 +159,7 @@ namespace server.Controllers
             try
             {
                 List<Servico> Servicos;
+                List<ServicoDto> ServicosDtos = [];
 
                 if (descricao == string.Empty)
                 {
@@ -180,13 +180,16 @@ namespace server.Controllers
                     }
                 }
 
-                return Ok(Servicos);
+                foreach (var Servico in Servicos)
+                    ServicosDtos.Add(Servico.DtoDoServico());
+
+                return Ok(ServicosDtos);
             }
             catch
             {
                 throw;
             }
-        }  
+        }
 
         [HttpGet]
         [Route("ByCusto/{custo}")]
@@ -195,6 +198,7 @@ namespace server.Controllers
             try
             {
                 List<Servico> Servicos;
+                List<ServicoDto> ServicosDtos = [];
 
                 if (custo == string.Empty)
                 {
@@ -220,12 +224,15 @@ namespace server.Controllers
                     }
                 }
 
-                return Ok(Servicos);
+                foreach (var Servico in Servicos)
+                    ServicosDtos.Add(Servico.DtoDoServico());
+
+                return Ok(ServicosDtos);
             }
             catch
             {
                 throw;
             }
-        }  
+        }
     }
 }

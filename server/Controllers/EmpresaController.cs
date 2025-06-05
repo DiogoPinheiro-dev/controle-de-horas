@@ -8,14 +8,9 @@ namespace server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EmpresaController : ControllerBase
+    public class EmpresaController(IEmpresaService service) : ControllerBase
     {
-        private readonly IEmpresaService service;
-
-        public EmpresaController(IEmpresaService service)
-        {
-            this.service = service;
-        }
+        private readonly IEmpresaService service = service;
 
         [HttpPost]
         public async Task<ActionResult> CriarEmpresa([FromBody] CriarEmpresaDto EmpresaDto)
@@ -36,7 +31,7 @@ namespace server.Controllers
 
                 await service.CriarEmpresa(Empresa);
 
-                return Ok(Empresa);
+                return Ok(Empresa.DtoDaEmpresa());
             }
             catch
             {
@@ -76,7 +71,7 @@ namespace server.Controllers
 
                 await service.AtualizarEmpresa(Empresa, EmpresaBody);
 
-                return Ok(Empresa);
+                return Ok(Empresa.DtoDaEmpresa());
             }
             catch
             {
@@ -104,7 +99,7 @@ namespace server.Controllers
                 }
                 await service.DeletarEmpresa(Empresa);
 
-                return Ok(Empresa);
+                return Ok(Empresa.DtoDaEmpresa());
             }
             catch
             {
@@ -118,8 +113,12 @@ namespace server.Controllers
             try
             {
                 List<Empresa> Empresas = await service.ObterTodasEmpresas();
+                List<EmpresaDto> EmpresasDto = [];
 
-                return Ok(Empresas);
+                foreach (var Empresa in Empresas)
+                    EmpresasDto.Add(Empresa.DtoDaEmpresa());
+
+                return Ok(EmpresasDto);
             }
             catch
             {
@@ -145,7 +144,7 @@ namespace server.Controllers
                     return NotFound();
                 }
 
-                return Ok(Empresa);
+                return Ok(Empresa.DtoDaEmpresa());
             }
             catch
             {
@@ -160,6 +159,7 @@ namespace server.Controllers
             try
             {
                 List<Empresa> Empresas;
+                List<EmpresaDto> EmpresasDtos = [];
 
                 if (nome == string.Empty)
                 {
@@ -180,12 +180,15 @@ namespace server.Controllers
                     }
                 }
 
-                return Ok(Empresas);
+                foreach (var Empresa in Empresas)
+                    EmpresasDtos.Add(Empresa.DtoDaEmpresa());
+
+                return Ok(EmpresasDtos);
             }
             catch
             {
                 throw;
             }
-        }  
+        }
     }
 }

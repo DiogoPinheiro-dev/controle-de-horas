@@ -5,6 +5,18 @@ namespace server.Mappers
 {
     public static class SubTarefaMapper
     {
+        public static SubTarefaDto DtoDaSubTarefa(this SubTarefa subTarefa)
+        {
+            return new SubTarefaDto
+            {
+                Descricao = subTarefa.Descricao,
+                DataInicio = subTarefa.DataInicio,
+                DataFim = subTarefa.DataFim,
+                TarefaId = subTarefa.TarefaId,
+                RecursoId = subTarefa.SubTarefaId
+            };
+        }
+
         public static SubTarefa DtoDaCriacaoDaSubTarefa(this CriarSubTarefaDto SubTarefaDto)
         {
             return new SubTarefa
@@ -12,7 +24,7 @@ namespace server.Mappers
                 Descricao = SubTarefaDto.Descricao,
                 DataInicio = SubTarefaDto.DataInicio,
                 TarefaId = SubTarefaDto.IdTarefa,
-                AnalistaId = SubTarefaDto.IdAnalista
+                RecursoId = SubTarefaDto.IdAnalista
             };
         }
 
@@ -22,8 +34,7 @@ namespace server.Mappers
             {
                 Descricao = SubTarefaDto.Descricao,
                 DataFim = SubTarefaDto.DataFim,
-                // ApontamentoId = SubTarefaDto.IdApontamento,
-                AnalistaId = SubTarefaDto.IdAnalista,
+                RecursoId = SubTarefaDto.IdAnalista
             };
         }
 

@@ -5,6 +5,19 @@ namespace server.Mappers
 {
     public static class ProjetoMapper
     {
+        public static ProjetoDto DtoDoProjeto(this Projeto projeto)
+        {
+            return new ProjetoDto
+            {
+                Descricao = projeto.Descricao,
+                Nome = projeto.Nome,
+                DataInicio = projeto.DataInicio,
+                DataFim = projeto.DataFim,
+                RecursoId = projeto.RecursoId,
+                EmpresaId = projeto.EmpresaId,
+                ClienteId = projeto.ClienteId
+            };
+        }
         public static Projeto DtoDaCriacaoDoProjeto(this CriarProjetoDto ProjetoDto)
         {
             return new Projeto
@@ -13,8 +26,8 @@ namespace server.Mappers
                 Nome = ProjetoDto.Nome,
                 DataInicio = ProjetoDto.DataIni,
                 ClienteId = ProjetoDto.IdCliente,
-                GerenteId = ProjetoDto.IdGerente
-                // TarefaId = ProjetoDto.IdTarefa
+                RecursoId = ProjetoDto.IdGerente,
+                EmpresaId = ProjetoDto.IdEmpresa
             };
         }
 
@@ -23,7 +36,7 @@ namespace server.Mappers
             return new Projeto
             {
                 ProjetoId = ProjetoDto.ProjetoId,
-                GerenteId = ProjetoDto.IdGerente
+                RecursoId = ProjetoDto.IdGerente
             };
         }
 
@@ -33,7 +46,8 @@ namespace server.Mappers
             {
                 Descricao = ProjetoDto.Descricao,
                 Nome = ProjetoDto.Nome,
-                DataFim = ProjetoDto.DataFim
+                DataFim = ProjetoDto.DataFim,
+                EmpresaId = ProjetoDto.IdEmpresa
             };
         }
     }

@@ -8,14 +8,9 @@ namespace server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ClienteController : ControllerBase
+    public class ClienteController(IClienteService service) : ControllerBase
     {
-        private readonly IClienteService service;
-
-        public ClienteController(IClienteService service)
-        {
-            this.service = service;
-        }
+        private readonly IClienteService service = service;
 
         [HttpPost]
         public async Task<ActionResult> CriarCliente([FromBody] CriarClienteDto ClienteDto)
@@ -36,7 +31,7 @@ namespace server.Controllers
 
                 await service.CriarCliente(Cliente);
 
-                return Ok(Cliente);
+                return Ok(Cliente.DtoDoCliente());
             }
             catch
             {
@@ -76,13 +71,12 @@ namespace server.Controllers
 
                 await service.AtualizarCliente(Cliente, ClienteBody);
 
-                return Ok(Cliente);
+                return Ok(Cliente.DtoDoCliente());
             }
             catch
             {
                 throw;
             }
-
         }
 
         [HttpDelete]
@@ -104,7 +98,7 @@ namespace server.Controllers
                 }
                 await service.DeletarCliente(Cliente);
 
-                return Ok(Cliente);
+                return Ok(Cliente.DtoDoCliente());
             }
             catch
             {
@@ -118,8 +112,12 @@ namespace server.Controllers
             try
             {
                 List<Cliente> Clientes = await service.ObterTodosClientes();
+                List<ClienteDto> ClientesDto = [];
 
-                return Ok(Clientes);
+                foreach (var Cliente in Clientes)
+                    ClientesDto.Add(Cliente.DtoDoCliente());
+
+                return Ok(ClientesDto);
             }
             catch
             {
@@ -145,7 +143,7 @@ namespace server.Controllers
                     return NotFound();
                 }
 
-                return Ok(Cliente);
+                return Ok(Cliente.DtoDoCliente());
             }
             catch
             {
@@ -160,6 +158,7 @@ namespace server.Controllers
             try
             {
                 List<Cliente> Clientes;
+                List<ClienteDto> ClientesDto = [];
 
                 if (nome == string.Empty)
                 {
@@ -180,7 +179,10 @@ namespace server.Controllers
                     }
                 }
 
-                return Ok(Clientes);
+                foreach (var Cliente in Clientes)
+                    ClientesDto.Add(Cliente.DtoDoCliente());
+
+                return Ok(ClientesDto);
             }
             catch
             {
@@ -195,6 +197,7 @@ namespace server.Controllers
             try
             {
                 List<Cliente> Clientes;
+                List<ClienteDto> ClientesDto = [];
 
                 if (email == string.Empty)
                 {
@@ -215,7 +218,10 @@ namespace server.Controllers
                     }
                 }
 
-                return Ok(Clientes);
+                foreach (var Cliente in Clientes)
+                    ClientesDto.Add(Cliente.DtoDoCliente());
+
+                return Ok(ClientesDto);
             }
             catch
             {
@@ -229,6 +235,7 @@ namespace server.Controllers
         {
             try
             {
+                List<ClienteDto> ClienteDtos = [];
 
                 if (tel == null)
                 {
@@ -238,17 +245,17 @@ namespace server.Controllers
                 tel = tel.Replace(" ", "");
                 tel = tel.Replace("-", "");
 
-                if (tel.Contains("("))
+                if (tel.Contains('('))
                 {
                     string[] parts;
 
                     string ddd, operadora_e_numero;
-                    parts = tel.Split(")");
+                    parts = tel.Split(')');
 
                     ddd = parts[0].Substring(1, 2).Trim();
                     operadora_e_numero = parts[1].Trim();
 
-                    if (operadora_e_numero.Contains(" "))
+                    if (operadora_e_numero.Contains(' '))
                     {
                         operadora_e_numero = operadora_e_numero.Replace(" ", "");
                     }
@@ -256,22 +263,22 @@ namespace server.Controllers
                     tel = ddd + operadora_e_numero;
                 }
 
-                var recursos = await service.ObterClientePorTelefone(tel.Trim());
+                var clientes = await service.ObterClientePorTelefone(tel.Trim());
 
-                if (recursos == null)
+                if (clientes == null)
                 {
                     return NotFound();
                 }
 
-                return Ok(recursos);
+                foreach (var cliente in clientes)
+                    ClienteDtos.Add(cliente.DtoDoCliente());
+
+                return Ok(ClienteDtos);
             }
             catch
             {
                 throw;
             }
         }
-
-        
-        
     }
 }

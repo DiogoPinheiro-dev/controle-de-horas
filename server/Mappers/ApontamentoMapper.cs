@@ -5,6 +5,21 @@ namespace server.Mappers
 {
     public static class ApontamentoMapper
     {
+        public static ApontamentoDto DtoDoApontamento(this Apontamento apontamentoDto)
+        {
+            return new ApontamentoDto
+            {
+                OS = apontamentoDto.OS,
+                Descricao = apontamentoDto.Descricao,
+                HorasApontadas = apontamentoDto.HorasApontadas,
+                HorasFinalizadas = apontamentoDto.HorasFinalizadas,
+                DataInicio = apontamentoDto.DataInicio,
+                DataFim = apontamentoDto.DataFim,
+                SubTarefaId = apontamentoDto.SubTarefaId,
+                RecursoId = apontamentoDto.RecursoId
+            };
+        }
+
         public static Apontamento DtoDaCriacaoDoApontamento(this CriarApontamentoDto apontamentoDto)
         {
             return new Apontamento
@@ -13,7 +28,7 @@ namespace server.Mappers
                 Descricao = apontamentoDto.Descricao,
                 HorasApontadas = apontamentoDto.HorasApontadas,
                 DataInicio = apontamentoDto.DataInicio,
-                AnalistaId = apontamentoDto.IdAnalista,
+                RecursoId = apontamentoDto.IdAnalista,
                 SubTarefaId = apontamentoDto.IdSubTarefa
             };
         }
@@ -36,7 +51,7 @@ namespace server.Mappers
                 Descricao = apontamentoDto.Descricao,
                 HorasFinalizadas = apontamentoDto.HorasFinalizadas,
                 DataFim = apontamentoDto.DataFim,
-                AnalistaId = apontamentoDto.IdAnalista,
+                RecursoId = apontamentoDto.IdAnalista,
             };
         }
     }

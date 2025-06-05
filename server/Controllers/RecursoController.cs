@@ -8,14 +8,9 @@ namespace server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RecursoController : ControllerBase
+    public class RecursoController(IRecursoService service) : ControllerBase
     {
-        private readonly IRecursoService service;
-
-        public RecursoController(IRecursoService service)
-        {
-            this.service = service;
-        }
+        private readonly IRecursoService service = service;
 
         [HttpPost]
         public async Task<ActionResult> CriarRecurso([FromBody] CriarRecursoDto recursoDto)
@@ -36,7 +31,7 @@ namespace server.Controllers
 
                 await service.CriarRecurso(modeloDeRecurso);
 
-                return Ok(modeloDeRecurso);
+                return Ok(modeloDeRecurso.DtoDoRecurso());
 
             }
             catch
@@ -64,7 +59,7 @@ namespace server.Controllers
 
                 await service.DeletarRecurso(recurso);
 
-                return Ok(recurso);
+                return Ok(recurso.DtoDoRecurso());
             }
             catch
             {
@@ -82,7 +77,7 @@ namespace server.Controllers
                 {
                     return NoContent();
                 }
-                
+
                 var recurso = RecursoPorId(id).Result.Value;
 
                 if (recurso == null)
@@ -99,7 +94,7 @@ namespace server.Controllers
 
                 await service.AtualizarRecurso(recurso, body);
 
-                return Ok(recurso);
+                return Ok(recurso.DtoDoRecurso());
             }
             catch
             {
@@ -113,6 +108,8 @@ namespace server.Controllers
         {
             try
             {
+                List<RecursoDto> RecursosDtos = [];
+
                 var recursos = await service.ObterTodosRecursos();
 
                 if (recursos == null)
@@ -120,7 +117,10 @@ namespace server.Controllers
                     return NotFound();
                 }
 
-                return Ok(recursos);
+                foreach (var recurso in recursos)
+                    RecursosDtos.Add(recurso.DtoDoRecurso());
+
+                return Ok(RecursosDtos);
             }
             catch
             {
@@ -145,7 +145,7 @@ namespace server.Controllers
                     return NotFound();
                 }
 
-                return Ok(recurso);
+                return Ok(recurso.DtoDoRecurso());
             }
             catch
             {
@@ -158,6 +158,8 @@ namespace server.Controllers
         {
             try
             {
+                List<RecursoDto> RecursosDtos = [];
+
                 if (email == null)
                 {
                     return BadRequest();
@@ -170,7 +172,10 @@ namespace server.Controllers
                     return NotFound();
                 }
 
-                return Ok(recursos);
+                foreach (var recurso in recursos)
+                    RecursosDtos.Add(recurso.DtoDoRecurso());
+
+                return Ok(RecursosDtos);
             }
             catch
             {
@@ -183,19 +188,24 @@ namespace server.Controllers
         {
             try
             {
+                List<RecursoDto> RecursosDtos = [];
+
                 if (nome == null)
                 {
                     return BadRequest();
                 }
 
-                var recurso = await service.ObterRecursoPorNome(nome.Trim());
+                var recursos = await service.ObterRecursoPorNome(nome.Trim());
 
-                if (recurso == null)
+                if (recursos == null)
                 {
                     return NotFound();
                 }
 
-                return Ok(recurso);
+                foreach (var recurso in recursos)
+                    RecursosDtos.Add(recurso.DtoDoRecurso());
+
+                return Ok(recursos);
             }
             catch
             {
@@ -208,6 +218,7 @@ namespace server.Controllers
         {
             try
             {
+                List<RecursoDto> RecursoDtos = [];
 
                 if (tel == null)
                 {
@@ -242,7 +253,10 @@ namespace server.Controllers
                     return NotFound();
                 }
 
-                return Ok(recursos);
+                foreach (var recurso in recursos)
+                    RecursoDtos.Add(recurso.DtoDoRecurso());
+
+                return Ok(RecursoDtos);
             }
             catch
             {
@@ -251,23 +265,28 @@ namespace server.Controllers
         }
 
         [HttpGet("ByTipo/{tipo}")]
-        public async Task<ActionResult<List<Recurso>>> RecursoPorTipo(string tipo)
+        public async Task<ActionResult<List<Recurso>>> RecursoPorTipo(char tipo)
         {
             try
             {
-                if (tipo == null)
+                List<RecursoDto> RecursosDtos = [];
+
+                if (tipo.Equals(null))
                 {
                     return BadRequest();
                 }
 
-                var recursos = await service.ObterRecursoPorTipo(tipo.Trim());
+                var recursos = await service.ObterRecursoPorTipo(tipo);
 
                 if (recursos == null)
                 {
                     return NotFound();
                 }
 
-                return Ok(recursos);
+                foreach (var recurso in recursos)
+                    RecursosDtos.Add(recurso.DtoDoRecurso());
+
+                return Ok(RecursosDtos);
             }
             catch
             {

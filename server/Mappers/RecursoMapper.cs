@@ -5,6 +5,18 @@ namespace server.Mappers
 {
     public static class RecursoMapper
     {
+        public static RecursoDto DtoDoRecurso(this Recurso recurso)
+        {
+            return new RecursoDto
+            {
+                Nome = recurso.Nome,
+                Email = recurso.Email,
+                Tipo = recurso.Tipo,
+                Telefone = recurso.Telefone,
+                IdEmpresa = recurso.IdEmpresa
+            };
+        }
+        
         public static Recurso DtoDaCriacaoDoRecurso(this CriarRecursoDto recursoDto)
         {
             return new Recurso
@@ -12,7 +24,8 @@ namespace server.Mappers
                 Nome = recursoDto.Nome,
                 Tipo = recursoDto.Tipo,
                 Email = recursoDto.Email,
-                Telefone = recursoDto.Telefone
+                Telefone = recursoDto.Telefone,
+                IdEmpresa = recursoDto.IdEmpresa
             };
         }
 
@@ -32,6 +45,7 @@ namespace server.Mappers
             return new Recurso
             {
                 RecursoId = recursoDto.RecursoId,
+                IdEmpresa = recursoDto.IdEmpresa,
                 Email = ""
             };
         }

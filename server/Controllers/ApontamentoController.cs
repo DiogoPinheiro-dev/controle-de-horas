@@ -8,14 +8,9 @@ namespace server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ApontamentoController : ControllerBase
+    public class ApontamentoController(IApontamentoService service) : ControllerBase
     {
-        private readonly IApontamentoService service;
-
-        public ApontamentoController(IApontamentoService service)
-        {
-            this.service = service;
-        }
+        private readonly IApontamentoService service = service;
 
         [HttpPost]
         public async Task<ActionResult> CriarApontamento([FromBody] CriarApontamentoDto apontamentoDto)
@@ -36,7 +31,7 @@ namespace server.Controllers
 
                 await service.CriarApontamento(apontamento);
 
-                return Ok(apontamento);
+                return Ok(apontamento.DtoDoApontamento());
             }
             catch
             {
@@ -76,7 +71,7 @@ namespace server.Controllers
 
                 await service.AtualizarApontamento(apontamento, apontamentoBody);
 
-                return Ok(apontamento);
+                return Ok(apontamento.DtoDoApontamento());
             }
             catch
             {
@@ -104,7 +99,7 @@ namespace server.Controllers
                 }
                 await service.DeletarApontamento(apontamento);
 
-                return Ok(apontamento);
+                return Ok(apontamento.DtoDoApontamento());
             }
             catch
             {
@@ -113,13 +108,18 @@ namespace server.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Apontamento>>> ObterTodosApontamentos()
+        public async Task<ActionResult<List<ApontamentoDto>>> ObterTodosApontamentos()
         {
             try
             {
                 List<Apontamento> apontamentos = await service.ObterTodosApontamentos();
+                List<ApontamentoDto> apontamentosDtos = [];
 
-                return Ok(apontamentos);
+                foreach (var apontamento in apontamentos)
+                    apontamentosDtos.Add(apontamento.DtoDoApontamento());
+
+
+                return Ok(apontamentosDtos);
             }
             catch
             {
@@ -133,6 +133,7 @@ namespace server.Controllers
         {
             try
             {
+
                 if (id <= 0)
                 {
                     return NoContent();
@@ -145,7 +146,7 @@ namespace server.Controllers
                     return NotFound();
                 }
 
-                return Ok(apontamento);
+                return Ok(apontamento.DtoDoApontamento());
             }
             catch
             {
@@ -160,6 +161,7 @@ namespace server.Controllers
             try
             {
                 List<Apontamento> apontamentos;
+                List<ApontamentoDto> apontamentoDtos = [];
 
                 if (os == string.Empty)
                 {
@@ -180,7 +182,10 @@ namespace server.Controllers
                     }
                 }
 
-                return Ok(apontamentos);
+                foreach (var apontamento in apontamentos)
+                    apontamentoDtos.Add(apontamento.DtoDoApontamento());
+
+                return Ok(apontamentoDtos);
             }
             catch
             {
@@ -195,6 +200,7 @@ namespace server.Controllers
             try
             {
                 List<Apontamento> apontamentos;
+                List<ApontamentoDto> apontamentoDtos = [];
 
                 if (dataIni <= dataFim)
                 {
@@ -210,8 +216,10 @@ namespace server.Controllers
                     return NotFound();
                 }
 
-                return Ok(apontamentos);
+                foreach (var apontamento in apontamentos)
+                    apontamentoDtos.Add(apontamento.DtoDoApontamento());
 
+                return Ok(apontamentos);
             }
             catch
             {

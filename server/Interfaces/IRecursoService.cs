@@ -14,6 +14,6 @@ namespace server.Interfaces
         Task<List<Recurso>> ObterRecursoPorNome(string nome);
         Task<List<Recurso>> ObterRecursoPorEmail(string email);
         Task<List<Recurso>> ObterRecursoPorTelefone(string telefone);
-        Task<List<Recurso>> ObterRecursoPorTipo(string tipo);
+        Task<List<Recurso>> ObterRecursoPorTipo(char tipo);
     }
 }

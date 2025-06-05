@@ -5,7 +5,7 @@
 namespace server.Migrations
 {
     /// <inheritdoc />
-    public partial class Setup_DB_V201 : Migration
+    public partial class Setup_DB_V2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,9 +16,11 @@ namespace server.Migrations
                 {
                     ClienteId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Telefone = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Nome = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    Telefone = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: true),
+                    ProjetoId = table.Column<int>(type: "int", nullable: false),
+                    IdEmpresa = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -31,7 +33,8 @@ namespace server.Migrations
                 {
                     EmpresaId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Nome = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: true),
+                    ProjetoId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -44,14 +47,16 @@ namespace server.Migrations
                 {
                     RecursoId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Tipo = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Telefone = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Nome = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: true),
+                    Tipo = table.Column<string>(type: "nvarchar(1)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    Telefone = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: true),
+                    IdEmpresa = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Recursos", x => x.RecursoId);
+                    table.CheckConstraint("CK_Tipo", "Tipo IN ('A', 'G', 'C')");
                 });
 
             migrationBuilder.CreateTable(
@@ -61,7 +66,8 @@ namespace server.Migrations
                     ServicoId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Custo = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Descricao = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    IdEmpresa = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -93,46 +99,6 @@ namespace server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Analistas",
-                columns: table => new
-                {
-                    AnalistaId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RecursoId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Analistas", x => x.AnalistaId);
-                    table.ForeignKey(
-                        name: "FK_Analistas_Recursos_RecursoId",
-                        column: x => x.RecursoId,
-                        principalTable: "Recursos",
-                        principalColumn: "RecursoId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Coordenadores",
-                columns: table => new
-                {
-                    CoordenadorId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RecursoId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Coordenadores", x => x.CoordenadorId);
-                    table.ForeignKey(
-                        name: "FK_Coordenadores_Recursos_RecursoId",
-                        column: x => x.RecursoId,
-                        principalTable: "Recursos",
-                        principalColumn: "RecursoId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "EmpresaRecursos",
                 columns: table => new
                 {
@@ -157,19 +123,36 @@ namespace server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Gerentes",
+                name: "Projetos",
                 columns: table => new
                 {
-                    GerenteId = table.Column<int>(type: "int", nullable: false)
+                    ProjetoId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RecursoId = table.Column<int>(type: "int", nullable: false)
+                    Descricao = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    Nome = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: true),
+                    DataInicio = table.Column<int>(type: "int", maxLength: 8, nullable: false),
+                    DataFim = table.Column<int>(type: "int", maxLength: 8, nullable: false),
+                    RecursoId = table.Column<int>(type: "int", nullable: false),
+                    EmpresaId = table.Column<int>(type: "int", nullable: false),
+                    ClienteId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Gerentes", x => x.GerenteId);
+                    table.PrimaryKey("PK_Projetos", x => x.ProjetoId);
                     table.ForeignKey(
-                        name: "FK_Gerentes_Recursos_RecursoId",
+                        name: "FK_Projetos_Clientes_ClienteId",
+                        column: x => x.ClienteId,
+                        principalTable: "Clientes",
+                        principalColumn: "ClienteId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Projetos_Empresas_EmpresaId",
+                        column: x => x.EmpresaId,
+                        principalTable: "Empresas",
+                        principalColumn: "EmpresaId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Projetos_Recursos_RecursoId",
                         column: x => x.RecursoId,
                         principalTable: "Recursos",
                         principalColumn: "RecursoId",
@@ -201,68 +184,31 @@ namespace server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Projetos",
-                columns: table => new
-                {
-                    ProjetoId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DataInicio = table.Column<int>(type: "int", nullable: false),
-                    DataFim = table.Column<int>(type: "int", nullable: false),
-                    GerenteId = table.Column<int>(type: "int", nullable: false),
-                    EmpresaId = table.Column<int>(type: "int", nullable: false),
-                    ClienteId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Projetos", x => x.ProjetoId);
-                    table.ForeignKey(
-                        name: "FK_Projetos_Clientes_ClienteId",
-                        column: x => x.ClienteId,
-                        principalTable: "Clientes",
-                        principalColumn: "ClienteId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Projetos_Empresas_EmpresaId",
-                        column: x => x.EmpresaId,
-                        principalTable: "Empresas",
-                        principalColumn: "EmpresaId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Projetos_Gerentes_GerenteId",
-                        column: x => x.GerenteId,
-                        principalTable: "Gerentes",
-                        principalColumn: "GerenteId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Tarefas",
                 columns: table => new
                 {
                     TarefaId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DataInicio = table.Column<int>(type: "int", nullable: false),
-                    DataFim = table.Column<int>(type: "int", nullable: false),
-                    CoordenadorId = table.Column<int>(type: "int", nullable: false),
+                    Descricao = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    DataInicio = table.Column<int>(type: "int", maxLength: 8, nullable: false),
+                    DataFim = table.Column<int>(type: "int", maxLength: 8, nullable: false),
+                    RecursoId = table.Column<int>(type: "int", nullable: false),
                     ProjetoId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tarefas", x => x.TarefaId);
                     table.ForeignKey(
-                        name: "FK_Tarefas_Coordenadores_CoordenadorId",
-                        column: x => x.CoordenadorId,
-                        principalTable: "Coordenadores",
-                        principalColumn: "CoordenadorId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
                         name: "FK_Tarefas_Projetos_ProjetoId",
                         column: x => x.ProjetoId,
                         principalTable: "Projetos",
                         principalColumn: "ProjetoId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Tarefas_Recursos_RecursoId",
+                        column: x => x.RecursoId,
+                        principalTable: "Recursos",
+                        principalColumn: "RecursoId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -272,20 +218,20 @@ namespace server.Migrations
                 {
                     SubTarefaId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DataInicio = table.Column<int>(type: "int", nullable: false),
-                    DataFim = table.Column<int>(type: "int", nullable: false),
+                    Descricao = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    DataInicio = table.Column<int>(type: "int", maxLength: 8, nullable: false),
+                    DataFim = table.Column<int>(type: "int", maxLength: 8, nullable: false),
                     TarefaId = table.Column<int>(type: "int", nullable: false),
-                    AnalistaId = table.Column<int>(type: "int", nullable: false)
+                    RecursoId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SubTarefas", x => x.SubTarefaId);
                     table.ForeignKey(
-                        name: "FK_SubTarefas_Analistas_AnalistaId",
-                        column: x => x.AnalistaId,
-                        principalTable: "Analistas",
-                        principalColumn: "AnalistaId",
+                        name: "FK_SubTarefas_Recursos_RecursoId",
+                        column: x => x.RecursoId,
+                        principalTable: "Recursos",
+                        principalColumn: "RecursoId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_SubTarefas_Tarefas_TarefaId",
@@ -301,23 +247,23 @@ namespace server.Migrations
                 {
                     ApontamentoId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    OS = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    HorasApontadas = table.Column<int>(type: "int", nullable: false),
-                    HorasFinalizadas = table.Column<int>(type: "int", nullable: false),
-                    DataInicio = table.Column<int>(type: "int", nullable: false),
-                    DataFim = table.Column<int>(type: "int", nullable: false),
+                    OS = table.Column<string>(type: "nvarchar(9)", maxLength: 9, nullable: false),
+                    Descricao = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    HorasApontadas = table.Column<int>(type: "int", maxLength: 4, nullable: false),
+                    HorasFinalizadas = table.Column<int>(type: "int", maxLength: 4, nullable: false),
+                    DataInicio = table.Column<int>(type: "int", maxLength: 8, nullable: false),
+                    DataFim = table.Column<int>(type: "int", maxLength: 8, nullable: false),
                     SubTarefaId = table.Column<int>(type: "int", nullable: false),
-                    AnalistaId = table.Column<int>(type: "int", nullable: false)
+                    RecursoId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Apontamentos", x => x.ApontamentoId);
                     table.ForeignKey(
-                        name: "FK_Apontamentos_Analistas_AnalistaId",
-                        column: x => x.AnalistaId,
-                        principalTable: "Analistas",
-                        principalColumn: "AnalistaId",
+                        name: "FK_Apontamentos_Recursos_RecursoId",
+                        column: x => x.RecursoId,
+                        principalTable: "Recursos",
+                        principalColumn: "RecursoId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Apontamentos_SubTarefas_SubTarefaId",
@@ -328,24 +274,14 @@ namespace server.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Analistas_RecursoId",
-                table: "Analistas",
-                column: "RecursoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Apontamentos_AnalistaId",
+                name: "IX_Apontamentos_RecursoId",
                 table: "Apontamentos",
-                column: "AnalistaId");
+                column: "RecursoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Apontamentos_SubTarefaId",
                 table: "Apontamentos",
                 column: "SubTarefaId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Coordenadores_RecursoId",
-                table: "Coordenadores",
-                column: "RecursoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EmpresaClientes_ClienteId",
@@ -363,11 +299,6 @@ namespace server.Migrations
                 column: "ServicoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Gerentes_RecursoId",
-                table: "Gerentes",
-                column: "RecursoId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Projetos_ClienteId",
                 table: "Projetos",
                 column: "ClienteId");
@@ -378,14 +309,14 @@ namespace server.Migrations
                 column: "EmpresaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Projetos_GerenteId",
+                name: "IX_Projetos_RecursoId",
                 table: "Projetos",
-                column: "GerenteId");
+                column: "RecursoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SubTarefas_AnalistaId",
+                name: "IX_SubTarefas_RecursoId",
                 table: "SubTarefas",
-                column: "AnalistaId");
+                column: "RecursoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SubTarefas_TarefaId",
@@ -393,14 +324,14 @@ namespace server.Migrations
                 column: "TarefaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tarefas_CoordenadorId",
-                table: "Tarefas",
-                column: "CoordenadorId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Tarefas_ProjetoId",
                 table: "Tarefas",
                 column: "ProjetoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tarefas_RecursoId",
+                table: "Tarefas",
+                column: "RecursoId");
         }
 
         /// <inheritdoc />
@@ -425,13 +356,7 @@ namespace server.Migrations
                 name: "Servicos");
 
             migrationBuilder.DropTable(
-                name: "Analistas");
-
-            migrationBuilder.DropTable(
                 name: "Tarefas");
-
-            migrationBuilder.DropTable(
-                name: "Coordenadores");
 
             migrationBuilder.DropTable(
                 name: "Projetos");
@@ -441,9 +366,6 @@ namespace server.Migrations
 
             migrationBuilder.DropTable(
                 name: "Empresas");
-
-            migrationBuilder.DropTable(
-                name: "Gerentes");
 
             migrationBuilder.DropTable(
                 name: "Recursos");

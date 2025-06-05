@@ -2,22 +2,32 @@ using Microsoft.EntityFrameworkCore;
 using server.Db;
 using server.Models;
 using server.Interfaces;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace server.Services
 {
-    public class ProjetoService : IProjetoService
+    public class ProjetoService(AppDbContext dbContext) : IProjetoService
     {
-        private readonly AppDbContext dbContext;
-
-        public ProjetoService(AppDbContext dbContext)
-        {
-            this.dbContext = dbContext;
-        }
+        private readonly AppDbContext dbContext = dbContext;
 
         public async Task CriarProjeto(Projeto Projeto)
         {
-            dbContext.Projetos.Add(Projeto);
-            await dbContext.SaveChangesAsync();
+            var empresa = await dbContext.Empresas.FindAsync(Projeto.EmpresaId);
+
+            Console.WriteLine($"{Projeto.EmpresaId}");
+
+            if (empresa == null)
+            {
+                throw new Exception("Empresa não encontrada.");
+            }
+            else
+            {
+                var projeto = dbContext.Projetos.Add(Projeto);
+                await dbContext.SaveChangesAsync();
+
+                empresa.ProjetoId = projeto.Property(p => p.ProjetoId).CurrentValue;
+                await dbContext.SaveChangesAsync();
+            }
         }
         public async Task AtualizarProjeto(Projeto Projeto, Projeto Body)
         {
@@ -31,26 +41,37 @@ namespace server.Services
             else
                 Projeto.Nome = Projeto.Nome;
 
-            // if (Body.TarefaId > 0)
-            //     Projeto.TarefaId = Body.TarefaId;
-            // else
-            //     Projeto.TarefaId = Projeto.TarefaId;
-
             if (Body.DataFim > 0)
                 Projeto.DataFim = Body.DataFim;
             else
                 Projeto.DataFim = Projeto.DataFim;
 
-            // if (Body.GerenteId > 0)
-            //     Projeto.GerenteId = Body.GerenteId;
-            // else
-            //     Projeto.GerenteId = Projeto.GerenteId;
-            
+            if (Body.RecursoId > 0)
+                Projeto.RecursoId = Body.RecursoId;
+            else
+                Projeto.RecursoId = Projeto.RecursoId;
+
             if (Body.EmpresaId > 0)
-                Projeto.EmpresaId = Body.EmpresaId;
+            {
+                var empresaAtu = await dbContext.Empresas.FindAsync(Projeto.EmpresaId);
+
+                var empresaNova = await dbContext.Empresas.FindAsync(Body.EmpresaId);
+
+                if (empresaNova == null || empresaAtu == null)
+                {
+                    throw new Exception("Empresa não econtrada.");
+                }
+                else
+                {
+                    empresaAtu.ProjetoId = 0;
+                    empresaNova.ProjetoId = Body.ProjetoId;
+                    Projeto.EmpresaId = Body.EmpresaId;
+                }
+
+            }
             else
                 Projeto.EmpresaId = Projeto.EmpresaId;
-                
+
             if (Body.ClienteId > 0)
                 Projeto.ClienteId = Body.ClienteId;
             else

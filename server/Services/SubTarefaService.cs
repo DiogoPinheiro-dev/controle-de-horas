@@ -5,14 +5,9 @@ using server.Interfaces;
 
 namespace server.Services
 {
-    public class SubTarefaService : ISubTarefaService
+    public class SubTarefaService(AppDbContext dbContext) : ISubTarefaService
     {
-        private readonly AppDbContext dbContext;
-
-        public SubTarefaService(AppDbContext dbContext)
-        {
-            this.dbContext = dbContext;
-        }
+        private readonly AppDbContext dbContext = dbContext;
 
         public async Task CriarSubTarefa(SubTarefa SubTarefa)
         {
@@ -25,21 +20,16 @@ namespace server.Services
                 SubTarefa.Descricao = Body.Descricao;
             else
                 SubTarefa.Descricao = SubTarefa.Descricao;
-                
-            if (Body.AnalistaId > 0)
-                SubTarefa.AnalistaId = Body.AnalistaId;
+
+            if (Body.RecursoId > 0)
+                SubTarefa.RecursoId = Body.RecursoId;
             else
-                SubTarefa.AnalistaId = SubTarefa.AnalistaId;
+                SubTarefa.RecursoId = SubTarefa.RecursoId;
 
             if (Body.DataFim > 0)
                 SubTarefa.DataFim = Body.DataFim;
             else
                 SubTarefa.DataFim = SubTarefa.DataFim;
-
-            // if (Body.ApontamentoId > 0)
-            //     SubTarefa.ApontamentoId = Body.ApontamentoId;
-            // else
-            //     SubTarefa.ApontamentoId = Body.ApontamentoId;
 
             await dbContext.SaveChangesAsync();
         }

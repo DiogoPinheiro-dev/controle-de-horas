@@ -5,14 +5,9 @@ using server.Interfaces;
 
 namespace server.Services
 {
-    public class EmpresaService : IEmpresaService
+    public class EmpresaService(AppDbContext dbContext) : IEmpresaService
     {
-        private readonly AppDbContext dbContext;
-
-        public EmpresaService(AppDbContext dbContext)
-        {
-            this.dbContext = dbContext;
-        }
+        private readonly AppDbContext dbContext = dbContext;
 
         public async Task CriarEmpresa(Empresa Empresa)
         {
@@ -26,10 +21,10 @@ namespace server.Services
             else
                 Empresa.Nome = Empresa.Nome;
 
-            // if (Body.ProjetoId > 0)
-            //     Empresa.ProjetoId = Body.ProjetoId;
-            // else
-            //     Empresa.ProjetoId = Empresa.ProjetoId;
+            if (Body.ProjetoId > 0)
+                Empresa.ProjetoId = Body.ProjetoId;
+            else
+                Empresa.ProjetoId = Empresa.ProjetoId;
 
             await dbContext.SaveChangesAsync();
         }

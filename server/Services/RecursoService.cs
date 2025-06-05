@@ -5,19 +5,35 @@ using server.Interfaces;
 
 namespace server.Services
 {
-    public class RecursoService : IRecursoService
+    public class RecursoService(AppDbContext dbContext) : IRecursoService
     {
-        private readonly AppDbContext dbContext;
-
-        public RecursoService(AppDbContext dbContext)
-        {
-            this.dbContext = dbContext;
-        }
+        private readonly AppDbContext dbContext = dbContext;
 
         public async Task CriarRecurso(Recurso recurso)
         {
-            dbContext.Recursos.Add(recurso);
+            await dbContext.Database.BeginTransactionAsync();
+
+            var empresa = await dbContext.Empresas.FindAsync(recurso.IdEmpresa);
+
+            if (empresa == null)
+            {
+                await dbContext.Database.RollbackTransactionAsync();
+                throw new Exception("Empresa não encontrada.");
+            }
+
+            await dbContext.Recursos.AddAsync(recurso);
             await dbContext.SaveChangesAsync();
+
+            EmpresaRecurso es = new()
+            {
+                EmpresaId = empresa.EmpresaId,
+                RecursoId = recurso.RecursoId
+            };
+
+            await dbContext.EmpresaRecursos.AddAsync(es);
+            await dbContext.SaveChangesAsync();
+
+            await dbContext.Database.CommitTransactionAsync();
         }
 
         public async Task AtualizarRecurso(Recurso Recurso, Recurso Body)
@@ -41,13 +57,48 @@ namespace server.Services
                 Recurso.Tipo = Body.Tipo;
             else
                 Recurso.Tipo = Recurso.Tipo;
-                
-            await dbContext.SaveChangesAsync();
+
+            if (Body.IdEmpresa > 0)
+            {
+                var empresaAtu = await dbContext.Empresas.FindAsync(Recurso.IdEmpresa);
+                var empresaNova = await dbContext.Empresas.FindAsync(Body.IdEmpresa);
+
+                if (empresaNova == null || empresaAtu == null)
+                {
+                    throw new Exception("Empresa nao encontrada.");
+                }
+                else
+                {
+                    var esAtu = await dbContext.EmpresaRecursos.FindAsync(empresaAtu.EmpresaId, Body.RecursoId);
+
+                    dbContext.EmpresaRecursos.Remove(esAtu);
+                    await dbContext.SaveChangesAsync();
+
+                    dbContext.EmpresaRecursos.Add(new EmpresaRecurso()
+                    {
+                        EmpresaId = Body.IdEmpresa,
+                        RecursoId = Body.RecursoId,
+                    });
+                    await dbContext.SaveChangesAsync();
+                }
+            }
         }
 
-        public async Task DeletarRecurso(Recurso recurso)
+        public async Task DeletarRecurso(Recurso Recurso)
         {
-            dbContext.Recursos.Remove(recurso);
+            var empresaRecurso = dbContext.EmpresaRecursos.Find(Recurso.IdEmpresa, Recurso.RecursoId);
+
+            if (empresaRecurso != null)
+            {
+                dbContext.EmpresaRecursos.Remove(empresaRecurso);
+            }
+            else
+            {
+                throw new Exception("Relação Empresa-Serviço não encontrada.");
+            }
+            await dbContext.SaveChangesAsync();
+
+            dbContext.Recursos.Remove(Recurso);
             await dbContext.SaveChangesAsync();
         }
 
@@ -96,13 +147,13 @@ namespace server.Services
             return recursos;
         }
 
-        public async Task<List<Recurso>> ObterRecursoPorTipo(string Tipo)
+        public async Task<List<Recurso>> ObterRecursoPorTipo(char Tipo)
         {
             List<Recurso> recursos;
 
             recursos = await dbContext
                     .Recursos
-                    .Where(r => r.Tipo.Contains(Tipo)).ToListAsync();
+                    .Where(r => r.Tipo == Tipo).ToListAsync();
 
             return recursos;
         }

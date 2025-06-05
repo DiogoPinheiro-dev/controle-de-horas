@@ -8,14 +8,9 @@ namespace server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TarefaController : ControllerBase
+    public class TarefaController(ITarefaService service) : ControllerBase
     {
-        private readonly ITarefaService service;
-
-        public TarefaController(ITarefaService service)
-        {
-            this.service = service;
-        }
+        private readonly ITarefaService service = service;
 
         [HttpPost]
         public async Task<ActionResult> CriarTarefa([FromBody] CriarTarefaDto TarefaDto)
@@ -36,7 +31,7 @@ namespace server.Controllers
 
                 await service.CriarTarefa(Tarefa);
 
-                return Ok(Tarefa);
+                return Ok(Tarefa.DtoDaTarefa());
             }
             catch
             {
@@ -76,7 +71,7 @@ namespace server.Controllers
 
                 await service.AtualizarTarefa(Tarefa, TarefaBody);
 
-                return Ok(Tarefa);
+                return Ok(Tarefa.DtoDaTarefa());
             }
             catch
             {
@@ -104,7 +99,7 @@ namespace server.Controllers
                 }
                 await service.DeletarTarefa(Tarefa);
 
-                return Ok(Tarefa);
+                return Ok(Tarefa.DtoDaTarefa());
             }
             catch
             {
@@ -118,8 +113,12 @@ namespace server.Controllers
             try
             {
                 List<Tarefa> Tarefas = await service.ObterTodasTarefas();
+                List<TarefaDto> TarefasDtos = [];
 
-                return Ok(Tarefas);
+                foreach (var Tarefa in Tarefas)
+                    TarefasDtos.Add(Tarefa.DtoDaTarefa());
+
+                return Ok(TarefasDtos);
             }
             catch
             {
@@ -145,7 +144,7 @@ namespace server.Controllers
                     return NotFound();
                 }
 
-                return Ok(Tarefa);
+                return Ok(Tarefa.DtoDaTarefa());
             }
             catch
             {
@@ -160,6 +159,7 @@ namespace server.Controllers
             try
             {
                 List<Tarefa> Tarefas;
+                List<TarefaDto> TarefasDtos = [];
 
                 if (descricao == string.Empty)
                 {
@@ -180,7 +180,10 @@ namespace server.Controllers
                     }
                 }
 
-                return Ok(Tarefas);
+                foreach (var Tarefa in Tarefas)
+                    TarefasDtos.Add(Tarefa.DtoDaTarefa());
+
+                return Ok(TarefasDtos);
             }
             catch
             {
@@ -195,6 +198,8 @@ namespace server.Controllers
             try
             {
                 List<Tarefa> Tarefas;
+                List<TarefaDto> TarefasDtos = [];
+
                 string[] data;
                 int dataIni, dataFim;
 
@@ -217,8 +222,10 @@ namespace server.Controllers
                     return NotFound();
                 }
 
-                return Ok(Tarefas);
+                foreach (var Tarefa in Tarefas)
+                    TarefasDtos.Add(Tarefa.DtoDaTarefa());
 
+                return Ok(TarefasDtos);
             }
             catch
             {

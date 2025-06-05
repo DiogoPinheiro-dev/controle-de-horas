@@ -5,12 +5,20 @@ namespace server.Mappers
 {
     public static class EmpresaMapper
     {
+        public static EmpresaDto DtoDaEmpresa(this Empresa empresa)
+        {
+            return new EmpresaDto
+            {
+                Nome = empresa.Nome,
+                ProjetoId = empresa.ProjetoId
+            };
+        }
+
         public static Empresa DtoDaCriacaoDoEmpresa(this CriarEmpresaDto EmpresaDto)
         {
             return new Empresa
             {
-                Nome = EmpresaDto.Nome,
-                // ProjetoId = EmpresaDto.IdProjeto
+                Nome = EmpresaDto.Nome
             };
         }
 
@@ -27,7 +35,7 @@ namespace server.Mappers
             return new Empresa
             {
                 Nome = EmpresaDto.Nome,
-                // ProjetoId = EmpresaDto.IdProjeto
+                ProjetoId = EmpresaDto.IdProjeto
             };
         }
     }

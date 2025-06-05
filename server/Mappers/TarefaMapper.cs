@@ -5,6 +5,18 @@ namespace server.Mappers
 {
     public static class TarefaMapper
     {
+        public static TarefaDto DtoDaTarefa(this Tarefa tarefa)
+        {
+            return new TarefaDto
+            {
+                Descricao = tarefa.Descricao,
+                DataInicio = tarefa.DataInicio,
+                DataFim = tarefa.DataFim,
+                RecursoId = tarefa.RecursoId,
+                ProjetoId = tarefa.ProjetoId
+            };
+        }
+        
         public static Tarefa DtoDaCriacaoDoTarefa(this CriarTarefaDto TarefaDto)
         {
             return new Tarefa
@@ -12,7 +24,7 @@ namespace server.Mappers
                 Descricao = TarefaDto.Descricao,
                 DataInicio = TarefaDto.DataInicio,
                 ProjetoId = TarefaDto.IdProjeto,
-                CoordenadorId = TarefaDto.IdCoordenador
+                RecursoId = TarefaDto.IdCoordenador
             };
         }
 
@@ -30,8 +42,7 @@ namespace server.Mappers
             return new Tarefa
             {
                 Descricao = TarefaDto.Descricao,
-                DataFim = TarefaDto.DataFim,
-                // SubTarefaId = TarefaDto.IdSubTarefa
+                DataFim = TarefaDto.DataFim
             };
         }
     }

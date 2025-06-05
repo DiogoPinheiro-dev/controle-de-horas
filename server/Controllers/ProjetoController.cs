@@ -8,14 +8,9 @@ namespace server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProjetoController : ControllerBase
+    public class ProjetoController(IProjetoService service) : ControllerBase
     {
-        private readonly IProjetoService service;
-
-        public ProjetoController(IProjetoService service)
-        {
-            this.service = service;
-        }
+        private readonly IProjetoService service = service;
 
         [HttpPost]
         public async Task<ActionResult> CriarProjeto([FromBody] CriarProjetoDto ProjetoDto)
@@ -36,7 +31,7 @@ namespace server.Controllers
 
                 await service.CriarProjeto(Projeto);
 
-                return Ok(Projeto);
+                return Ok(Projeto.DtoDoProjeto());
             }
             catch
             {
@@ -76,7 +71,7 @@ namespace server.Controllers
 
                 await service.AtualizarProjeto(Projeto, ProjetoBody);
 
-                return Ok(Projeto);
+                return Ok(Projeto.DtoDoProjeto());
             }
             catch
             {
@@ -104,7 +99,7 @@ namespace server.Controllers
                 }
                 await service.DeletarProjeto(Projeto);
 
-                return Ok(Projeto);
+                return Ok(Projeto.DtoDoProjeto());
             }
             catch
             {
@@ -118,8 +113,12 @@ namespace server.Controllers
             try
             {
                 List<Projeto> Projetos = await service.ObterTodosProjetos();
+                List<ProjetoDto> ProjetosDtos = [];
 
-                return Ok(Projetos);
+                foreach (var Projeto in Projetos)
+                    ProjetosDtos.Add(Projeto.DtoDoProjeto());
+
+                return Ok(ProjetosDtos);
             }
             catch
             {
@@ -145,7 +144,7 @@ namespace server.Controllers
                     return NotFound();
                 }
 
-                return Ok(Projeto);
+                return Ok(Projeto.DtoDoProjeto());
             }
             catch
             {
@@ -160,6 +159,7 @@ namespace server.Controllers
             try
             {
                 List<Projeto> Projetos;
+                List<ProjetoDto> ProjetosDtos = [];
 
                 if (nome == string.Empty)
                 {
@@ -180,14 +180,17 @@ namespace server.Controllers
                     }
                 }
 
-                return Ok(Projetos);
+                foreach (var Projeto in Projetos)
+                    ProjetosDtos.Add(Projeto.DtoDoProjeto());
+
+                return Ok(ProjetosDtos);
             }
             catch
             {
                 throw;
             }
         }
-        
+
         [HttpGet]
         [Route("ByDescricao/{descricao}")]
         public async Task<ActionResult<List<Projeto>>> ObterProjetoPorDescricao([FromRoute] string descricao)
@@ -195,6 +198,7 @@ namespace server.Controllers
             try
             {
                 List<Projeto> Projetos;
+                List<ProjetoDto> ProjetosDtos = [];
 
                 if (descricao == string.Empty)
                 {
@@ -215,7 +219,10 @@ namespace server.Controllers
                     }
                 }
 
-                return Ok(Projetos);
+                foreach (var Projeto in Projetos)
+                    ProjetosDtos.Add(Projeto.DtoDoProjeto());
+
+                return Ok(ProjetosDtos);
             }
             catch
             {
@@ -230,6 +237,8 @@ namespace server.Controllers
             try
             {
                 List<Projeto> Projetos;
+                List<ProjetoDto> ProjetosDtos = [];
+
                 string[] data;
                 int dataIni, dataFim;
 
@@ -252,8 +261,10 @@ namespace server.Controllers
                     return NotFound();
                 }
 
-                return Ok(Projetos);
+                foreach (var Projeto in Projetos)
+                    ProjetosDtos.Add(Projeto.DtoDoProjeto());
 
+                return Ok(ProjetosDtos);
             }
             catch
             {

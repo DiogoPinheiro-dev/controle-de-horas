@@ -8,14 +8,9 @@ namespace server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SubTarefaController : ControllerBase
+    public class SubTarefaController(ISubTarefaService service) : ControllerBase
     {
-        private readonly ISubTarefaService service;
-
-        public SubTarefaController(ISubTarefaService service)
-        {
-            this.service = service;
-        }
+        private readonly ISubTarefaService service = service;
 
         [HttpPost]
         public async Task<ActionResult> CriarSubTarefa([FromBody] CriarSubTarefaDto SubTarefaDto)
@@ -36,7 +31,7 @@ namespace server.Controllers
 
                 await service.CriarSubTarefa(SubTarefa);
 
-                return Ok(SubTarefa);
+                return Ok(SubTarefa.DtoDaSubTarefa());
             }
             catch
             {
@@ -76,7 +71,7 @@ namespace server.Controllers
 
                 await service.AtualizarSubTarefa(SubTarefa, SubTarefaBody);
 
-                return Ok(SubTarefa);
+                return Ok(SubTarefa.DtoDaSubTarefa());
             }
             catch
             {
@@ -104,7 +99,7 @@ namespace server.Controllers
                 }
                 await service.DeletarSubTarefa(SubTarefa);
 
-                return Ok(SubTarefa);
+                return Ok(SubTarefa.DtoDaSubTarefa());
             }
             catch
             {
@@ -118,8 +113,12 @@ namespace server.Controllers
             try
             {
                 List<SubTarefa> SubTarefas = await service.ObterTodasSubTarefas();
+                List<SubTarefaDto> SubTarefasDtos = [];
 
-                return Ok(SubTarefas);
+                foreach (var SubTarefa in SubTarefas)
+                    SubTarefasDtos.Add(SubTarefa.DtoDaSubTarefa());
+
+                return Ok(SubTarefasDtos);
             }
             catch
             {
@@ -145,7 +144,7 @@ namespace server.Controllers
                     return NotFound();
                 }
 
-                return Ok(SubTarefa);
+                return Ok(SubTarefa.DtoDaSubTarefa());
             }
             catch
             {
@@ -160,6 +159,7 @@ namespace server.Controllers
             try
             {
                 List<SubTarefa> SubTarefas;
+                List<SubTarefaDto> SubTarefasDtos = [];
 
                 if (descricao == string.Empty)
                 {
@@ -180,7 +180,10 @@ namespace server.Controllers
                     }
                 }
 
-                return Ok(SubTarefas);
+                foreach (var SubTarefa in SubTarefas)
+                    SubTarefasDtos.Add(SubTarefa.DtoDaSubTarefa());
+
+                return Ok(SubTarefasDtos);
             }
             catch
             {
@@ -195,6 +198,8 @@ namespace server.Controllers
             try
             {
                 List<SubTarefa> SubTarefas;
+                List<SubTarefaDto> SubTarefasDtos = [];
+
                 string[] data;
                 int dataIni, dataFim;
 
@@ -217,8 +222,10 @@ namespace server.Controllers
                     return NotFound();
                 }
 
-                return Ok(SubTarefas);
+                foreach (var SubTarefa in SubTarefas)
+                    SubTarefasDtos.Add(SubTarefa.DtoDaSubTarefa());
 
+                return Ok(SubTarefasDtos);
             }
             catch
             {

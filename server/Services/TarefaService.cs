@@ -5,14 +5,9 @@ using server.Interfaces;
 
 namespace server.Services
 {
-    public class TarefaService : ITarefaService
+    public class TarefaService(AppDbContext dbContext) : ITarefaService
     {
-        private readonly AppDbContext dbContext;
-
-        public TarefaService(AppDbContext dbContext)
-        {
-            this.dbContext = dbContext;
-        }
+        private readonly AppDbContext dbContext = dbContext;
 
         public async Task CriarTarefa(Tarefa Tarefa)
         {
@@ -31,10 +26,10 @@ namespace server.Services
             else
                 Tarefa.DataFim = Tarefa.DataFim;
 
-            // if (Body.SubTarefaId > 0)
-            //     Tarefa.SubTarefaId = Body.SubTarefaId;
-            // else
-            //     Tarefa.SubTarefaId = Tarefa.SubTarefaId;
+            if (Body.RecursoId > 0)
+                Tarefa.RecursoId = Body.RecursoId;
+            else
+                Tarefa.RecursoId = Tarefa.RecursoId;
 
             await dbContext.SaveChangesAsync();
         }

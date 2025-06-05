@@ -26,10 +26,10 @@ namespace server.Services
             else
                 Apontamento.Descricao = Apontamento.Descricao;
 
-            if (Body.AnalistaId > 0)
-                Apontamento.AnalistaId = Body.AnalistaId;
+            if (Body.RecursoId > 0)
+                Apontamento.RecursoId = Body.RecursoId;
             else
-                Apontamento.AnalistaId = Apontamento.AnalistaId;
+                Apontamento.RecursoId = Apontamento.RecursoId;
 
             if (Body.HorasFinalizadas > 0)
                 Apontamento.HorasFinalizadas = Body.HorasFinalizadas;

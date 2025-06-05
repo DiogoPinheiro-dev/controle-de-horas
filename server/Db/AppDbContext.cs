@@ -13,9 +13,6 @@ namespace server.Db
         public DbSet<SubTarefa> SubTarefas { get; set; }
         public DbSet<Apontamento> Apontamentos { get; set; }
         public DbSet<Recurso> Recursos { get; set; }
-        public DbSet<Gerente> Gerentes { get; set; }
-        public DbSet<Coordenador> Coordenadores { get; set; }
-        public DbSet<Analista> Analistas { get; set; }
         public DbSet<EmpresaCliente> EmpresaClientes { get; set; }
         public DbSet<EmpresaServico> EmpresaServicos { get; set; }
         public DbSet<EmpresaRecurso> EmpresaRecursos { get; set; }
@@ -80,9 +77,9 @@ namespace server.Db
 
             // Projetos -> Gerentes (N:1)
             modelBuilder.Entity<Projeto>()
-                .HasOne(p => p.Gerente)
-                .WithMany(g => g.Projetos)
-                .HasForeignKey(p => p.GerenteId)
+                .HasOne(p => p.Recurso)
+                .WithMany(g => g.Projeto)
+                .HasForeignKey(p => p.RecursoId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Projetos -> Tarefas (1:N)
@@ -94,9 +91,9 @@ namespace server.Db
 
             // Tarefas -> Coordenadores (N:1)
             modelBuilder.Entity<Tarefa>()
-                .HasOne(t => t.Coordenador)
+                .HasOne(t => t.Recurso)
                 .WithMany(c => c.Tarefas)
-                .HasForeignKey(t => t.CoordenadorId)
+                .HasForeignKey(t => t.RecursoId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Tarefas -> SubTarefas (1:N)
@@ -108,9 +105,9 @@ namespace server.Db
 
             // SubTarefas -> Analistas (N:1)
             modelBuilder.Entity<SubTarefa>()
-                .HasOne(st => st.Analista)
+                .HasOne(st => st.Recurso)
                 .WithMany(a => a.SubTarefas)
-                .HasForeignKey(st => st.AnalistaId)
+                .HasForeignKey(st => st.RecursoId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             // SubTarefas -> Apontamentos (1:N)
@@ -122,29 +119,20 @@ namespace server.Db
 
             // Apontamentos -> Analistas (N:1)
             modelBuilder.Entity<Apontamento>()
-                .HasOne(a => a.Analista)
+                .HasOne(a => a.Recurso)
                 .WithMany(an => an.Apontamentos)
-                .HasForeignKey(a => a.AnalistaId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            // Recursos -> Analistas/Gerentes/Coordenadores (1:N)
-            modelBuilder.Entity<Recurso>()
-                .HasMany(r => r.Analistas)
-                .WithOne(a => a.Recurso)
                 .HasForeignKey(a => a.RecursoId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Recurso>()
-                .HasMany(r => r.Gerentes)
-                .WithOne(g => g.Recurso)
-                .HasForeignKey(g => g.RecursoId)
-                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Recurso>(entity =>
+            {
+                entity.ToTable(tb =>
+                {
+                    tb.HasCheckConstraint("CK_Tipo", "Tipo IN ('A', 'G', 'C')");
+                });
+            });
 
-            modelBuilder.Entity<Recurso>()
-                .HasMany(r => r.Coordenadores)
-                .WithOne(c => c.Recurso)
-                .HasForeignKey(c => c.RecursoId)
-                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Servico>().Property(s => s.Custo).HasColumnType("decimal(18,2)");
 
             // Definição das chaves primárias
             modelBuilder.Entity<Empresa>().HasKey(e => e.EmpresaId);
@@ -155,9 +143,6 @@ namespace server.Db
             modelBuilder.Entity<SubTarefa>().HasKey(st => st.SubTarefaId);
             modelBuilder.Entity<Apontamento>().HasKey(a => a.ApontamentoId);
             modelBuilder.Entity<Recurso>().HasKey(r => r.RecursoId);
-            modelBuilder.Entity<Gerente>().HasKey(g => g.GerenteId);
-            modelBuilder.Entity<Coordenador>().HasKey(c => c.CoordenadorId);
-            modelBuilder.Entity<Analista>().HasKey(a => a.AnalistaId);
         }
     }
 }
