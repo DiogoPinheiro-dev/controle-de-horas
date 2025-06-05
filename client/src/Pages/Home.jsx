@@ -12,6 +12,7 @@ function App() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
+  
 
   const handleLogin = () => {
     if (email && password) {
@@ -27,30 +28,32 @@ function App() {
   };
 
   return (
-    <div className="gradient-bg">
-      <div className="container">
-        <Header 
-          isLoggedIn={isLoggedIn} 
-          onLoginPress={() => setLoginModalVisible(true)}
-          onLogoutPress={handleLogout}
-        />
-        <Hero />
-        <FeaturesSection />
-      </div>
-      <Footer />
+    <>
+      <div className="gradient-bg">
+        <div className="container">
+          <Header
+            isLoggedIn={isLoggedIn}
+            onLoginPress={() => setLoginModalVisible(true)}
+            onLogoutPress={handleLogout}
+          />
+          <Hero />
+          <FeaturesSection />
+        </div>
+        <Footer />
 
-      <LoginModal 
-        visible={loginModalVisible}
-        onClose={() => setLoginModalVisible(false)}
-        email={email}
-        setEmail={setEmail}
-        password={password}
-        setPassword={setPassword}
-        rememberMe={rememberMe}
-        setRememberMe={setRememberMe}
-        onLogin={handleLogin}
-      />
-    </div>
+        <LoginModal
+          visible={loginModalVisible}
+          onClose={() => setLoginModalVisible(false)}
+          email={email}
+          setEmail={setEmail}
+          password={password}
+          setPassword={setPassword}
+          rememberMe={rememberMe}
+          setRememberMe={setRememberMe}
+          onLogin={handleLogin}
+        />
+      </div>
+    </>
   );
 }
 

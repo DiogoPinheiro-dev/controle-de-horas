@@ -1,14 +1,14 @@
 import React from 'react';
 import '../styles/modal.css';
 
-const LoginModal = ({ 
-  visible, 
-  onClose, 
-  email, 
-  setEmail, 
-  password, 
-  setPassword, 
-  rememberMe, 
+const LoginModal = ({
+  visible,
+  onClose,
+  email,
+  setEmail,
+  password,
+  setPassword,
+  rememberMe,
   setRememberMe,
   onLogin
 }) => {
@@ -20,11 +20,11 @@ const LoginModal = ({
   };
 
   return (
-    <div 
+    <div
       className="modal-overlay"
       onClick={onClose}
     >
-      <div 
+      <div
         className="modal-content"
         onClick={(e) => e.stopPropagation()}
       >
