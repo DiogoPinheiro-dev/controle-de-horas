@@ -9,12 +9,13 @@ namespace server.Services
     {
         private readonly AppDbContext dbContext = dbContext;
 
-        public async Task CriarSubTarefa(SubTarefa SubTarefa)
+        public async Task<SubTarefa> CriarSubTarefa(SubTarefa SubTarefa)
         {
             dbContext.SubTarefas.Add(SubTarefa);
             await dbContext.SaveChangesAsync();
+            return SubTarefa;
         }
-        public async Task AtualizarSubTarefa(SubTarefa SubTarefa, SubTarefa Body)
+        public async Task<SubTarefa> AtualizarSubTarefa(SubTarefa SubTarefa, SubTarefa Body)
         {
             if (Body.Descricao != null)
                 SubTarefa.Descricao = Body.Descricao;
@@ -32,11 +33,13 @@ namespace server.Services
                 SubTarefa.DataFim = SubTarefa.DataFim;
 
             await dbContext.SaveChangesAsync();
+            return SubTarefa;
         }
-        public async Task DeletarSubTarefa(SubTarefa SubTarefa)
+        public async Task<SubTarefa> DeletarSubTarefa(SubTarefa SubTarefa)
         {
             dbContext.SubTarefas.Remove(SubTarefa);
             await dbContext.SaveChangesAsync();
+            return SubTarefa;
         }
 
         public async Task<List<SubTarefa>> ObterTodasSubTarefas()

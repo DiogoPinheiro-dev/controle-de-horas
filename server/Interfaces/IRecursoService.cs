@@ -4,9 +4,9 @@ namespace server.Interfaces
 {
     public interface IRecursoService
     {
-        Task CriarRecurso(Recurso recurso);
-        Task AtualizarRecurso(Recurso recurso, Recurso body);
-        Task DeletarRecurso(Recurso recurso);
+        Task<Recurso> CriarRecurso(Recurso recurso);
+        Task<Recurso> AtualizarRecurso(Recurso recurso, Recurso body);
+        Task<Recurso> DeletarRecurso(Recurso recurso);
 
         Task<List<Recurso>> ObterTodosRecursos();
         Task<Recurso> ObterRecursoPorId(int id);

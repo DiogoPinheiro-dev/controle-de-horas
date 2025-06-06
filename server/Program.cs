@@ -2,9 +2,10 @@ using Microsoft.EntityFrameworkCore;
 using server.Db;
 using server.Services;
 using server.Interfaces;
-// using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 
 builder.Services.AddScoped<IEmpresaService, EmpresaService>();
 builder.Services.AddScoped<IServicoService, ServicoService>();
@@ -21,11 +22,6 @@ builder.Services.AddScoped<IEmpresaRecursoService, EmpresaRecursoService>();
 builder.Services.AddScoped<IEmpresaServicoService, EmpresaServicoService>();
 
 builder.Services.AddControllers();
-    // .AddJsonOptions(options =>
-    // {
-    //     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-    //     options.JsonSerializerOptions.MaxDepth = 64; // Opcional: aumenta o limite de profundidade
-    // });
 
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
@@ -34,7 +30,6 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>((options) =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("conn"));
-
 });
 
 var app = builder.Build();

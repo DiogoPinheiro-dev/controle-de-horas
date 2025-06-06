@@ -4,9 +4,9 @@ namespace server.Interfaces
 {
     public interface IClienteService
     {
-        Task CriarCliente(Cliente cliente);
-        Task AtualizarCliente(Cliente cliente, Cliente body);
-        Task DeletarCliente(Cliente cliente);
+        Task<Cliente> CriarCliente(Cliente cliente);
+        Task<Cliente> AtualizarCliente(Cliente cliente, Cliente body);
+        Task<Cliente> DeletarCliente(Cliente cliente);
 
         Task<List<Cliente>> ObterTodosClientes();
         Task<Cliente> ObterClientePorId(int id);

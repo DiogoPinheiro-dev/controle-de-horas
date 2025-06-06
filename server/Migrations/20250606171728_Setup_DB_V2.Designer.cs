@@ -11,7 +11,7 @@ using server.Db;
 namespace server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250603195905_Setup_DB_V2")]
+    [Migration("20250606171728_Setup_DB_V2")]
     partial class Setup_DB_V2
     {
         /// <inheritdoc />
@@ -99,6 +99,9 @@ namespace server.Migrations
                         .HasMaxLength(16)
                         .HasColumnType("nvarchar(16)");
 
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("int");
+
                     b.HasKey("ClienteId");
 
                     b.ToTable("Clientes");
@@ -117,6 +120,9 @@ namespace server.Migrations
                         .HasColumnType("nvarchar(60)");
 
                     b.Property<int>("ProjetoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UsuarioId")
                         .HasColumnType("int");
 
                     b.HasKey("EmpresaId");
@@ -241,6 +247,9 @@ namespace server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(1)");
 
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("int");
+
                     b.HasKey("RecursoId");
 
                     b.ToTable("Recursos", t =>
@@ -340,6 +349,46 @@ namespace server.Migrations
                     b.HasIndex("RecursoId");
 
                     b.ToTable("Tarefas");
+                });
+
+            modelBuilder.Entity("server.Models.Usuario", b =>
+                {
+                    b.Property<int>("UsuarioId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UsuarioId"));
+
+                    b.Property<int>("ClienteId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("EmpresaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NivelDeUsuario")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RecursoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Senha")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UsuarioId");
+
+                    b.HasIndex("ClienteId")
+                        .IsUnique();
+
+                    b.HasIndex("EmpresaId")
+                        .IsUnique();
+
+                    b.HasIndex("RecursoId")
+                        .IsUnique();
+
+                    b.ToTable("Usuarios");
                 });
 
             modelBuilder.Entity("server.Models.Apontamento", b =>
@@ -483,11 +532,40 @@ namespace server.Migrations
                     b.Navigation("Recurso");
                 });
 
+            modelBuilder.Entity("server.Models.Usuario", b =>
+                {
+                    b.HasOne("server.Models.Cliente", "Cliente")
+                        .WithOne("Usuario")
+                        .HasForeignKey("server.Models.Usuario", "ClienteId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("server.Models.Empresa", "Empresa")
+                        .WithOne("Usuario")
+                        .HasForeignKey("server.Models.Usuario", "EmpresaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("server.Models.Recurso", "Recurso")
+                        .WithOne("Usuario")
+                        .HasForeignKey("server.Models.Usuario", "RecursoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Cliente");
+
+                    b.Navigation("Empresa");
+
+                    b.Navigation("Recurso");
+                });
+
             modelBuilder.Entity("server.Models.Cliente", b =>
                 {
                     b.Navigation("EmpresaClientes");
 
                     b.Navigation("Projetos");
+
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("server.Models.Empresa", b =>
@@ -499,6 +577,8 @@ namespace server.Migrations
                     b.Navigation("EmpresaServicos");
 
                     b.Navigation("Projetos");
+
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("server.Models.Projeto", b =>
@@ -517,6 +597,8 @@ namespace server.Migrations
                     b.Navigation("SubTarefas");
 
                     b.Navigation("Tarefas");
+
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("server.Models.Servico", b =>

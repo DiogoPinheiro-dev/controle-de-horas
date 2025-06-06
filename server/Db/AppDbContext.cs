@@ -13,6 +13,7 @@ namespace server.Db
         public DbSet<SubTarefa> SubTarefas { get; set; }
         public DbSet<Apontamento> Apontamentos { get; set; }
         public DbSet<Recurso> Recursos { get; set; }
+        public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<EmpresaCliente> EmpresaClientes { get; set; }
         public DbSet<EmpresaServico> EmpresaServicos { get; set; }
         public DbSet<EmpresaRecurso> EmpresaRecursos { get; set; }
@@ -124,6 +125,28 @@ namespace server.Db
                 .HasForeignKey(a => a.RecursoId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // Usuarios -> Recursos (1:1)
+            modelBuilder.Entity<Recurso>()
+                .HasOne(r => r.Usuario)
+                .WithOne(u => u.Recurso)
+                .HasForeignKey<Usuario>(u => u.RecursoId)
+                .OnDelete(DeleteBehavior.Restrict);
+                
+            // Usuarios -> Clientes (1:1)
+            modelBuilder.Entity<Cliente>()
+                .HasOne(c => c.Usuario)
+                .WithOne(u => u.Cliente)
+                .HasForeignKey<Usuario>(u => u.ClienteId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Usuarios -> Empresas (1:1)
+            modelBuilder.Entity<Empresa>()
+                .HasOne(e => e.Usuario)
+                .WithOne(u => u.Empresa)
+                .HasForeignKey<Usuario>(u => u.EmpresaId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
             modelBuilder.Entity<Recurso>(entity =>
             {
                 entity.ToTable(tb =>
@@ -135,14 +158,32 @@ namespace server.Db
             modelBuilder.Entity<Servico>().Property(s => s.Custo).HasColumnType("decimal(18,2)");
 
             // Definição das chaves primárias
-            modelBuilder.Entity<Empresa>().HasKey(e => e.EmpresaId);
-            modelBuilder.Entity<Cliente>().HasKey(c => c.ClienteId);
-            modelBuilder.Entity<Servico>().HasKey(s => s.ServicoId);
-            modelBuilder.Entity<Projeto>().HasKey(p => p.ProjetoId);
-            modelBuilder.Entity<Tarefa>().HasKey(t => t.TarefaId);
-            modelBuilder.Entity<SubTarefa>().HasKey(st => st.SubTarefaId);
-            modelBuilder.Entity<Apontamento>().HasKey(a => a.ApontamentoId);
-            modelBuilder.Entity<Recurso>().HasKey(r => r.RecursoId);
+            modelBuilder.Entity<Empresa>()
+                .HasKey(e => e.EmpresaId);
+
+            modelBuilder.Entity<Cliente>()
+                .HasKey(c => c.ClienteId);
+
+            modelBuilder.Entity<Servico>()
+                .HasKey(s => s.ServicoId);
+
+            modelBuilder.Entity<Projeto>()
+                .HasKey(p => p.ProjetoId);
+
+            modelBuilder.Entity<Tarefa>()
+                .HasKey(t => t.TarefaId);
+
+            modelBuilder.Entity<SubTarefa>()
+                .HasKey(st => st.SubTarefaId);
+
+            modelBuilder.Entity<Apontamento>()
+                .HasKey(a => a.ApontamentoId);
+
+            modelBuilder.Entity<Recurso>()
+                .HasKey(r => r.RecursoId);
+            
+            modelBuilder.Entity<Usuario>()
+                .HasKey(u => u.UsuarioId);
         }
     }
 }

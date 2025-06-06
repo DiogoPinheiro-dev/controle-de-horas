@@ -12,6 +12,9 @@ namespace server.Models
         public int ProjetoId { get; set; }
         public List<Projeto>? Projetos { get; set; }
 
+        public int UsuarioId { get; set; }
+        public Usuario? Usuario { get; set; }
+
         public List<EmpresaRecurso>? EmpresaRecursos { get; set; }
         public List<EmpresaServico>? EmpresaServicos { get; set; }
         public List<EmpresaCliente>? EmpresaClientes { get; set; }

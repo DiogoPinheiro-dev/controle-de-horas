@@ -10,7 +10,7 @@ namespace server.Services
     {
         private readonly AppDbContext dbContext = dbContext;
 
-        public async Task CriarProjeto(Projeto Projeto)
+        public async Task<Projeto> CriarProjeto(Projeto Projeto)
         {
             var empresa = await dbContext.Empresas.FindAsync(Projeto.EmpresaId);
 
@@ -22,14 +22,16 @@ namespace server.Services
             }
             else
             {
-                var projeto = dbContext.Projetos.Add(Projeto);
+                var projetoEntry = dbContext.Projetos.Add(Projeto);
                 await dbContext.SaveChangesAsync();
 
-                empresa.ProjetoId = projeto.Property(p => p.ProjetoId).CurrentValue;
+                empresa.ProjetoId = projetoEntry.Property(p => p.ProjetoId).CurrentValue;
                 await dbContext.SaveChangesAsync();
+
+                return projetoEntry.Entity;
             }
         }
-        public async Task AtualizarProjeto(Projeto Projeto, Projeto Body)
+        public async Task<Projeto> AtualizarProjeto(Projeto Projeto, Projeto Body)
         {
             if (Body.Descricao != null)
                 Projeto.Descricao = Body.Descricao;
@@ -78,11 +80,13 @@ namespace server.Services
                 Projeto.ClienteId = Projeto.ClienteId;
 
             await dbContext.SaveChangesAsync();
+            return Projeto;
         }
-        public async Task DeletarProjeto(Projeto Projeto)
+        public async Task<Projeto> DeletarProjeto(Projeto Projeto)
         {
             dbContext.Projetos.Remove(Projeto);
             await dbContext.SaveChangesAsync();
+            return Projeto;
         }
 
         public async Task<List<Projeto>> ObterTodosProjetos()

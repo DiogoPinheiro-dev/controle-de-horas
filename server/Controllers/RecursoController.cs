@@ -29,9 +29,9 @@ namespace server.Controllers
                     return StatusCode(500);
                 }
 
-                await service.CriarRecurso(modeloDeRecurso);
+                var res = await service.CriarRecurso(modeloDeRecurso);
 
-                return Ok(modeloDeRecurso.DtoDoRecurso());
+                return Ok(res.DtoDoRecurso());
 
             }
             catch
@@ -57,9 +57,9 @@ namespace server.Controllers
                     return NotFound();
                 }
 
-                await service.DeletarRecurso(recurso);
+                var res = await service.DeletarRecurso(recurso);
 
-                return Ok(recurso.DtoDoRecurso());
+                return Ok(res.DtoDoRecurso());
             }
             catch
             {
@@ -92,9 +92,9 @@ namespace server.Controllers
                     return BadRequest();
                 }
 
-                await service.AtualizarRecurso(recurso, body);
+                var res = await service.AtualizarRecurso(recurso, body);
 
-                return Ok(recurso.DtoDoRecurso());
+                return Ok(res.DtoDoRecurso());
             }
             catch
             {
@@ -238,7 +238,7 @@ namespace server.Controllers
                     ddd = parts[0].Substring(1, 2).Trim();
                     operadora_e_numero = parts[1].Trim();
 
-                    if (operadora_e_numero.Contains(" "))
+                    if (operadora_e_numero.Contains(' '))
                     {
                         operadora_e_numero = operadora_e_numero.Replace(" ", "");
                     }

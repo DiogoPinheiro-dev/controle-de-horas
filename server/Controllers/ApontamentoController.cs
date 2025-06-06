@@ -69,9 +69,9 @@ namespace server.Controllers
                     return BadRequest();
                 }
 
-                await service.AtualizarApontamento(apontamento, apontamentoBody);
+                var res = await service.AtualizarApontamento(apontamento, apontamentoBody);
 
-                return Ok(apontamento.DtoDoApontamento());
+                return Ok(res.DtoDoApontamento());
             }
             catch
             {
@@ -97,9 +97,9 @@ namespace server.Controllers
                 {
                     return NotFound();
                 }
-                await service.DeletarApontamento(apontamento);
+                var res = await service.DeletarApontamento(apontamento);
 
-                return Ok(apontamento.DtoDoApontamento());
+                return Ok(res.DtoDoApontamento());
             }
             catch
             {

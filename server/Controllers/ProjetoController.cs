@@ -29,9 +29,9 @@ namespace server.Controllers
                     return BadRequest();
                 }
 
-                await service.CriarProjeto(Projeto);
+                var res = await service.CriarProjeto(Projeto);
 
-                return Ok(Projeto.DtoDoProjeto());
+                return Ok(res.DtoDoProjeto());
             }
             catch
             {
@@ -69,9 +69,9 @@ namespace server.Controllers
                     return BadRequest();
                 }
 
-                await service.AtualizarProjeto(Projeto, ProjetoBody);
+                var res = await service.AtualizarProjeto(Projeto, ProjetoBody);
 
-                return Ok(Projeto.DtoDoProjeto());
+                return Ok(res.DtoDoProjeto());
             }
             catch
             {
@@ -97,9 +97,9 @@ namespace server.Controllers
                 {
                     return NotFound();
                 }
-                await service.DeletarProjeto(Projeto);
+                var res = await service.DeletarProjeto(Projeto);
 
-                return Ok(Projeto.DtoDoProjeto());
+                return Ok(res.DtoDoProjeto());
             }
             catch
             {

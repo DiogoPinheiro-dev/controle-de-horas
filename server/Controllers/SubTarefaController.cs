@@ -29,9 +29,9 @@ namespace server.Controllers
                     return BadRequest();
                 }
 
-                await service.CriarSubTarefa(SubTarefa);
+                var res = await service.CriarSubTarefa(SubTarefa);
 
-                return Ok(SubTarefa.DtoDaSubTarefa());
+                return Ok(res.DtoDaSubTarefa());
             }
             catch
             {
@@ -69,9 +69,9 @@ namespace server.Controllers
                     return BadRequest();
                 }
 
-                await service.AtualizarSubTarefa(SubTarefa, SubTarefaBody);
+                var res = await service.AtualizarSubTarefa(SubTarefa, SubTarefaBody);
 
-                return Ok(SubTarefa.DtoDaSubTarefa());
+                return Ok(res.DtoDaSubTarefa());
             }
             catch
             {
@@ -97,9 +97,10 @@ namespace server.Controllers
                 {
                     return NotFound();
                 }
-                await service.DeletarSubTarefa(SubTarefa);
+                
+                var res = await service.DeletarSubTarefa(SubTarefa);
 
-                return Ok(SubTarefa.DtoDaSubTarefa());
+                return Ok(res.DtoDaSubTarefa());
             }
             catch
             {
@@ -151,7 +152,7 @@ namespace server.Controllers
                 throw;
             }
         }
-        
+
         [HttpGet]
         [Route("ByDescricao/{descricao}")]
         public async Task<ActionResult<List<SubTarefa>>> ObterSubTarefaPorDescricao([FromRoute] string descricao)

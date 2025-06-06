@@ -4,9 +4,9 @@ namespace server.Interfaces
 {
     public interface IApontamentoService
     {
-        Task CriarApontamento(Apontamento apontamento);
-        Task AtualizarApontamento(Apontamento apontamento, Apontamento body);
-        Task DeletarApontamento(Apontamento apontamento);
+        Task<Apontamento> CriarApontamento(Apontamento apontamento);
+        Task<Apontamento> AtualizarApontamento(Apontamento apontamento, Apontamento body);
+        Task<Apontamento> DeletarApontamento(Apontamento apontamento);
 
         Task<Apontamento> ObterApontamentoPorId(int id);
         Task<List<Apontamento>> ObterTodosApontamentos();

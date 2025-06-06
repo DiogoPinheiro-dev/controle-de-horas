@@ -4,9 +4,9 @@ namespace server.Interfaces
 {
     public interface IServicoService
     {
-        Task CriarServico(Servico servico);
-        Task AtualizarServico(Servico servico, Servico body);
-        Task DeletarServico(Servico servico);
+        Task<Servico> CriarServico(Servico servico);
+        Task<Servico> AtualizarServico(Servico servico, Servico body);
+        Task<Servico> DeletarServico(Servico servico);
 
         Task<Servico> ObterServicoPorId(int id);
         Task<List<Servico>> ObterTodosServicos();

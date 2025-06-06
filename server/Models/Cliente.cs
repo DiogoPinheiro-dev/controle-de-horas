@@ -20,5 +20,8 @@ namespace server.Models
 
         public int IdEmpresa { get; set; }
         public List<EmpresaCliente>? EmpresaClientes { get; set; }
+        
+        public int UsuarioId { get; set; }
+        public Usuario? Usuario { get; set; }
     }
 }

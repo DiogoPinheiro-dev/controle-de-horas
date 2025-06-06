@@ -29,9 +29,9 @@ namespace server.Controllers
                     return BadRequest();
                 }
 
-                await service.CriarCliente(Cliente);
+                var res = await service.CriarCliente(Cliente);
 
-                return Ok(Cliente.DtoDoCliente());
+                return Ok(res.DtoDoCliente());
             }
             catch
             {
@@ -69,9 +69,9 @@ namespace server.Controllers
                     return BadRequest();
                 }
 
-                await service.AtualizarCliente(Cliente, ClienteBody);
+                var res = await service.AtualizarCliente(Cliente, ClienteBody);
 
-                return Ok(Cliente.DtoDoCliente());
+                return Ok(res.DtoDoCliente());
             }
             catch
             {
@@ -96,9 +96,9 @@ namespace server.Controllers
                 {
                     return NotFound();
                 }
-                await service.DeletarCliente(Cliente);
+                var res = await service.DeletarCliente(Cliente);
 
-                return Ok(Cliente.DtoDoCliente());
+                return Ok(res.DtoDoCliente());
             }
             catch
             {
@@ -197,7 +197,7 @@ namespace server.Controllers
             try
             {
                 List<Cliente> Clientes;
-                List<ClienteDto> ClientesDto = [];
+                List<ClienteDto> ClientesDtos = [];
 
                 if (email == string.Empty)
                 {
@@ -219,9 +219,9 @@ namespace server.Controllers
                 }
 
                 foreach (var Cliente in Clientes)
-                    ClientesDto.Add(Cliente.DtoDoCliente());
+                    ClientesDtos.Add(Cliente.DtoDoCliente());
 
-                return Ok(ClientesDto);
+                return Ok(ClientesDtos);
             }
             catch
             {

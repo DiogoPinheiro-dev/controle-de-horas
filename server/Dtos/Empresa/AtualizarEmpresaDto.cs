@@ -4,5 +4,6 @@ namespace server.Dtos.Empresa
     {
         public string? Nome { get; set; }
         public int IdProjeto { get; set; }
+        public int IdUsuario { get; set; }
     }
 }

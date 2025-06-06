@@ -9,12 +9,13 @@ namespace server.Services
     {
         private readonly AppDbContext dbContext = dbContext;
 
-        public async Task CriarTarefa(Tarefa Tarefa)
+        public async Task<Tarefa> CriarTarefa(Tarefa Tarefa)
         {
             dbContext.Tarefas.Add(Tarefa);
             await dbContext.SaveChangesAsync();
+            return Tarefa;
         }
-        public async Task AtualizarTarefa(Tarefa Tarefa, Tarefa Body)
+        public async Task<Tarefa> AtualizarTarefa(Tarefa Tarefa, Tarefa Body)
         {
             if (Body.Descricao != null)
                 Tarefa.Descricao = Body.Descricao;
@@ -32,11 +33,13 @@ namespace server.Services
                 Tarefa.RecursoId = Tarefa.RecursoId;
 
             await dbContext.SaveChangesAsync();
+            return Tarefa;
         }
-        public async Task DeletarTarefa(Tarefa Tarefa)
+        public async Task<Tarefa> DeletarTarefa(Tarefa Tarefa)
         {
             dbContext.Tarefas.Remove(Tarefa);
             await dbContext.SaveChangesAsync();
+            return Tarefa;
         }
 
         public async Task<List<Tarefa>> ObterTodasTarefas()

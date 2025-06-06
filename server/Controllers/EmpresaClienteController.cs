@@ -20,9 +20,9 @@ namespace server.Controllers
                     return NoContent();
                 }
 
-                await service.RelacionarEmpresaCliente(body);
+                var res = await service.RelacionarEmpresaCliente(body);
 
-                return Ok();
+                return Ok(res);
             }
             catch
             {
@@ -53,9 +53,9 @@ namespace server.Controllers
                     return NoContent();
                 }
 
-                await service.AlterarRelacaoEmpresaCliente(atual, body);
+                var res = await service.AlterarRelacaoEmpresaCliente(atual, body);
 
-                return Ok(body);
+                return Ok(res);
             }
             catch
             {
@@ -73,9 +73,9 @@ namespace server.Controllers
                     return NoContent();
                 }
 
-                await service.DeletarRelacaoEmpresaCliente(body);
+                var res = await service.DeletarRelacaoEmpresaCliente(body);
 
-                return Ok(body);
+                return Ok(res);
             }
             catch
             {

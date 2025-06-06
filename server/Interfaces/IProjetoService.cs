@@ -4,9 +4,9 @@ namespace server.Interfaces
 {
     public interface IProjetoService 
     {
-        Task CriarProjeto(Projeto projeto);
-        Task AtualizarProjeto(Projeto projeto, Projeto body);
-        Task DeletarProjeto(Projeto projeto);
+        Task<Projeto> CriarProjeto(Projeto projeto);
+        Task<Projeto> AtualizarProjeto(Projeto projeto, Projeto body);
+        Task<Projeto> DeletarProjeto(Projeto projeto);
 
         Task<Projeto> ObterProjetoPorId(int id);
         Task<List<Projeto>> ObterTodosProjetos();

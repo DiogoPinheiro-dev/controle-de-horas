@@ -29,9 +29,9 @@ namespace server.Controllers
                     return BadRequest();
                 }
 
-                await service.CriarServico(Servico);
+                var res = await service.CriarServico(Servico);
 
-                return Ok(Servico.DtoDoServico());
+                return Ok(res.DtoDoServico());
             }
             catch
             {
@@ -69,9 +69,9 @@ namespace server.Controllers
                     return BadRequest();
                 }
 
-                await service.AtualizarServico(Servico, ServicoBody);
+                var res = await service.AtualizarServico(Servico, ServicoBody);
 
-                return Ok(Servico.DtoDoServico());
+                return Ok(res.DtoDoServico());
             }
             catch
             {
@@ -97,9 +97,9 @@ namespace server.Controllers
                 {
                     return NotFound();
                 }
-                await service.DeletarServico(Servico);
+                var res = await service.DeletarServico(Servico);
 
-                return Ok(Servico.DtoDoServico());
+                return Ok(res.DtoDoServico());
             }
             catch
             {

@@ -6,5 +6,6 @@ namespace server.Dtos.Cliente
         public string? Telefone { get; set; }
         public int IdProjeto { get; set; }
         public int IdEmpresa { get; set; }
+        public int IdUsuario { get; set; }
     }
 }

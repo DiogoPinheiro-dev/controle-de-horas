@@ -29,9 +29,9 @@ namespace server.Controllers
                     return BadRequest();
                 }
 
-                await service.CriarEmpresa(Empresa);
+                var res = await service.CriarEmpresa(Empresa);
 
-                return Ok(Empresa.DtoDaEmpresa());
+                return Ok(res.DtoDaEmpresa());
             }
             catch
             {
@@ -69,9 +69,9 @@ namespace server.Controllers
                     return BadRequest();
                 }
 
-                await service.AtualizarEmpresa(Empresa, EmpresaBody);
+                var res = await service.AtualizarEmpresa(Empresa, EmpresaBody);
 
-                return Ok(Empresa.DtoDaEmpresa());
+                return Ok(res.DtoDaEmpresa());
             }
             catch
             {
@@ -97,9 +97,9 @@ namespace server.Controllers
                 {
                     return NotFound();
                 }
-                await service.DeletarEmpresa(Empresa);
+                var res = await service.DeletarEmpresa(Empresa);
 
-                return Ok(Empresa.DtoDaEmpresa());
+                return Ok(res.DtoDaEmpresa());
             }
             catch
             {
@@ -113,12 +113,12 @@ namespace server.Controllers
             try
             {
                 List<Empresa> Empresas = await service.ObterTodasEmpresas();
-                List<EmpresaDto> EmpresasDto = [];
+                List<EmpresaDto> EmpresasDtos = [];
 
                 foreach (var Empresa in Empresas)
-                    EmpresasDto.Add(Empresa.DtoDaEmpresa());
+                    EmpresasDtos.Add(Empresa.DtoDaEmpresa());
 
-                return Ok(EmpresasDto);
+                return Ok(EmpresasDtos);
             }
             catch
             {

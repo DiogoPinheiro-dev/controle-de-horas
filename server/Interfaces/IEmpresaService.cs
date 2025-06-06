@@ -4,9 +4,9 @@ namespace server.Interfaces
 {
     public interface IEmpresaService
     {
-        Task CriarEmpresa(Empresa empresa);
-        Task AtualizarEmpresa(Empresa empresam, Empresa body);
-        Task DeletarEmpresa(Empresa empresa);
+        Task<Empresa> CriarEmpresa(Empresa empresa);
+        Task<Empresa> AtualizarEmpresa(Empresa empresam, Empresa body);
+        Task<Empresa> DeletarEmpresa(Empresa empresa);
 
         Task<List<Empresa>> ObterTodasEmpresas();
         Task<Empresa> ObterEmpresaPorId(int id);

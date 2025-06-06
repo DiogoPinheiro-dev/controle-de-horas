@@ -9,7 +9,7 @@ namespace server.Services
     {
         private readonly AppDbContext dbContext = dbContext;
 
-        public async Task CriarCliente(Cliente Cliente)
+        public async Task<Cliente> CriarCliente(Cliente Cliente)
         {
             await dbContext.Database.BeginTransactionAsync();
 
@@ -34,8 +34,10 @@ namespace server.Services
             await dbContext.SaveChangesAsync();
 
             await dbContext.Database.CommitTransactionAsync();
+
+            return Cliente;
         }
-        public async Task AtualizarCliente(Cliente Cliente, Cliente Body)
+        public async Task<Cliente> AtualizarCliente(Cliente Cliente, Cliente Body)
         {
             if (Body.Nome != null)
                 Cliente.Nome = Body.Nome;
@@ -78,8 +80,9 @@ namespace server.Services
             }
 
             await dbContext.SaveChangesAsync();
+            return Cliente;
         }
-        public async Task DeletarCliente(Cliente Cliente)
+        public async Task<Cliente> DeletarCliente(Cliente Cliente)
         {
             var empresaCliente = dbContext.EmpresaClientes.Find(Cliente.IdEmpresa, Cliente.ClienteId);
 
@@ -95,6 +98,8 @@ namespace server.Services
 
             dbContext.Clientes.Remove(Cliente);
             await dbContext.SaveChangesAsync();
+
+            return Cliente;
         }
 
         public async Task<List<Cliente>> ObterTodosClientes()

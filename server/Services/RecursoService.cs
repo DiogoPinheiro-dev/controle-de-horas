@@ -9,7 +9,7 @@ namespace server.Services
     {
         private readonly AppDbContext dbContext = dbContext;
 
-        public async Task CriarRecurso(Recurso recurso)
+        public async Task<Recurso> CriarRecurso(Recurso recurso)
         {
             await dbContext.Database.BeginTransactionAsync();
 
@@ -34,26 +34,28 @@ namespace server.Services
             await dbContext.SaveChangesAsync();
 
             await dbContext.Database.CommitTransactionAsync();
+
+            return recurso;
         }
 
-        public async Task AtualizarRecurso(Recurso Recurso, Recurso Body)
+        public async Task<Recurso> AtualizarRecurso(Recurso Recurso, Recurso Body)
         {
             if (Body.Nome != null)
                 Recurso.Nome = Body.Nome;
             else
                 Recurso.Nome = Recurso.Nome;
 
-            if (Body.Nome != null)
+            if (Body.Email != null)
                 Recurso.Email = Body.Email;
             else
                 Recurso.Email = Recurso.Email;
 
-            if (Body.Nome != null)
+            if (Body.Telefone != null)
                 Recurso.Telefone = Body.Telefone;
             else
                 Recurso.Telefone = Recurso.Telefone;
 
-            if (Body.Nome != null)
+            if (Body.Tipo != '\0')
                 Recurso.Tipo = Body.Tipo;
             else
                 Recurso.Tipo = Recurso.Tipo;
@@ -82,9 +84,12 @@ namespace server.Services
                     await dbContext.SaveChangesAsync();
                 }
             }
+
+            await dbContext.SaveChangesAsync();
+            return Recurso;
         }
 
-        public async Task DeletarRecurso(Recurso Recurso)
+        public async Task<Recurso> DeletarRecurso(Recurso Recurso)
         {
             var empresaRecurso = dbContext.EmpresaRecursos.Find(Recurso.IdEmpresa, Recurso.RecursoId);
 
@@ -100,6 +105,8 @@ namespace server.Services
 
             dbContext.Recursos.Remove(Recurso);
             await dbContext.SaveChangesAsync();
+
+            return Recurso;
         }
 
         public async Task<List<Recurso>> ObterTodosRecursos()

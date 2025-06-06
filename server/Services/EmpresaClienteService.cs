@@ -9,7 +9,7 @@ namespace server.Services
     {
         private readonly AppDbContext dbContext = dbContext;
 
-        public async Task AlterarRelacaoEmpresaCliente(EmpresaCliente EmpresaCliente, EmpresaCliente Body)
+        public async Task<EmpresaCliente> AlterarRelacaoEmpresaCliente(EmpresaCliente EmpresaCliente, EmpresaCliente Body)
         {
             if (Body.ClienteId <= 0)
                 EmpresaCliente.ClienteId = EmpresaCliente.ClienteId;
@@ -22,12 +22,14 @@ namespace server.Services
                 EmpresaCliente.EmpresaId = Body.EmpresaId;
 
             await dbContext.SaveChangesAsync();
+            return EmpresaCliente;
         }
 
-        public async Task DeletarRelacaoEmpresaCliente(EmpresaCliente EmpresaCliente)
+        public async Task<EmpresaCliente> DeletarRelacaoEmpresaCliente(EmpresaCliente EmpresaCliente)
         {
             dbContext.EmpresaClientes.Remove(EmpresaCliente);
             await dbContext.SaveChangesAsync();
+            return EmpresaCliente;
         }
 
         public async Task<List<EmpresaCliente>> ObterRelacoesPorIdDaEmpresa(int idEmpresa)
@@ -61,10 +63,11 @@ namespace server.Services
             return await dbContext.EmpresaClientes.ToListAsync();
         }
 
-        public async Task RelacionarEmpresaCliente(EmpresaCliente EmpresaCliente)
+        public async Task<EmpresaCliente> RelacionarEmpresaCliente(EmpresaCliente EmpresaCliente)
         {
             await dbContext.EmpresaClientes.AddAsync(EmpresaCliente);
             await dbContext.SaveChangesAsync();
+            return EmpresaCliente;
         }
     }
 }

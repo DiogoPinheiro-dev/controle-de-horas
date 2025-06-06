@@ -5,21 +5,17 @@ using server.Interfaces;
 
 namespace server.Services
 {
-    public class ApontamentoService : IApontamentoService
+    public class ApontamentoService(AppDbContext dbContext) : IApontamentoService
     {
-        private readonly AppDbContext dbContext;
+        private readonly AppDbContext dbContext = dbContext;
 
-        public ApontamentoService(AppDbContext dbContext)
-        {
-            this.dbContext = dbContext;
-        }
-
-        public async Task CriarApontamento(Apontamento Apontamento)
+        public async Task<Apontamento> CriarApontamento(Apontamento Apontamento)
         {
             dbContext.Apontamentos.Add(Apontamento);
             await dbContext.SaveChangesAsync();
+            return Apontamento;
         }
-        public async Task AtualizarApontamento(Apontamento Apontamento, Apontamento Body)
+        public async Task<Apontamento> AtualizarApontamento(Apontamento Apontamento, Apontamento Body)
         {
             if (Body.Descricao != null)
                 Apontamento.Descricao = Body.Descricao;
@@ -47,17 +43,18 @@ namespace server.Services
                 Apontamento.ApontamentoId = Apontamento.ApontamentoId;
 
             await dbContext.SaveChangesAsync();
+            return Apontamento;
         }
-        public async Task DeletarApontamento(Apontamento Apontamento)
+        public async Task<Apontamento> DeletarApontamento(Apontamento Apontamento)
         {
             dbContext.Apontamentos.Remove(Apontamento);
             await dbContext.SaveChangesAsync();
+            return Apontamento;
         }
 
         public async Task<List<Apontamento>> ObterTodosApontamentos()
         {
             return await dbContext.Apontamentos.ToListAsync();
-
         }
 
         public async Task<List<Apontamento>> ObterApontamentoPorOS(string OS)

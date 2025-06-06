@@ -29,9 +29,9 @@ namespace server.Controllers
                     return BadRequest();
                 }
 
-                await service.CriarTarefa(Tarefa);
+                var res = await service.CriarTarefa(Tarefa);
 
-                return Ok(Tarefa.DtoDaTarefa());
+                return Ok(res.DtoDaTarefa());
             }
             catch
             {
@@ -69,9 +69,9 @@ namespace server.Controllers
                     return BadRequest();
                 }
 
-                await service.AtualizarTarefa(Tarefa, TarefaBody);
+                var res = await service.AtualizarTarefa(Tarefa, TarefaBody);
 
-                return Ok(Tarefa.DtoDaTarefa());
+                return Ok(res.DtoDaTarefa());
             }
             catch
             {
@@ -97,9 +97,10 @@ namespace server.Controllers
                 {
                     return NotFound();
                 }
-                await service.DeletarTarefa(Tarefa);
+                
+                var res = await service.DeletarTarefa(Tarefa);
 
-                return Ok(Tarefa.DtoDaTarefa());
+                return Ok(res.DtoDaTarefa());
             }
             catch
             {
