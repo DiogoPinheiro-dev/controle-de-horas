@@ -9,6 +9,7 @@ namespace server.Mappers
         {
             return new ApontamentoDto
             {
+                ApontamentoId = apontamentoDto.ApontamentoId,
                 OS = apontamentoDto.OS,
                 Descricao = apontamentoDto.Descricao,
                 HorasApontadas = apontamentoDto.HorasApontadas,
@@ -16,7 +17,7 @@ namespace server.Mappers
                 DataInicio = apontamentoDto.DataInicio,
                 DataFim = apontamentoDto.DataFim,
                 SubTarefaId = apontamentoDto.SubTarefaId,
-                RecursoId = apontamentoDto.RecursoId
+                AnalistaId = apontamentoDto.RecursoId,
             };
         }
 

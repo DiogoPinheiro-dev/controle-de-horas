@@ -9,10 +9,11 @@ namespace server.Mappers
         {
             return new TarefaDto
             {
+                TarefaId = tarefa.TarefaId,
                 Descricao = tarefa.Descricao,
                 DataInicio = tarefa.DataInicio,
                 DataFim = tarefa.DataFim,
-                RecursoId = tarefa.RecursoId,
+                CoordenadorId = tarefa.RecursoId,
                 ProjetoId = tarefa.ProjetoId
             };
         }

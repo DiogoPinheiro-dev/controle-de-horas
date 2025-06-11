@@ -9,6 +9,7 @@ namespace server.Mappers
         {
             return new ProjetoDto
             {
+                ProjetoId = projeto.ProjetoId,
                 Descricao = projeto.Descricao,
                 Nome = projeto.Nome,
                 DataInicio = projeto.DataInicio,

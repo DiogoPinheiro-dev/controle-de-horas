@@ -19,6 +19,7 @@ namespace server.Models
         public int DataFim { get; set; }
 
         public int RecursoId { get; set; }
+        public string? RecursoEmail { get; set; }
         public Recurso? Recurso { get; set; }
 
         public int ProjetoId { get; set; }

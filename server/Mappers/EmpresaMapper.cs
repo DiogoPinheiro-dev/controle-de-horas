@@ -10,7 +10,9 @@ namespace server.Mappers
             return new EmpresaDto
             {
                 Nome = empresa.Nome,
-                ProjetoId = empresa.ProjetoId
+                Email = empresa.Email,
+                UsuarioId = empresa.IdUsuario,
+                EmpresaId = empresa.EmpresaId
             };
         }
 
@@ -18,7 +20,8 @@ namespace server.Mappers
         {
             return new Empresa
             {
-                Nome = EmpresaDto.Nome
+                Nome = EmpresaDto.Nome,
+                Email = EmpresaDto.Email
             };
         }
 
@@ -26,7 +29,9 @@ namespace server.Mappers
         {
             return new Empresa
             {
-                EmpresaId = EmpresaDto.EmpresaId
+                EmpresaId = EmpresaDto.EmpresaId,
+                Nome = "",
+                Email = "",
             };
         }
 
@@ -35,7 +40,8 @@ namespace server.Mappers
             return new Empresa
             {
                 Nome = EmpresaDto.Nome,
-                ProjetoId = EmpresaDto.IdProjeto
+                Email = "",
+                IdUsuario = EmpresaDto.IdUsuario
             };
         }
     }

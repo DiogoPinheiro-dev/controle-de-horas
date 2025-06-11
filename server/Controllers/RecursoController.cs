@@ -40,7 +40,8 @@ namespace server.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete]
+        [Route("{id}")]
         public async Task<IActionResult> DeletarRecurso([FromRoute] int id)
         {
             try
@@ -50,7 +51,7 @@ namespace server.Controllers
                     return NoContent();
                 }
 
-                var recurso = RecursoPorId(id).Result.Value;
+                var recurso = await service.ObterRecursoPorId(id);
 
                 if (recurso == null)
                 {
@@ -78,7 +79,7 @@ namespace server.Controllers
                     return NoContent();
                 }
 
-                var recurso = RecursoPorId(id).Result.Value;
+                var recurso = await service.ObterRecursoPorId(id);
 
                 if (recurso == null)
                 {
@@ -128,8 +129,9 @@ namespace server.Controllers
             }
         }
 
-        [HttpGet("ById/{id}")]
-        public async Task<ActionResult<Recurso>> RecursoPorId(int id)
+        [HttpGet]
+        [Route("ById/{id}")]
+        public async Task<ActionResult<Recurso>> RecursoPorId([FromRoute] int id)
         {
             try
             {
@@ -153,8 +155,9 @@ namespace server.Controllers
             }
         }
 
-        [HttpGet("ByEmail/{email}")]
-        public async Task<ActionResult<List<Recurso>>> RecursoPorEmail(string email)
+        [HttpGet]
+        [Route("ByEmail/{email}")]
+        public async Task<ActionResult<List<Recurso>>> RecursoPorEmail([FromRoute] string email)
         {
             try
             {
@@ -183,8 +186,9 @@ namespace server.Controllers
             }
         }
 
-        [HttpGet("ByNome/{nome}")]
-        public async Task<ActionResult<List<Recurso>>> RecursoPorNome(string nome)
+        [HttpGet]
+        [Route("ByNome/{nome}")]
+        public async Task<ActionResult<List<Recurso>>> RecursoPorNome([FromRoute] string nome)
         {
             try
             {
@@ -213,8 +217,9 @@ namespace server.Controllers
             }
         }
 
-        [HttpGet("ByTel/{tel}")]
-        public async Task<ActionResult<List<Recurso>>> RecursoPorTelefone(string tel)
+        [HttpGet]
+        [Route("ByTel/{tel}")]
+        public async Task<ActionResult<List<Recurso>>> RecursoPorTelefone([FromRoute] string tel)
         {
             try
             {
@@ -264,8 +269,9 @@ namespace server.Controllers
             }
         }
 
-        [HttpGet("ByTipo/{tipo}")]
-        public async Task<ActionResult<List<Recurso>>> RecursoPorTipo(char tipo)
+        [HttpGet]
+        [Route("ByTipo/{tipo}")]
+        public async Task<ActionResult<List<Recurso>>> RecursoPorTipo([FromRoute] char tipo)
         {
             try
             {

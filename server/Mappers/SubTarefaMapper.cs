@@ -9,11 +9,12 @@ namespace server.Mappers
         {
             return new SubTarefaDto
             {
+                SubTarefaId = subTarefa.SubTarefaId,
                 Descricao = subTarefa.Descricao,
                 DataInicio = subTarefa.DataInicio,
                 DataFim = subTarefa.DataFim,
                 TarefaId = subTarefa.TarefaId,
-                RecursoId = subTarefa.SubTarefaId
+                AnalistaId = subTarefa.RecursoId
             };
         }
 

@@ -11,5 +11,6 @@ namespace server.Interfaces
         Task<List<Empresa>> ObterTodasEmpresas();
         Task<Empresa> ObterEmpresaPorId(int id);
         Task<List<Empresa>> ObterEmpresaPorNome(string nome);
+        Task<List<Empresa>> ObterEmpresaPorEmail(string email);
     }
 }

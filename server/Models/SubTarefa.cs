@@ -24,6 +24,7 @@ namespace server.Models
         public Tarefa? Tarefa { get; set; }
 
         public int RecursoId { get; set; }
+        public string? RecursoEmail { get; set; }
         public Recurso? Recurso { get; set; }
     }
 }

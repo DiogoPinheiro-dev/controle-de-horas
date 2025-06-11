@@ -11,17 +11,16 @@ namespace server.Models
         
         public char Tipo { get; set; }
 
-        [MaxLength(60)]
         public required string Email { get; set; }
 
         [MaxLength(16)]
         public string? Telefone { get; set; }
-        
-        public int UsuarioId { get; set; }
-        public Usuario? Usuario { get; set; }
-        
+    
         public int IdEmpresa { get; set; }
         public List<EmpresaRecurso>? EmpresaRecursos { get; set; }
+
+        public int IdUsuario { get; set; }
+        public List<UsuariosRecursos>? UsuariosRecursos { get; set; }
 
         public List<Projeto>? Projeto { get; set; }
         public List<Tarefa>? Tarefas { get; set; }

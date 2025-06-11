@@ -8,30 +8,7 @@ namespace server.Services
     public class EmpresaRecursoService(AppDbContext dbContext) : IEmpresaRecursoService
     {
         private readonly AppDbContext dbContext = dbContext;
-
-        public async Task<EmpresaRecurso> AlterarRelacaoEmpresaRecurso(EmpresaRecurso empresaRecurso, EmpresaRecurso Body)
-        {
-            if (Body.RecursoId <= 0)
-                empresaRecurso.RecursoId = empresaRecurso.RecursoId;
-            else
-                empresaRecurso.RecursoId = Body.RecursoId;
-
-            if (Body.EmpresaId <= 0)
-                empresaRecurso.EmpresaId = empresaRecurso.EmpresaId;
-            else
-                empresaRecurso.EmpresaId = Body.EmpresaId;
-
-            await dbContext.SaveChangesAsync();
-            return empresaRecurso;
-        }
-
-        public async Task<EmpresaRecurso> DeletarRelacaoEmpresaRecurso(EmpresaRecurso empresaRecurso)
-        {
-            dbContext.EmpresaRecursos.Remove(empresaRecurso);
-            await dbContext.SaveChangesAsync();
-            return empresaRecurso;
-        }
-
+        
         public async Task<List<EmpresaRecurso>> ObterRelacoesPorIdDaEmpresa(int idEmpresa)
         {
             List<EmpresaRecurso> empresaRecursos;
@@ -61,12 +38,6 @@ namespace server.Services
         public async Task<List<EmpresaRecurso>> ObterTodasRelacoes()
         {
             return await dbContext.EmpresaRecursos.ToListAsync();
-        }
-        public async Task<EmpresaRecurso> RelacionarEmpresaRecurso(EmpresaRecurso empresaRecurso)
-        {
-            await dbContext.EmpresaRecursos.AddAsync(empresaRecurso);
-            await dbContext.SaveChangesAsync();
-            return empresaRecurso;
         }
     }
 }

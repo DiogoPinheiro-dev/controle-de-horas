@@ -12,8 +12,9 @@ namespace server.Mappers
                 Email = cliente.Email,
                 Nome = cliente.Nome,
                 Telefone = cliente.Telefone,
-                ProjetoId = cliente.ProjetoId,
-                IdEmpresa = cliente.IdEmpresa
+                IdEmpresa = cliente.IdEmpresa,
+                UsuarioId = cliente.IdUsuario,
+                ClienteId = cliente.ClienteId
             };
         }
 
@@ -45,8 +46,8 @@ namespace server.Mappers
                 Email = "",
                 Nome = ClienteDto.Nome,
                 Telefone = ClienteDto.Telefone,
-                ProjetoId = ClienteDto.IdProjeto,
-                IdEmpresa = ClienteDto.IdEmpresa
+                IdEmpresa = ClienteDto.IdEmpresa,
+                IdUsuario = ClienteDto.IdUsuario
             };
         }
     }

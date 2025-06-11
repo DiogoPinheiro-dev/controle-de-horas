@@ -10,9 +10,6 @@ namespace server.Interfaces
         Task<Usuario> ObterUsuarioPorIdDeUsuario(int id);
         Task<Usuario> ObterUsuarioPorEmail(string email);
         Task<List<Usuario>> ObterUsuariosPorNivelDeUsuario(int nivelDeUsuario);
-        Task<List<Usuario>> ObterUsuariosPorRecursoId(int recursoId);
-        Task<List<Usuario>> ObterUsuariosPorClienteId(int clienteId);
-        Task<List<Usuario>> ObterUsuariosPorEmpresaId(int empresaId);
         Task<List<Usuario>> ObterTodosOsUsuarios();
 
     }

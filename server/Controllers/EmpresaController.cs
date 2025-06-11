@@ -26,10 +26,15 @@ namespace server.Controllers
 
                 if (Empresa == null)
                 {
-                    return BadRequest();
+                    return BadRequest("Dados inválidos para criação da empresa.");
                 }
 
                 var res = await service.CriarEmpresa(Empresa);
+
+                if (res == null)
+                {
+                    return BadRequest("Empresa já existe com o mesmo email.");
+                }
 
                 return Ok(res.DtoDaEmpresa());
             }
@@ -71,6 +76,11 @@ namespace server.Controllers
 
                 var res = await service.AtualizarEmpresa(Empresa, EmpresaBody);
 
+                if (res == null)
+                {
+                    return BadRequest("Dados inválidos para atualização da empresa.");
+                }
+
                 return Ok(res.DtoDaEmpresa());
             }
             catch
@@ -97,7 +107,13 @@ namespace server.Controllers
                 {
                     return NotFound();
                 }
+
                 var res = await service.DeletarEmpresa(Empresa);
+
+                if (res == null)
+                {
+                    return BadRequest("Empresa não encontrada.");
+                }
 
                 return Ok(res.DtoDaEmpresa());
             }
@@ -173,6 +189,45 @@ namespace server.Controllers
                 else
                 {
                     Empresas = await service.ObterEmpresaPorNome(nome.Trim());
+
+                    if (Empresas == null)
+                    {
+                        return NotFound();
+                    }
+                }
+
+                foreach (var Empresa in Empresas)
+                    EmpresasDtos.Add(Empresa.DtoDaEmpresa());
+
+                return Ok(EmpresasDtos);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("ByEmail/{email}")]
+        public async Task<ActionResult<List<Empresa>>> ObterEmpresaPorEmail([FromRoute] string email)
+        {
+            try
+            {
+                List<Empresa> Empresas;
+                List<EmpresaDto> EmpresasDtos = [];
+
+                if (email == string.Empty)
+                {
+                    Empresas = await service.ObterTodasEmpresas();
+
+                    if (Empresas == null)
+                    {
+                        return BadRequest();
+                    }
+                }
+                else
+                {
+                    Empresas = await service.ObterEmpresaPorEmail(email.Trim());
 
                     if (Empresas == null)
                     {

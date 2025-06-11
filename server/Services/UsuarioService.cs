@@ -5,191 +5,270 @@ using Microsoft.EntityFrameworkCore;
 
 namespace server.Services
 {
-    public class UsuarioService(AppDbContext servicos) : IUsuarioService
+    public class UsuarioService(AppDbContext dbContext) : IUsuarioService
     {
-        private readonly AppDbContext servicos = servicos;
+        private readonly AppDbContext dbContext = dbContext;
 
         public async Task<Usuario> CriarUsuario(Usuario usuario)
         {
-            await servicos.Database.BeginTransactionAsync();
+            await dbContext.Database.BeginTransactionAsync();
 
-            var usuarioExistentes = await servicos.Usuarios.FindAsync(usuario.Email);
+            var usuarioExistentes = await dbContext
+                .Usuarios
+                .Select(u => u)
+                .Where(u => u.Email == usuario.Email)
+                .FirstOrDefaultAsync();
 
             if (usuarioExistentes != null)
             {
-                throw new ArgumentException("Usuário já existe com este email");
+                throw new ArgumentException("Esse email já está sendo utilizado!");
             }
 
-            await servicos.Usuarios.AddAsync(usuario);
-            await servicos.SaveChangesAsync();
+            var recurso = await dbContext
+                .Recursos
+                .Select(r => r)
+                .Where(r => r.Email == usuario.Email)
+                .FirstOrDefaultAsync();
 
-            Empresa empresa;
-            Cliente cliente;
-            Recurso recurso;
+            var cliente = await dbContext
+                .Clientes
+                .Select(c => c)
+                .Where(c => c.Email == usuario.Email)
+                .FirstOrDefaultAsync();
 
-            if (usuario.ClienteId > 0)
+            var empresa = await dbContext
+                .Empresas
+                .Select(e => e)
+                .Where(e => e.Email == usuario.Email)
+                .FirstOrDefaultAsync();
+
+            if (recurso != null)
             {
-                cliente = await servicos.Clientes.FindAsync(usuario.ClienteId) ?? throw new ArgumentException("Cliente não encontrado");
+                await dbContext.Usuarios.AddAsync(usuario);
+                await dbContext.SaveChangesAsync();
 
-                cliente.UsuarioId = usuario.UsuarioId;
+                var ur = await dbContext
+                    .UsuariosRecursos
+                    .Select(ur => ur)
+                    .Where(ur => ur.RecursoId == recurso.RecursoId && ur.UsuarioId == usuario.UsuarioId)
+                    .FirstOrDefaultAsync();
 
-                if (cliente == null)
+                if (ur != null)
                 {
-                    await servicos.Database.RollbackTransactionAsync();
+                    throw new ArgumentException("Esse usuário já está vinculado a esse recurso!");
                 }
 
-                await servicos.SaveChangesAsync();
+                await dbContext.UsuariosRecursos.AddAsync(new UsuariosRecursos
+                {
+                    UsuarioId = usuario.UsuarioId,
+                    UsuarioEmail = usuario.Email,
+                    RecursoId = recurso.RecursoId,
+                    RecursoEmail = recurso.Email
+                });
+
+                await dbContext.SaveChangesAsync();
+
+                recurso.IdUsuario = usuario.UsuarioId;
+                await dbContext.SaveChangesAsync();
             }
 
-            if (usuario.EmpresaId > 0)
+            if (cliente != null)
             {
-                empresa = await servicos.Empresas.FindAsync(usuario.EmpresaId) ?? throw new ArgumentException("Empresa não encontrada");
+                await dbContext.Usuarios.AddAsync(usuario);
+                await dbContext.SaveChangesAsync();
 
-                empresa.UsuarioId = usuario.UsuarioId;
+                var uc = await dbContext
+                    .UsuariosClientes
+                    .Select(uc => uc)
+                    .Where(uc => uc.ClienteId == cliente.ClienteId && uc.UsuarioId == usuario.UsuarioId)
+                    .FirstOrDefaultAsync();
 
-                if (empresa == null)
+                if (uc != null)
                 {
-                    await servicos.Database.RollbackTransactionAsync();
+                    throw new ArgumentException("Esse usuário já está vinculado a esse cliente!");
                 }
 
-                await servicos.SaveChangesAsync();
+                await dbContext.UsuariosClientes.AddAsync(new UsuariosClientes
+                {
+                    UsuarioId = usuario.UsuarioId,
+                    UsuarioEmail = usuario.Email,
+                    ClienteId = cliente.ClienteId,
+                    ClienteEmail = cliente.Email
+                });
+
+                await dbContext.SaveChangesAsync();
+
+                cliente.IdUsuario = usuario.UsuarioId;
+                await dbContext.SaveChangesAsync();
             }
 
-            if (usuario.RecursoId > 0)
+            if (empresa != null)
             {
-                recurso = await servicos.Recursos.FindAsync(usuario.RecursoId) ?? throw new ArgumentException("Recurso não encontrado");
+                await dbContext.Usuarios.AddAsync(usuario);
+                await dbContext.SaveChangesAsync();
 
-                recurso.UsuarioId = usuario.UsuarioId;
+                var ue = await dbContext
+                    .UsuariosEmpresas
+                    .Select(ue => ue)
+                    .Where(ue => ue.EmpresaId == empresa.EmpresaId && ue.UsuarioId == usuario.UsuarioId)
+                    .FirstOrDefaultAsync();
 
-                if (recurso == null)
+                if (ue != null)
                 {
-                    await servicos.Database.RollbackTransactionAsync();
+                    throw new ArgumentException("Esse usuário já está vinculado a essa empresa!");
                 }
 
-                await servicos.SaveChangesAsync();
+                await dbContext.UsuariosEmpresas.AddAsync(new UsuariosEmpresas
+                {
+                    UsuarioId = usuario.UsuarioId,
+                    UsuarioEmail = usuario.Email,
+                    EmpresaId = empresa.EmpresaId,
+                    EmpresaEmail = empresa.Email
+                });
+
+                await dbContext.SaveChangesAsync();
+
+                empresa.IdUsuario = usuario.UsuarioId;
+                await dbContext.SaveChangesAsync();
             }
 
-            await servicos.Database.CommitTransactionAsync();
+            if (recurso == null && cliente == null && empresa == null)
+            {
+                throw new ArgumentException("Usuário não vinculado a nenhum recurso, cliente ou empresa.");
+            }
+
+            await dbContext.Database.CommitTransactionAsync();
             return usuario;
         }
 
         public async Task<Usuario> AlterarUsuario(Usuario usuario, Usuario Body)
         {
-            await servicos.Database.BeginTransactionAsync();
+            await dbContext.Database.BeginTransactionAsync();
 
             if (Body.Senha != null)
                 usuario.Senha = Body.Senha;
 
-            if (Body.Email != null)
-                usuario.Email = Body.Email;
-
             if (Body.NivelDeUsuario > 0)
                 usuario.NivelDeUsuario = Body.NivelDeUsuario;
 
-            if (Body.ClienteId > 0)
-                usuario.ClienteId = Body.ClienteId;
-
-            if (Body.EmpresaId > 0)
-                usuario.EmpresaId = Body.EmpresaId;
-
-            if (Body.RecursoId > 0)
-                usuario.RecursoId = Body.RecursoId;
-
-            await servicos.SaveChangesAsync();
-            await servicos.Database.CommitTransactionAsync();
+            await dbContext.SaveChangesAsync();
+            await dbContext.Database.CommitTransactionAsync();
             return usuario;
         }
 
         public async Task<Usuario> DeletarUsuario(Usuario usuario)
         {
-            await servicos.Database.BeginTransactionAsync();
+            await dbContext.Database.BeginTransactionAsync();
 
-            if (usuario.ClienteId > 0)
+            var ur = await dbContext
+                .UsuariosRecursos
+                .Select(r => r)
+                .Where(r => r.UsuarioId == usuario.UsuarioId)
+                .FirstOrDefaultAsync();
+
+            if (ur != null)
             {
-                var cliente = await servicos.Clientes.FindAsync(usuario.ClienteId);
+                var recurso = await dbContext
+                .Recursos
+                .Select(r => r)
+                .Where(r => r.IdUsuario == ur.UsuarioId)
+                .FirstOrDefaultAsync();
 
-                if (cliente == null)
-                    throw new ArgumentException("Cliente não encontrado");
-
-                else
+                if (recurso != null)
                 {
-                    cliente.UsuarioId = 0;
-                    await servicos.SaveChangesAsync();
+                    recurso.IdUsuario = 0;
+                    await dbContext.SaveChangesAsync();
                 }
+
+                dbContext.UsuariosRecursos.Remove(ur);
+                await dbContext.SaveChangesAsync();
             }
 
-            if (usuario.EmpresaId > 0)
+            var uc = await dbContext
+                .UsuariosClientes
+                .Select(c => c)
+                .Where(c => c.UsuarioId == usuario.UsuarioId)
+                .FirstOrDefaultAsync();
+
+            if (uc != null)
             {
-                var empresa = await servicos.Empresas.FindAsync(usuario.EmpresaId);
+                var cliente = await dbContext
+                    .Clientes
+                    .Select(c => c)
+                    .Where(c => c.IdUsuario == uc.UsuarioId)
+                    .FirstOrDefaultAsync();
 
-                if (empresa == null)
-                    throw new ArgumentException("Empresa não encontrada");
-
-                else
+                if (cliente != null)
                 {
-                    empresa.UsuarioId = 0;
-                    await servicos.SaveChangesAsync();
+                    cliente.IdUsuario = 0;
+                    await dbContext.SaveChangesAsync();
                 }
+
+                dbContext.UsuariosClientes.Remove(uc);
+                await dbContext.SaveChangesAsync();
             }
 
-            if (usuario.RecursoId > 0)
+            var ue = await dbContext
+                .UsuariosEmpresas
+                .Select(e => e)
+                .Where(e => e.UsuarioId == usuario.UsuarioId)
+                .FirstOrDefaultAsync();
+
+            if (ue != null)
             {
-                var recurso = await servicos.Recursos.FindAsync(usuario.RecursoId);
+                var empresa = await dbContext
+                    .Empresas
+                    .Select(e => e)
+                    .Where(e => e.IdUsuario == ue.UsuarioId)
+                    .FirstOrDefaultAsync();
 
-                if (recurso == null)
-                    throw new ArgumentException("Recurso não encontrado");
-
-                else
+                if (empresa != null)
                 {
-                    recurso.UsuarioId = 0;
-                    await servicos.SaveChangesAsync();
+                    empresa.IdUsuario = 0;
+                    await dbContext.SaveChangesAsync();
                 }
+
+                dbContext.UsuariosEmpresas.Remove(ue);
+                await dbContext.SaveChangesAsync();
             }
 
-            servicos.Usuarios.Remove(usuario);
-            await servicos.SaveChangesAsync();
-            
-            await servicos.Database.CommitTransactionAsync();
+            dbContext.Usuarios.Remove(usuario);
+            await dbContext.SaveChangesAsync();
+
+            await dbContext.Database.CommitTransactionAsync();
             return usuario;
         }
 
         public async Task<List<Usuario>> ObterTodosOsUsuarios()
         {
-            return await servicos.Usuarios.ToListAsync();
+            return await dbContext.Usuarios.ToListAsync();
         }
 
         public async Task<Usuario> ObterUsuarioPorEmail(string email)
         {
-            Usuario usuarios = await servicos.Usuarios.FirstOrDefaultAsync(u => u.Email == email) ?? throw new ArgumentException("Usuário não encontrado com este email");
-
-            return usuarios;
+            return await dbContext
+                .Usuarios
+                .Select(u => u)
+                .Where(u => u.Email == email)
+                .FirstOrDefaultAsync() ?? throw new ArgumentException("Usuário não encontrado com este email");
         }
 
         public async Task<Usuario> ObterUsuarioPorIdDeUsuario(int id)
         {
-            Usuario usuarios = await servicos.Usuarios.FindAsync(id) ?? throw new ArgumentException("Usuário não encontrado com este ID");
-
-            return usuarios;
-        }
-
-        public async Task<List<Usuario>> ObterUsuariosPorClienteId(int clienteId)
-        {
-            return await servicos.Usuarios.Where(u => u.ClienteId == clienteId).ToListAsync();
-        }
-
-        public async Task<List<Usuario>> ObterUsuariosPorEmpresaId(int empresaId)
-        {
-            return await servicos.Usuarios.Where(u => u.EmpresaId == empresaId).ToListAsync();
+            return await dbContext
+                .Usuarios
+                .Select(u => u)
+                .Where(u => u.UsuarioId == id)
+                .FirstOrDefaultAsync() ?? throw new ArgumentException("Usuário não encontrado com este ID");
         }
 
         public async Task<List<Usuario>> ObterUsuariosPorNivelDeUsuario(int nivelDeUsuario)
         {
-            return await servicos.Usuarios.Where(u => u.NivelDeUsuario == nivelDeUsuario).ToListAsync();
-        }
-
-        public async Task<List<Usuario>> ObterUsuariosPorRecursoId(int recursoId)
-        {
-            return await servicos.Usuarios.Where(u => u.RecursoId == recursoId).ToListAsync();
+            return await dbContext
+                .Usuarios
+                .Select(u => u)
+                .Where(u => u.NivelDeUsuario == nivelDeUsuario)
+                .ToListAsync();
         }
     }
 }

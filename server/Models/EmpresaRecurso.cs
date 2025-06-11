@@ -8,6 +8,9 @@ namespace server.Models
         public int EmpresaId { get; set; }
         public int RecursoId { get; set; }
 
+        public string? EmpresaEmail { get; set; }
+        public string? RecursoEmail { get; set; }
+
         public Empresa? Empresa { get; set; }
         public Recurso? Recurso { get; set; }
     }

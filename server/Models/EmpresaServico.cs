@@ -7,7 +7,9 @@ namespace server.Models
     {
         public int EmpresaId { get; set; }
         public int ServicoId { get; set; }
-
+    
+        public string? EmpresaEmail { get; set; }
+        
         public Empresa? Empresa { get; set; }
         public Servico? Servico { get; set; }
     }

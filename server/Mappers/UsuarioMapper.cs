@@ -9,11 +9,10 @@ namespace server.Mappers
         {
             return new UsuarioDto
             {
+                UsuarioId = usuario.UsuarioId,
                 Email = usuario.Email,
                 NivelDeUsuario = usuario.NivelDeUsuario,
-                IdRecurso = usuario.RecursoId,
-                IdCliente = usuario.ClienteId,
-                IdEmpresa = usuario.EmpresaId
+                Senha = usuario.Senha
             };
         }
 
@@ -23,10 +22,7 @@ namespace server.Mappers
             {
                 Email = usuarioDTO.Email,
                 Senha = usuarioDTO.Senha,
-                NivelDeUsuario = usuarioDTO.NivelDeUsuario,
-                RecursoId = usuarioDTO.IdRecurso,
-                ClienteId = usuarioDTO.IdCliente,
-                EmpresaId = usuarioDTO.IdEmpresa
+                NivelDeUsuario = usuarioDTO.NivelDeUsuario
             };
         }
 
@@ -34,12 +30,9 @@ namespace server.Mappers
         {
             return new Usuario
             {
-                Email = usuarioDTO.Email,
+                Email = "",
                 Senha = usuarioDTO.Senha,
-                NivelDeUsuario = usuarioDTO.NivelDeUsuario,
-                RecursoId = usuarioDTO.IdRecurso,
-                ClienteId = usuarioDTO.IdCliente,
-                EmpresaId = usuarioDTO.IdEmpresa
+                NivelDeUsuario = usuarioDTO.NivelDeUsuario
             };
         }
 

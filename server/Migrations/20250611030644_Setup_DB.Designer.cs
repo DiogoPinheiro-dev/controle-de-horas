@@ -11,8 +11,8 @@ using server.Db;
 namespace server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250606171728_Setup_DB_V2")]
-    partial class Setup_DB_V2
+    [Migration("20250611030644_Setup_DB")]
+    partial class Setup_DB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -57,6 +57,9 @@ namespace server.Migrations
                         .HasMaxLength(9)
                         .HasColumnType("nvarchar(9)");
 
+                    b.Property<string>("RecursoEmail")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("RecursoId")
                         .HasColumnType("int");
 
@@ -65,9 +68,9 @@ namespace server.Migrations
 
                     b.HasKey("ApontamentoId");
 
-                    b.HasIndex("RecursoId");
-
                     b.HasIndex("SubTarefaId");
+
+                    b.HasIndex("RecursoId", "RecursoEmail");
 
                     b.ToTable("Apontamentos");
                 });
@@ -81,30 +84,28 @@ namespace server.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClienteId"));
 
                     b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(60)
-                        .HasColumnType("nvarchar(60)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("IdEmpresa")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdUsuario")
                         .HasColumnType("int");
 
                     b.Property<string>("Nome")
                         .HasMaxLength(60)
                         .HasColumnType("nvarchar(60)");
 
-                    b.Property<int>("ProjetoId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Telefone")
                         .HasMaxLength(16)
                         .HasColumnType("nvarchar(16)");
 
-                    b.Property<int>("UsuarioId")
-                        .HasColumnType("int");
+                    b.HasKey("ClienteId", "Email");
 
-                    b.HasKey("ClienteId");
-
-                    b.ToTable("Clientes");
+                    b.ToTable("Clientes", t =>
+                        {
+                            t.HasCheckConstraint("CK_Email", "Email LIKE '%@gmail.com%'");
+                        });
                 });
 
             modelBuilder.Entity("server.Models.Empresa", b =>
@@ -115,19 +116,23 @@ namespace server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmpresaId"));
 
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("IdUsuario")
+                        .HasColumnType("int");
+
                     b.Property<string>("Nome")
                         .HasMaxLength(60)
                         .HasColumnType("nvarchar(60)");
 
-                    b.Property<int>("ProjetoId")
-                        .HasColumnType("int");
+                    b.HasKey("EmpresaId", "Email");
 
-                    b.Property<int>("UsuarioId")
-                        .HasColumnType("int");
-
-                    b.HasKey("EmpresaId");
-
-                    b.ToTable("Empresas");
+                    b.ToTable("Empresas", t =>
+                        {
+                            t.HasCheckConstraint("CK_Email", "Email LIKE '%@gmail.com%'")
+                                .HasName("CK_Email1");
+                        });
                 });
 
             modelBuilder.Entity("server.Models.EmpresaCliente", b =>
@@ -138,9 +143,17 @@ namespace server.Migrations
                     b.Property<int>("ClienteId")
                         .HasColumnType("int");
 
+                    b.Property<string>("ClienteEmail")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("EmpresaEmail")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("EmpresaId", "ClienteId");
 
-                    b.HasIndex("ClienteId");
+                    b.HasIndex("ClienteId", "ClienteEmail");
+
+                    b.HasIndex("EmpresaId", "EmpresaEmail");
 
                     b.ToTable("EmpresaClientes");
                 });
@@ -153,9 +166,17 @@ namespace server.Migrations
                     b.Property<int>("RecursoId")
                         .HasColumnType("int");
 
+                    b.Property<string>("EmpresaEmail")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RecursoEmail")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("EmpresaId", "RecursoId");
 
-                    b.HasIndex("RecursoId");
+                    b.HasIndex("EmpresaId", "EmpresaEmail");
+
+                    b.HasIndex("RecursoId", "RecursoEmail");
 
                     b.ToTable("EmpresaRecursos");
                 });
@@ -168,9 +189,14 @@ namespace server.Migrations
                     b.Property<int>("ServicoId")
                         .HasColumnType("int");
 
+                    b.Property<string>("EmpresaEmail")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("EmpresaId", "ServicoId");
 
                     b.HasIndex("ServicoId");
+
+                    b.HasIndex("EmpresaId", "EmpresaEmail");
 
                     b.ToTable("EmpresaServicos");
                 });
@@ -182,6 +208,9 @@ namespace server.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProjetoId"));
+
+                    b.Property<string>("ClienteEmail")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("ClienteId")
                         .HasColumnType("int");
@@ -198,6 +227,9 @@ namespace server.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<string>("EmpresaEmail")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("EmpresaId")
                         .HasColumnType("int");
 
@@ -205,16 +237,19 @@ namespace server.Migrations
                         .HasMaxLength(60)
                         .HasColumnType("nvarchar(60)");
 
+                    b.Property<string>("RecursoEmail")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("RecursoId")
                         .HasColumnType("int");
 
                     b.HasKey("ProjetoId");
 
-                    b.HasIndex("ClienteId");
+                    b.HasIndex("ClienteId", "ClienteEmail");
 
-                    b.HasIndex("EmpresaId");
+                    b.HasIndex("EmpresaId", "EmpresaEmail");
 
-                    b.HasIndex("RecursoId");
+                    b.HasIndex("RecursoId", "RecursoEmail");
 
                     b.ToTable("Projetos");
                 });
@@ -228,11 +263,12 @@ namespace server.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RecursoId"));
 
                     b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(60)
-                        .HasColumnType("nvarchar(60)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("IdEmpresa")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdUsuario")
                         .HasColumnType("int");
 
                     b.Property<string>("Nome")
@@ -247,13 +283,13 @@ namespace server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(1)");
 
-                    b.Property<int>("UsuarioId")
-                        .HasColumnType("int");
-
-                    b.HasKey("RecursoId");
+                    b.HasKey("RecursoId", "Email");
 
                     b.ToTable("Recursos", t =>
                         {
+                            t.HasCheckConstraint("CK_Email", "Email LIKE '%@gmail.com%'")
+                                .HasName("CK_Email2");
+
                             t.HasCheckConstraint("CK_Tipo", "Tipo IN ('A', 'G', 'C')");
                         });
                 });
@@ -301,6 +337,9 @@ namespace server.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<string>("RecursoEmail")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("RecursoId")
                         .HasColumnType("int");
 
@@ -309,9 +348,9 @@ namespace server.Migrations
 
                     b.HasKey("SubTarefaId");
 
-                    b.HasIndex("RecursoId");
-
                     b.HasIndex("TarefaId");
+
+                    b.HasIndex("RecursoId", "RecursoEmail");
 
                     b.ToTable("SubTarefas");
                 });
@@ -339,6 +378,9 @@ namespace server.Migrations
                     b.Property<int>("ProjetoId")
                         .HasColumnType("int");
 
+                    b.Property<string>("RecursoEmail")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("RecursoId")
                         .HasColumnType("int");
 
@@ -346,7 +388,7 @@ namespace server.Migrations
 
                     b.HasIndex("ProjetoId");
 
-                    b.HasIndex("RecursoId");
+                    b.HasIndex("RecursoId", "RecursoEmail");
 
                     b.ToTable("Tarefas");
                 });
@@ -359,51 +401,105 @@ namespace server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UsuarioId"));
 
-                    b.Property<int>("ClienteId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("EmpresaId")
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("NivelDeUsuario")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RecursoId")
                         .HasColumnType("int");
 
                     b.Property<string>("Senha")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("UsuarioId");
+                    b.HasKey("UsuarioId", "Email");
 
-                    b.HasIndex("ClienteId")
-                        .IsUnique();
+                    b.ToTable("Usuarios", t =>
+                        {
+                            t.HasCheckConstraint("CK_Email", "Email LIKE '%@gmail.com%'")
+                                .HasName("CK_Email3");
+                        });
+                });
 
-                    b.HasIndex("EmpresaId")
-                        .IsUnique();
+            modelBuilder.Entity("server.Models.UsuariosClientes", b =>
+                {
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("RecursoId")
-                        .IsUnique();
+                    b.Property<int>("ClienteId")
+                        .HasColumnType("int");
 
-                    b.ToTable("Usuarios");
+                    b.Property<string>("ClienteEmail")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UsuarioEmail")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UsuarioId", "ClienteId");
+
+                    b.HasIndex("ClienteId", "ClienteEmail");
+
+                    b.HasIndex("UsuarioId", "UsuarioEmail");
+
+                    b.ToTable("UsuariosClientes");
+                });
+
+            modelBuilder.Entity("server.Models.UsuariosEmpresas", b =>
+                {
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EmpresaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EmpresaEmail")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UsuarioEmail")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UsuarioId", "EmpresaId");
+
+                    b.HasIndex("EmpresaId", "EmpresaEmail");
+
+                    b.HasIndex("UsuarioId", "UsuarioEmail");
+
+                    b.ToTable("UsuariosEmpresas");
+                });
+
+            modelBuilder.Entity("server.Models.UsuariosRecursos", b =>
+                {
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RecursoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RecursoEmail")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UsuarioEmail")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UsuarioId", "RecursoId");
+
+                    b.HasIndex("RecursoId", "RecursoEmail");
+
+                    b.HasIndex("UsuarioId", "UsuarioEmail");
+
+                    b.ToTable("UsuariosRecursos");
                 });
 
             modelBuilder.Entity("server.Models.Apontamento", b =>
                 {
-                    b.HasOne("server.Models.Recurso", "Recurso")
-                        .WithMany("Apontamentos")
-                        .HasForeignKey("RecursoId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("server.Models.SubTarefa", "SubTarefa")
                         .WithMany("Apontamentos")
                         .HasForeignKey("SubTarefaId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("server.Models.Recurso", "Recurso")
+                        .WithMany("Apontamentos")
+                        .HasForeignKey("RecursoId", "RecursoEmail")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Recurso");
 
@@ -414,15 +510,13 @@ namespace server.Migrations
                 {
                     b.HasOne("server.Models.Cliente", "Cliente")
                         .WithMany("EmpresaClientes")
-                        .HasForeignKey("ClienteId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("ClienteId", "ClienteEmail")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("server.Models.Empresa", "Empresa")
                         .WithMany("EmpresaClientes")
-                        .HasForeignKey("EmpresaId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("EmpresaId", "EmpresaEmail")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Cliente");
 
@@ -433,15 +527,13 @@ namespace server.Migrations
                 {
                     b.HasOne("server.Models.Empresa", "Empresa")
                         .WithMany("EmpresaRecursos")
-                        .HasForeignKey("EmpresaId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("EmpresaId", "EmpresaEmail")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("server.Models.Recurso", "Recurso")
                         .WithMany("EmpresaRecursos")
-                        .HasForeignKey("RecursoId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("RecursoId", "RecursoEmail")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Empresa");
 
@@ -450,17 +542,16 @@ namespace server.Migrations
 
             modelBuilder.Entity("server.Models.EmpresaServico", b =>
                 {
-                    b.HasOne("server.Models.Empresa", "Empresa")
-                        .WithMany("EmpresaServicos")
-                        .HasForeignKey("EmpresaId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("server.Models.Servico", "Servico")
                         .WithMany("EmpresaServicos")
                         .HasForeignKey("ServicoId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("server.Models.Empresa", "Empresa")
+                        .WithMany("EmpresaServicos")
+                        .HasForeignKey("EmpresaId", "EmpresaEmail")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Empresa");
 
@@ -471,21 +562,18 @@ namespace server.Migrations
                 {
                     b.HasOne("server.Models.Cliente", "Cliente")
                         .WithMany("Projetos")
-                        .HasForeignKey("ClienteId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("ClienteId", "ClienteEmail")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("server.Models.Empresa", "Empresa")
                         .WithMany("Projetos")
-                        .HasForeignKey("EmpresaId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("EmpresaId", "EmpresaEmail")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("server.Models.Recurso", "Recurso")
                         .WithMany("Projeto")
-                        .HasForeignKey("RecursoId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("RecursoId", "RecursoEmail")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Cliente");
 
@@ -496,17 +584,16 @@ namespace server.Migrations
 
             modelBuilder.Entity("server.Models.SubTarefa", b =>
                 {
-                    b.HasOne("server.Models.Recurso", "Recurso")
-                        .WithMany("SubTarefas")
-                        .HasForeignKey("RecursoId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("server.Models.Tarefa", "Tarefa")
                         .WithMany("SubTarefas")
                         .HasForeignKey("TarefaId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("server.Models.Recurso", "Recurso")
+                        .WithMany("SubTarefas")
+                        .HasForeignKey("RecursoId", "RecursoEmail")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Recurso");
 
@@ -523,40 +610,63 @@ namespace server.Migrations
 
                     b.HasOne("server.Models.Recurso", "Recurso")
                         .WithMany("Tarefas")
-                        .HasForeignKey("RecursoId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("RecursoId", "RecursoEmail")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Projeto");
 
                     b.Navigation("Recurso");
                 });
 
-            modelBuilder.Entity("server.Models.Usuario", b =>
+            modelBuilder.Entity("server.Models.UsuariosClientes", b =>
                 {
                     b.HasOne("server.Models.Cliente", "Cliente")
-                        .WithOne("Usuario")
-                        .HasForeignKey("server.Models.Usuario", "ClienteId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .WithMany("UsuariosClientes")
+                        .HasForeignKey("ClienteId", "ClienteEmail")
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("server.Models.Empresa", "Empresa")
-                        .WithOne("Usuario")
-                        .HasForeignKey("server.Models.Usuario", "EmpresaId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("server.Models.Recurso", "Recurso")
-                        .WithOne("Usuario")
-                        .HasForeignKey("server.Models.Usuario", "RecursoId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                    b.HasOne("server.Models.Usuario", "Usuario")
+                        .WithMany("UsuariosClientes")
+                        .HasForeignKey("UsuarioId", "UsuarioEmail")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Cliente");
 
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("server.Models.UsuariosEmpresas", b =>
+                {
+                    b.HasOne("server.Models.Empresa", "Empresa")
+                        .WithMany("UsuariosEmpresas")
+                        .HasForeignKey("EmpresaId", "EmpresaEmail")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("server.Models.Usuario", "Usuario")
+                        .WithMany("UsuariosEmpresas")
+                        .HasForeignKey("UsuarioId", "UsuarioEmail")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.Navigation("Empresa");
 
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("server.Models.UsuariosRecursos", b =>
+                {
+                    b.HasOne("server.Models.Recurso", "Recurso")
+                        .WithMany("UsuariosRecursos")
+                        .HasForeignKey("RecursoId", "RecursoEmail")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("server.Models.Usuario", "Usuario")
+                        .WithMany("UsuariosRecursos")
+                        .HasForeignKey("UsuarioId", "UsuarioEmail")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.Navigation("Recurso");
+
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("server.Models.Cliente", b =>
@@ -565,7 +675,7 @@ namespace server.Migrations
 
                     b.Navigation("Projetos");
 
-                    b.Navigation("Usuario");
+                    b.Navigation("UsuariosClientes");
                 });
 
             modelBuilder.Entity("server.Models.Empresa", b =>
@@ -578,7 +688,7 @@ namespace server.Migrations
 
                     b.Navigation("Projetos");
 
-                    b.Navigation("Usuario");
+                    b.Navigation("UsuariosEmpresas");
                 });
 
             modelBuilder.Entity("server.Models.Projeto", b =>
@@ -598,7 +708,7 @@ namespace server.Migrations
 
                     b.Navigation("Tarefas");
 
-                    b.Navigation("Usuario");
+                    b.Navigation("UsuariosRecursos");
                 });
 
             modelBuilder.Entity("server.Models.Servico", b =>
@@ -614,6 +724,15 @@ namespace server.Migrations
             modelBuilder.Entity("server.Models.Tarefa", b =>
                 {
                     b.Navigation("SubTarefas");
+                });
+
+            modelBuilder.Entity("server.Models.Usuario", b =>
+                {
+                    b.Navigation("UsuariosClientes");
+
+                    b.Navigation("UsuariosEmpresas");
+
+                    b.Navigation("UsuariosRecursos");
                 });
 #pragma warning restore 612, 618
         }

@@ -71,6 +71,11 @@ namespace server.Controllers
 
                 var res = await service.AtualizarCliente(Cliente, ClienteBody);
 
+                if (res == null)
+                {
+                    return BadRequest();
+                }
+
                 return Ok(res.DtoDoCliente());
             }
             catch

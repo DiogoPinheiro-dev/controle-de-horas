@@ -6,6 +6,9 @@ using server.Interfaces;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+builder.Services.AddScoped<IUsuariosClientesService, UsuariosClientesService>();
+builder.Services.AddScoped<IUsuariosEmpresasService, UsuariosEmpresasService>();
+builder.Services.AddScoped<IUsuariosRecursosService, UsuariosRecursosService>();
 
 builder.Services.AddScoped<IEmpresaService, EmpresaService>();
 builder.Services.AddScoped<IServicoService, ServicoService>();
@@ -32,6 +35,15 @@ builder.Services.AddDbContext<AppDbContext>((options) =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("conn"));
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy => policy
+            .WithOrigins("http://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod());
+});
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -44,5 +56,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+
+app.UseCors("AllowFrontend");
 
 app.Run();

@@ -12,24 +12,29 @@ namespace server.Services
 
         public async Task<Projeto> CriarProjeto(Projeto Projeto)
         {
-            var empresa = await dbContext.Empresas.FindAsync(Projeto.EmpresaId);
+            await dbContext.Database.BeginTransactionAsync();
 
-            Console.WriteLine($"{Projeto.EmpresaId}");
+            var empresa = await dbContext.Empresas
+                .Select(e => e)
+                .Where(e => e.EmpresaId == Projeto.EmpresaId)
+                .FirstOrDefaultAsync() ?? throw new Exception("Empresa não encontrada.");
 
-            if (empresa == null)
-            {
-                throw new Exception("Empresa não encontrada.");
-            }
-            else
-            {
-                var projetoEntry = dbContext.Projetos.Add(Projeto);
-                await dbContext.SaveChangesAsync();
+            var cliente = await dbContext.Clientes
+                .Select(c => c)
+                .Where(c => c.ClienteId == Projeto.ClienteId)
+                .FirstOrDefaultAsync() ?? throw new Exception("Cliente não encontrado.");
 
-                empresa.ProjetoId = projetoEntry.Property(p => p.ProjetoId).CurrentValue;
-                await dbContext.SaveChangesAsync();
+            dbContext.Projetos.Add(Projeto);
+            await dbContext.SaveChangesAsync();
 
-                return projetoEntry.Entity;
-            }
+            // empresa.ProjetoId = projeto.Property(p => p.ProjetoId).CurrentValue;
+            // await dbContext.SaveChangesAsync();
+
+            // cliente.ProjetoId = projeto.Property(p => p.ProjetoId).CurrentValue;
+            // await dbContext.SaveChangesAsync();
+
+            await dbContext.Database.CommitTransactionAsync();
+            return Projeto;
         }
         public async Task<Projeto> AtualizarProjeto(Projeto Projeto, Projeto Body)
         {
@@ -55,27 +60,53 @@ namespace server.Services
 
             if (Body.EmpresaId > 0)
             {
-                var empresaAtu = await dbContext.Empresas.FindAsync(Projeto.EmpresaId);
+                var empresaAtu = await dbContext
+                    .Empresas
+                    .Select(e => e)
+                    .Where(e => e.EmpresaId == Projeto.EmpresaId)
+                    .FirstOrDefaultAsync() ?? throw new Exception("Empresa não encontrada.");
 
-                var empresaNova = await dbContext.Empresas.FindAsync(Body.EmpresaId);
+                var empresaNova = await dbContext
+                    .Empresas
+                    .Select(e => e)
+                    .Where(e => e.EmpresaId == Body.EmpresaId)
+                    .FirstOrDefaultAsync() ?? throw new Exception("Empresa não encontrada.");
 
-                if (empresaNova == null || empresaAtu == null)
-                {
-                    throw new Exception("Empresa não econtrada.");
-                }
-                else
-                {
-                    empresaAtu.ProjetoId = 0;
-                    empresaNova.ProjetoId = Body.ProjetoId;
-                    Projeto.EmpresaId = Body.EmpresaId;
-                }
+                // empresaAtu.ProjetoId = 0;
+                // await dbContext.SaveChangesAsync();
 
+                // empresaNova.ProjetoId = Body.ProjetoId;
+                // await dbContext.SaveChangesAsync();
+
+                Projeto.EmpresaId = Body.EmpresaId;
+                await dbContext.SaveChangesAsync();
             }
             else
                 Projeto.EmpresaId = Projeto.EmpresaId;
 
             if (Body.ClienteId > 0)
+            {
+                var clienteAtu = await dbContext
+                    .Clientes
+                    .Select(e => e)
+                    .Where(e => e.ClienteId == Projeto.ClienteId)
+                    .FirstOrDefaultAsync() ?? throw new Exception("Cliente não encontrado.");
+
+                var clienteNova = await dbContext
+                    .Clientes
+                    .Select(e => e)
+                    .Where(e => e.ClienteId == Body.ClienteId)
+                    .FirstOrDefaultAsync() ?? throw new Exception("Cliente não encontrado.");
+
+                // clienteAtu.ProjetoId = 0;
+                // await dbContext.SaveChangesAsync();
+
+                // clienteNova.ProjetoId = Body.ProjetoId;
+                // await dbContext.SaveChangesAsync();
+
                 Projeto.ClienteId = Body.ClienteId;
+                await dbContext.SaveChangesAsync();
+            }
             else
                 Projeto.ClienteId = Projeto.ClienteId;
 
@@ -84,8 +115,31 @@ namespace server.Services
         }
         public async Task<Projeto> DeletarProjeto(Projeto Projeto)
         {
+            await dbContext.Database.BeginTransactionAsync();
+
+            var empresa = await dbContext
+                .Empresas
+                .Select(e => e)
+                .Where(e => e.EmpresaId == Projeto.EmpresaId)
+                .FirstOrDefaultAsync() ?? throw new Exception("Empresa não encontrada.");
+
+            var cliente = await dbContext
+                .Clientes
+                .Select(c => c)
+                .Where(c => c.ClienteId == Projeto.ClienteId)
+                .FirstOrDefaultAsync() ?? throw new Exception("Cliente não encontrado.");
+
+            // empresa.ProjetoId = 0;
+            // await dbContext.SaveChangesAsync();
+
+            // cliente.ProjetoId = 0;
+            // await dbContext.SaveChangesAsync();
+
             dbContext.Projetos.Remove(Projeto);
+
             await dbContext.SaveChangesAsync();
+            await dbContext.Database.CommitTransactionAsync();
+
             return Projeto;
         }
 
@@ -97,7 +151,7 @@ namespace server.Services
 
         public async Task<Projeto> ObterProjetoPorId(int id)
         {
-            return await dbContext.Projetos.FindAsync(id);
+            return await dbContext.Projetos.FindAsync(id) ?? throw new Exception("Projeto não encontrado.");
         }
 
 
@@ -107,7 +161,7 @@ namespace server.Services
 
             Projeto = await dbContext
                 .Projetos
-                .Where(r => r.Descricao.Contains(Descricao)).ToListAsync();
+                .Where(r => r.Descricao.Contains(Descricao)).ToListAsync() ?? throw new Exception("Projeto não encontrado.");
 
             return Projeto;
         }
@@ -118,7 +172,7 @@ namespace server.Services
 
             Projeto = await dbContext
                 .Projetos
-                .Where(r => r.Nome.Contains(nome)).ToListAsync();
+                .Where(r => r.Nome.Contains(nome)).ToListAsync() ?? throw new Exception("Projeto não encontrado.");
 
             return Projeto;
         }
@@ -131,8 +185,7 @@ namespace server.Services
                 dbContext
                     .Projetos
                         .Where(a => a.DataInicio >= dataIni && a.DataFim <= dataFim)
-                        .ToListAsync()
-            );
+                        .ToListAsync()) ?? throw new Exception("Projeto não encontrado.");
 
             return projeto;
         }

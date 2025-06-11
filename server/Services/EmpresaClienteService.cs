@@ -8,30 +8,6 @@ namespace server.Services
     public class EmpresaClienteService(AppDbContext dbContext) : IEmpresaClienteService
     {
         private readonly AppDbContext dbContext = dbContext;
-
-        public async Task<EmpresaCliente> AlterarRelacaoEmpresaCliente(EmpresaCliente EmpresaCliente, EmpresaCliente Body)
-        {
-            if (Body.ClienteId <= 0)
-                EmpresaCliente.ClienteId = EmpresaCliente.ClienteId;
-            else
-                EmpresaCliente.ClienteId = Body.ClienteId;
-
-            if (Body.EmpresaId <= 0)
-                EmpresaCliente.EmpresaId = EmpresaCliente.EmpresaId;
-            else
-                EmpresaCliente.EmpresaId = Body.EmpresaId;
-
-            await dbContext.SaveChangesAsync();
-            return EmpresaCliente;
-        }
-
-        public async Task<EmpresaCliente> DeletarRelacaoEmpresaCliente(EmpresaCliente EmpresaCliente)
-        {
-            dbContext.EmpresaClientes.Remove(EmpresaCliente);
-            await dbContext.SaveChangesAsync();
-            return EmpresaCliente;
-        }
-
         public async Task<List<EmpresaCliente>> ObterRelacoesPorIdDaEmpresa(int idEmpresa)
         {
             List<EmpresaCliente> EmpresaClientes;
@@ -61,13 +37,6 @@ namespace server.Services
         public async Task<List<EmpresaCliente>> ObterTodasRelacoes()
         {
             return await dbContext.EmpresaClientes.ToListAsync();
-        }
-
-        public async Task<EmpresaCliente> RelacionarEmpresaCliente(EmpresaCliente EmpresaCliente)
-        {
-            await dbContext.EmpresaClientes.AddAsync(EmpresaCliente);
-            await dbContext.SaveChangesAsync();
-            return EmpresaCliente;
         }
     }
 }
