@@ -1,31 +1,57 @@
-import React, { useState } from 'react';
-import Header from '../components/Header';
-import Hero from '../components/Hero';
-import FeaturesSection from '../components/FeaturesSection';
-import Footer from '../components/Footer';
+import { useEffect, useState } from 'react';
+
+import Header from '../Components/Header';
+import Body from '../Components/Body';
+import Footer from '../Components/Footer';
+
 import LoginModal from '../components/LoginModal';
+
 import '../styles/global.css';
 
-function App() {
+import { loginUsuario } from '../Services/Usuario/AuthService';
+
+const Home = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loginModalVisible, setLoginModalVisible] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
-  
+  const [usuario, setUsuario] = useState(null);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (email && password) {
-      setIsLoggedIn(true);
-      setLoginModalVisible(false);
-      alert(`Bem-vindo, ${email}! Login realizado com sucesso.`);
+      try {
+        const usuarioLogado = await loginUsuario(email, password);
+        if (usuarioLogado) {
+          setIsLoggedIn(true);
+          setUsuario(usuarioLogado);
+          setLoginModalVisible(false);
+        } else {
+          alert('E-mail ou senha inválidos.');
+        }
+      } catch (error) {
+        alert('Erro ao realizar login.', error);
+      }
     }
   };
 
   const handleLogout = () => {
     setIsLoggedIn(false);
-    alert('Logout realizado com sucesso!');
+    setUsuario(null);
+    localStorage.removeItem('usuario');
+    sessionStorage.removeItem('usuario');
+
   };
+
+  useEffect(() => {
+    if (usuario) {
+      if (rememberMe)
+        localStorage.setItem('usuario', JSON.stringify(usuario));
+
+      else
+        sessionStorage.setItem('usuario', JSON.stringify(usuario));
+    }
+  }, [usuario, rememberMe]);
 
   return (
     <>
@@ -36,8 +62,10 @@ function App() {
             onLoginPress={() => setLoginModalVisible(true)}
             onLogoutPress={handleLogout}
           />
-          <Hero />
-          <FeaturesSection />
+          <Body
+            isLoggedIn={isLoggedIn}
+            email={email}
+          />
         </div>
         <Footer />
 
@@ -57,4 +85,4 @@ function App() {
   );
 }
 
-export default App;
+export default Home;

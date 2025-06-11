@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000/api/Cliente';
+const API_URL = 'http://localhost:5180/api/Cliente';
 
 const getAllClientes = async () => {
     try {

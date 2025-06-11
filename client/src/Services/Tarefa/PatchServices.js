@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URI = 'http://localhost:3000/api/Tarefa';
+const API_URI = 'http://localhost:5180/api/Tarefa';
 
 const patchTarefa = async (id, Tarefa) => {
     try {

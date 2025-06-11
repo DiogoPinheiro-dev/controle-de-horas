@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000/api/Servicos';
+const API_URL = 'http://localhost:5180/api/Servicos';
 
 const getAllServicos = async () => {
     try {

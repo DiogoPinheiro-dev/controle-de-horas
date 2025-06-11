@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000/api/Empresa';
+const API_URL = 'http://localhost:5180/api/Empresa';
 
 const getAllEmpresas = async () => {
     try {
@@ -38,4 +38,16 @@ const getEmpresasByNome = async (nome) => {
     }
 };
 
-export { getAllEmpresas, getEmpresaById, getEmpresasByNome };
+const getEmpresasByEmail = async (email) => {
+    try {
+        const response = await axios.get(`${API_URL}/ByEmail/${email}`);
+        return response.data;
+
+    } catch (error) {
+        console.error(`Error fetching Empresas with email ${email}:`, error);
+        throw error;
+
+    }
+};
+
+export { getAllEmpresas, getEmpresaById, getEmpresasByNome, getEmpresasByEmail };

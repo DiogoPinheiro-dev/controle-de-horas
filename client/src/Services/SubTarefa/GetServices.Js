@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000/api/SubTarefa';
+const API_URL = 'http://localhost:5180/api/SubTarefa';
 
 const getAllSubTarefas = async () => {
     try {

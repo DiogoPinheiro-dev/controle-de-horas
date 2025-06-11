@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000/api/Recurso';
+const API_URL = 'http://localhost:5180/api/Recurso';
 
 const getAllRecursos = async () => {
     try {

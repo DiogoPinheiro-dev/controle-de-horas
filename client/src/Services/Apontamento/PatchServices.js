@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URI = 'http://localhost:3000/api/Apontamento';
+const API_URI = 'http://localhost:5180/api/Apontamento';
 
 const patchApontamento = async (id, apontamento) => {
     try {
