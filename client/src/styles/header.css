@@ -70,3 +70,25 @@
 .button-icon {
   margin-right: 0.5rem;
 }
+
+.user-info {
+  display: flex;
+  align-items: center;
+  margin-right: 1rem;
+}
+
+.user-icon {
+  font-size: 2rem;
+  color: var(--primary-600);
+  margin-right: 0.75rem;
+}
+
+.user-name {
+  font-weight: 600;
+  color: var(--gray-800);
+}
+
+.user-company {
+  font-size: 0.875rem;
+  color: var(--gray-600);
+}

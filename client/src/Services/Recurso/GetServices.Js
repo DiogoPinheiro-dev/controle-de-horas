@@ -76,4 +76,4 @@ const getRecursosByTipo = async (tipo) => {
     }
 };
 
-export { getAllRecursos, getRecursoById, getRecursosByEmail, getRecursosByNome, getRecursosByTipo };
+export { getAllRecursos, getRecursoById, getRecursosByEmail, getRecursosByNome, getRecursosByTipo, getRecursosByTelefone };

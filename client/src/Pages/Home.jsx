@@ -1,35 +1,41 @@
+import { loginUsuario } from '../Services/Usuario/AuthService';
+
 import { useEffect, useState } from 'react';
 
 import Header from '../Components/Header';
 import Body from '../Components/Body';
 import Footer from '../Components/Footer';
+import Loading from '../Components/Loading';
 
-import LoginModal from '../components/LoginModal';
+import LoginModal from '../Components/LoginModal';
 
 import '../styles/global.css';
 
-import { loginUsuario } from '../Services/Usuario/AuthService';
-
 const Home = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('login') || sessionStorage.getItem('login') || false);
   const [loginModalVisible, setLoginModalVisible] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [usuario, setUsuario] = useState(null);
+  const [isLoading, setIsLoading] = useState(false); // novo estado
 
   const handleLogin = async () => {
     if (email && password) {
       try {
+        setIsLoading(true); // Inicia o loading
         const usuarioLogado = await loginUsuario(email, password);
         if (usuarioLogado) {
           setIsLoggedIn(true);
           setUsuario(usuarioLogado);
           setLoginModalVisible(false);
+          setTimeout(() => setIsLoading(false), 1000);
         } else {
+          setIsLoading(false);
           alert('E-mail ou senha inválidos.');
         }
       } catch (error) {
+        setIsLoading(false);
         alert('Erro ao realizar login.', error);
       }
     }
@@ -38,18 +44,18 @@ const Home = () => {
   const handleLogout = () => {
     setIsLoggedIn(false);
     setUsuario(null);
-    localStorage.removeItem('usuario');
-    sessionStorage.removeItem('usuario');
+    localStorage.removeItem('login');
+    sessionStorage.removeItem('login');
 
   };
 
   useEffect(() => {
     if (usuario) {
       if (rememberMe)
-        localStorage.setItem('usuario', JSON.stringify(usuario));
+        localStorage.setItem('login', JSON.stringify(usuario.email));
 
       else
-        sessionStorage.setItem('usuario', JSON.stringify(usuario));
+        sessionStorage.setItem('login', JSON.stringify(usuario.email));
     }
   }, [usuario, rememberMe]);
 
@@ -62,10 +68,11 @@ const Home = () => {
             onLoginPress={() => setLoginModalVisible(true)}
             onLogoutPress={handleLogout}
           />
-          <Body
-            isLoggedIn={isLoggedIn}
-            email={email}
-          />
+          {isLoading ? (
+            <Loading />
+          ) : (
+            <Body isLoggedIn={isLoggedIn} />
+          )}
         </div>
         <Footer />
 

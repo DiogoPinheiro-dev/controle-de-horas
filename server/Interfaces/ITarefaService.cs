@@ -9,6 +9,8 @@ namespace server.Interfaces
         Task<Tarefa> DeletarTarefa(Tarefa Tarefa);
         Task<Tarefa> ObterTarefaPorId(int id);
         Task<List<Tarefa>> ObterTodasTarefas();
+        Task<List<Tarefa>> ObterTarefasPorIdDeCoordenador(int idCoordenador);
+        Task<List<Tarefa>> ObterTarefasPorIdDeProjeto(int idProjeto);
         Task<List<Tarefa>> ObterTarefaPorDescricao(string nome);
         Task<List<Tarefa>> ObterTarefasPorData(int dataIni, int dataFim);
     }

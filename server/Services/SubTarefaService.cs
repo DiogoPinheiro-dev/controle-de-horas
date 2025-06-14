@@ -22,11 +22,6 @@ namespace server.Services
             else
                 SubTarefa.Descricao = SubTarefa.Descricao;
 
-            if (Body.RecursoId > 0)
-                SubTarefa.RecursoId = Body.RecursoId;
-            else
-                SubTarefa.RecursoId = SubTarefa.RecursoId;
-
             if (Body.DataFim > 0)
                 SubTarefa.DataFim = Body.DataFim;
             else
@@ -51,6 +46,19 @@ namespace server.Services
         public async Task<SubTarefa> ObterSubTarefaPorId(int id)
         {
             return await dbContext.SubTarefas.FindAsync(id);
+        }
+
+        public async Task<List<SubTarefa>> ObterProjetosPorIdDeAnalista(int idAnalista)
+        {
+            List<SubTarefa> SubTarefas;
+
+            SubTarefas = await dbContext
+                .SubTarefas
+                .Select(p => p)
+                .Where(p => p.RecursoId == idAnalista)
+                .ToListAsync() ?? throw new Exception("Esse Analista nao tem SubTarefas.");
+
+            return SubTarefas;
         }
 
 

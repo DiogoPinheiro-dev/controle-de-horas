@@ -50,4 +50,26 @@ const getTarefasByData = async (dataIni, dataFim) => {
     }
 }
 
-export { getAllTarefas, getTarefaById, getTarefasByDescricao, getTarefasByData };
+const getTarefasByProjetoId = async (projetoId) => {
+    try {
+        const response = await axios.get(`${API_URL}/ByProjetoId/${projetoId}`);
+        return response.data;
+
+    } catch (error) {
+        console.error(`Error fetching Tarefas by ProjectId ${projetoId}:`, error);
+        throw error;
+    }
+}
+
+const getTarefasByCoordenadorId = async (coordenadorId) => {
+    try {
+        const response = await axios.get(`${API_URL}/ByCoordenadorId/${coordenadorId}`);
+        return response.data;
+
+    } catch (error) {
+        console.error(`Error fetching Tarefas by ProjectId ${coordenadorId}:`, error);
+        throw error;
+    }
+}
+
+export { getAllTarefas, getTarefaById, getTarefasByDescricao, getTarefasByData, getTarefasByProjetoId, getTarefasByCoordenadorId };

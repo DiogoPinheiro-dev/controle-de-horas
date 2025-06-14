@@ -128,6 +128,46 @@ namespace server.Controllers
         }
 
         [HttpGet]
+        [Route("ByProjetoId/{projetoId}")]
+        public async Task<ActionResult<List<Tarefa>>> ObterTarefasPorIdDeProjeto([FromRoute] int projetoId)
+        {
+            try
+            {
+                List<Tarefa> Tarefas = await service.ObterTarefasPorIdDeProjeto(projetoId);
+                List<TarefaDto> TarefasDtos = [];
+
+                foreach (var Tarefa in Tarefas)
+                    TarefasDtos.Add(Tarefa.DtoDaTarefa());
+
+                return Ok(TarefasDtos);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("ByCoordenadorId/{coordenadorId}")]
+        public async Task<ActionResult<List<Tarefa>>> ObterTarefasPorIdDeCoordenador([FromRoute] int coordenadorId)
+        {
+            try
+            {
+                List<Tarefa> Tarefas = await service.ObterTarefasPorIdDeCoordenador(coordenadorId);
+                List<TarefaDto> TarefasDtos = [];
+
+                foreach (var Tarefa in Tarefas)
+                    TarefasDtos.Add(Tarefa.DtoDaTarefa());
+
+                return Ok(TarefasDtos);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
         [Route("ById/{id}")]
         public async Task<ActionResult<Tarefa>> ObterTarefaPorId([FromRoute] int id)
         {

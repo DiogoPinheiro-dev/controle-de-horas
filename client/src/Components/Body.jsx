@@ -6,38 +6,55 @@ import Hero from './Hero.jsx';
 import FeaturesSection from './FeaturesSection.jsx';
 
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const Body = ({ isLoggedIn, email }) => {
-    const [tipo, setTipo] = useState('');
+const Body = ({ isLoggedIn }) => {
+    const [tipo, setTipo] = useState("");
+    const [email] = useState(JSON.parse(sessionStorage.getItem('login')) || JSON.parse(localStorage.getItem('login')));
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const getTipo = async () => {
-            var recurso = await getRecursosByEmail(email);
-            if (recurso != null) setTipo(recurso.tipo);
+        const fetchData = async () => {
+            if (email) {
+                try {
+                    let data = await getClientesByEmail(email);
+                    if (!data || data.length === 0) data = await getEmpresasByEmail(email);
+                    if (!data || data.length === 0) data = await getRecursosByEmail(email);
 
-            var empresa = await getEmpresasByEmail(email);
-            if (empresa != null) setTipo('E');
+                    if (data && data.length > 0) {
+                        if (data[0].tipo) {
+                            if (data[0].tipo === "A" || data[0].tipo === "G" || data[0].tipo === "C") setTipo(data[0].tipo);
+                        } else {
+                            if (data[0].telefone) setTipo("Cliente");
+                            else setTipo("Empresa");
+                        }
+                    } else setTipo('Nenhum dado encontrado');
 
-            var cliente = await getClientesByEmail(email);
-            if (cliente != null) setTipo('C');
+                } catch (error) {
+                    console.error('Erro ao buscar dados:', error);
+                    setTipo('Erro ao buscar dados');
+                }
+            }
         };
-        getTipo();
-    }, [email]);
+
+        if (isLoggedIn) {
+            fetchData();
+        }
+    }, [isLoggedIn, email]);
+
+
+    console.log(tipo);
 
     return (
         <>
             {
                 isLoggedIn ? (
-                    tipo == 'A' || tipo == 'G' || tipo == 'C' ? (
-                        <p>Recurso: {tipo}</p>
-
-                    ) : tipo == 'E' ? (
-                        <p>Empresa</p>
-
-                    ) : tipo == 'C' ? (
-                        <p>Cliente</p>
-
-                    ) : <p>{tipo}</p>
+                    tipo === "A" ? (navigate(`/Recurso/${tipo}`)) :
+                        tipo === "G" ? (navigate(`/Recurso/${tipo}`)) :
+                            tipo === "C" ? (navigate(`/Recurso/${tipo}`)) :
+                                tipo === "Empresa" ? (navigate(`/${tipo}`)) :
+                                    tipo === "Cliente" ? (navigate(`/${tipo}`)) :
+                                        tipo === 'Nenhum dado encontrado' ? (navigate('/')) : null
                 ) : (
                     <>
                         <Hero />

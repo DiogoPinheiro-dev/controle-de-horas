@@ -153,6 +153,102 @@ namespace server.Controllers
         }
 
         [HttpGet]
+        [Route("ByEmpresaId/{empresaId}")]
+        public async Task<ActionResult<Projeto>> ObterProjetoPorIdDeEmpresa([FromRoute] int empresaId)
+        {
+            try
+            {
+                List<Projeto> Projetos;
+                List<ProjetoDto> ProjetosDtos = [];
+
+                if (empresaId <= 0)
+                {
+                    return NoContent();
+                }
+
+                Projetos = await service.ObterProjetosPorIdDeEmpresa(empresaId);
+
+                if (Projetos.Count <= 0)
+                {
+                    return NotFound();
+                }
+                
+                foreach (var Projeto in Projetos)
+                    ProjetosDtos.Add(Projeto.DtoDoProjeto());
+
+                return Ok(ProjetosDtos);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("ByClienteId/{clienteId}")]
+        public async Task<ActionResult<Projeto>> ObterProjetoPorIdDeCliente([FromRoute] int clienteId)
+        {
+            try
+            {
+                List<Projeto> Projetos;
+                List<ProjetoDto> ProjetosDtos = [];
+
+                if (clienteId <= 0)
+                {
+                    return NoContent();
+                }
+
+                Projetos = await service.ObterProjetosPorIdDeEmpresa(clienteId);
+
+                if (Projetos.Count <= 0)
+                {
+                    return NotFound();
+                }
+                
+                foreach (var Projeto in Projetos)
+                    ProjetosDtos.Add(Projeto.DtoDoProjeto());
+
+                return Ok(ProjetosDtos);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("ByRecursoId/{RecursoId}")]
+        public async Task<ActionResult<Projeto>> ObterProjetoPorIdDeGerente([FromRoute] int RecursoId)
+        {
+            try
+            {
+                List<Projeto> Projetos;
+                List<ProjetoDto> ProjetosDtos = [];
+
+                if (RecursoId <= 0)
+                {
+                    return NoContent();
+                }
+
+                Projetos = await service.ObterProjetosPorIdDeEmpresa(RecursoId);
+
+                if (Projetos.Count <= 0)
+                {
+                    return NotFound();
+                }
+                
+                foreach (var Projeto in Projetos)
+                    ProjetosDtos.Add(Projeto.DtoDoProjeto());
+
+                return Ok(ProjetosDtos);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
         [Route("ByNome/{nome}")]
         public async Task<ActionResult<List<Projeto>>> ObterProjetoPorNome([FromRoute] string nome)
         {

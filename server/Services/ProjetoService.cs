@@ -72,12 +72,6 @@ namespace server.Services
                     .Where(e => e.EmpresaId == Body.EmpresaId)
                     .FirstOrDefaultAsync() ?? throw new Exception("Empresa não encontrada.");
 
-                // empresaAtu.ProjetoId = 0;
-                // await dbContext.SaveChangesAsync();
-
-                // empresaNova.ProjetoId = Body.ProjetoId;
-                // await dbContext.SaveChangesAsync();
-
                 Projeto.EmpresaId = Body.EmpresaId;
                 await dbContext.SaveChangesAsync();
             }
@@ -97,12 +91,6 @@ namespace server.Services
                     .Select(e => e)
                     .Where(e => e.ClienteId == Body.ClienteId)
                     .FirstOrDefaultAsync() ?? throw new Exception("Cliente não encontrado.");
-
-                // clienteAtu.ProjetoId = 0;
-                // await dbContext.SaveChangesAsync();
-
-                // clienteNova.ProjetoId = Body.ProjetoId;
-                // await dbContext.SaveChangesAsync();
 
                 Projeto.ClienteId = Body.ClienteId;
                 await dbContext.SaveChangesAsync();
@@ -129,12 +117,6 @@ namespace server.Services
                 .Where(c => c.ClienteId == Projeto.ClienteId)
                 .FirstOrDefaultAsync() ?? throw new Exception("Cliente não encontrado.");
 
-            // empresa.ProjetoId = 0;
-            // await dbContext.SaveChangesAsync();
-
-            // cliente.ProjetoId = 0;
-            // await dbContext.SaveChangesAsync();
-
             dbContext.Projetos.Remove(Projeto);
 
             await dbContext.SaveChangesAsync();
@@ -146,12 +128,49 @@ namespace server.Services
         public async Task<List<Projeto>> ObterTodosProjetos()
         {
             return await dbContext.Projetos.ToListAsync();
-
         }
 
         public async Task<Projeto> ObterProjetoPorId(int id)
         {
             return await dbContext.Projetos.FindAsync(id) ?? throw new Exception("Projeto não encontrado.");
+        }
+
+        public async Task<List<Projeto>> ObterProjetosPorIdDeCliente(int idCliente)
+        {
+            List<Projeto> Projeto;
+
+            Projeto = await dbContext
+                .Projetos
+                .Select(p => p)
+                .Where(p => p.ClienteId == idCliente)
+                .ToListAsync() ?? throw new Exception("Esse Cliente nao tem projetos.");
+
+            return Projeto;
+        }
+        public async Task<List<Projeto>> ObterProjetosPorIdDeGerente(int idGerente)
+        {
+            List<Projeto> Projeto;
+
+            Projeto = await dbContext
+                .Projetos
+                .Select(p => p)
+                .Where(p => p.RecursoId == idGerente)
+                .ToListAsync() ?? throw new Exception("Esse Gerente nao tem projetos.");
+
+            return Projeto;
+        }
+        
+        public async Task<List<Projeto>> ObterProjetosPorIdDeEmpresa(int idEmpresa)
+        {
+            List<Projeto> Projeto;
+
+            Projeto = await dbContext
+                .Projetos
+                .Select(p => p)
+                .Where(p => p.EmpresaId == idEmpresa)
+                .ToListAsync() ?? throw new Exception("Esse Empresa nao tem projetos.");
+
+            return Projeto;
         }
 
 

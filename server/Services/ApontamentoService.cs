@@ -22,11 +22,6 @@ namespace server.Services
             else
                 Apontamento.Descricao = Apontamento.Descricao;
 
-            if (Body.RecursoId > 0)
-                Apontamento.RecursoId = Body.RecursoId;
-            else
-                Apontamento.RecursoId = Apontamento.RecursoId;
-
             if (Body.HorasFinalizadas > 0)
                 Apontamento.HorasFinalizadas = Body.HorasFinalizadas;
             else
@@ -36,11 +31,6 @@ namespace server.Services
                 Apontamento.DataFim = Body.DataFim;
             else
                 Apontamento.DataFim = Apontamento.DataFim;
-
-            if (Body.ApontamentoId > 0)
-                Apontamento.ApontamentoId = Body.ApontamentoId;
-            else
-                Apontamento.ApontamentoId = Apontamento.ApontamentoId;
 
             await dbContext.SaveChangesAsync();
             return Apontamento;
@@ -89,6 +79,32 @@ namespace server.Services
         public async Task<Apontamento> ObterApontamentoPorId(int id)
         {
             return await dbContext.Apontamentos.FindAsync(id);
+        }
+
+        public async Task<List<Apontamento>> ObterProjetosPorIdDeSubTarefa(int idSubTarefa)
+        {
+            List<Apontamento> Apontamentos;
+
+            Apontamentos = await dbContext
+                .Apontamentos
+                .Select(p => p)
+                .Where(p => p.SubTarefaId == idSubTarefa)
+                .ToListAsync() ?? throw new Exception("Esse Apontamento nao existe.");
+
+            return Apontamentos;
+        }
+
+        public async Task<List<Apontamento>> ObterProjetosPorIdDeAnalista(int idAnalista)
+        {
+            List<Apontamento> Apontamentos;
+
+            Apontamentos = await dbContext
+                .Apontamentos
+                .Select(p => p)
+                .Where(p => p.RecursoId == idAnalista)
+                .ToListAsync() ?? throw new Exception("Esse Analista nao tem apontamentos.");
+
+            return Apontamentos;
         }
     }
 

@@ -30,11 +30,6 @@ namespace server.Services
             else
                 Empresa.Nome = Empresa.Nome;
 
-            // if (Body.ProjetoId > 0)
-            //     Empresa.ProjetoId = Body.ProjetoId;
-            // else
-            //     Empresa.ProjetoId = Empresa.ProjetoId;
-
             if (Body.IdUsuario > 0)
             {
                 await dbContext.Database.BeginTransactionAsync();
@@ -187,7 +182,7 @@ namespace server.Services
 
             empresas = await dbContext
                 .Empresas
-                .Where(r => r.Email.Contains(Email)).ToListAsync();
+                .Where(r => r.Email == Email).ToListAsync();
 
             return empresas;
         }

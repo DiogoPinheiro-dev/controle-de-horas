@@ -2,7 +2,7 @@ using server.Models;
 
 namespace server.Interfaces
 {
-    public interface IProjetoService 
+    public interface IProjetoService
     {
         Task<Projeto> CriarProjeto(Projeto projeto);
         Task<Projeto> AtualizarProjeto(Projeto projeto, Projeto body);
@@ -12,7 +12,9 @@ namespace server.Interfaces
         Task<List<Projeto>> ObterTodosProjetos();
         Task<List<Projeto>> ObterProjetoPorNome(string nome);
         Task<List<Projeto>> ObterProjetoPorDescricao(string descricao);
-        
         Task<List<Projeto>> ObterProjetosPorData(int dataIni, int dataFim);
+        Task<List<Projeto>> ObterProjetosPorIdDeCliente(int idCliente);
+        Task<List<Projeto>> ObterProjetosPorIdDeEmpresa(int idEmpresa);
+        Task<List<Projeto>> ObterProjetosPorIdDeGerente(int idGerente);
     }
 }

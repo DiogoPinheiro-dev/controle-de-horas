@@ -27,11 +27,6 @@ namespace server.Services
             else
                 Tarefa.DataFim = Tarefa.DataFim;
 
-            if (Body.RecursoId > 0)
-                Tarefa.RecursoId = Body.RecursoId;
-            else
-                Tarefa.RecursoId = Tarefa.RecursoId;
-
             await dbContext.SaveChangesAsync();
             return Tarefa;
         }
@@ -51,6 +46,32 @@ namespace server.Services
         public async Task<Tarefa> ObterTarefaPorId(int id)
         {
             return await dbContext.Tarefas.FindAsync(id);
+        }
+
+        public async Task<List<Tarefa>> ObterTarefasPorIdDeCoordenador(int idAnalista)
+        {
+            List<Tarefa> Tarefas;
+
+            Tarefas = await dbContext
+                .Tarefas
+                .Select(p => p)
+                .Where(p => p.RecursoId == idAnalista)
+                .ToListAsync() ?? throw new Exception("Esse Coordenador nao tem Tarefas.");
+
+            return Tarefas;
+        }
+
+        public async Task<List<Tarefa>> ObterTarefasPorIdDeProjeto(int idProjeto)
+        {
+            List<Tarefa> Tarefas;
+
+            Tarefas = await dbContext
+                .Tarefas
+                .Select(t => t)
+                .Where(t => t.ProjetoId == idProjeto)
+                .ToListAsync() ?? throw new Exception("Esse Coordenador nao tem Tarefas.");
+
+            return Tarefas;
         }
 
 

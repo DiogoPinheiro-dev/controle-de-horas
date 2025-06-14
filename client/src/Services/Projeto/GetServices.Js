@@ -62,4 +62,40 @@ const getProjetosByData = async (dataIni, dataFim) => {
     }
 }
 
-export { getAllProjetos, getProjetoById, getProjetosByNome, getProjetosByDescricao, getProjetosByData };
+const getProjetosByClienteId = async (clienteId) => {
+    try {
+        const response = await axios.get(`${API_URL}/ByClienteId/${clienteId}`);
+        return response.data;
+
+    } catch (error) {
+        console.error(`Error fetching Projetos for clienteId ${clienteId}:`, error);
+        throw error;
+
+    }
+}
+
+const getProjetosByRecursoId = async (recursoId) => {
+    try {
+        const response = await axios.get(`${API_URL}/ByRecursoId/${recursoId}`);
+        return response.data;
+
+    } catch (error) {
+        console.error(`Error fetching Projetos for recursoId ${recursoId}:`, error);
+        throw error;
+
+    }
+}
+
+const getProjetosByEmpresaId = async (empresaId) => {
+    try {
+        const response = await axios.get(`${API_URL}/ByEmpresaId/${empresaId}`);
+        return response.data;
+
+    } catch (error) {
+        console.error(`Error fetching Projetos for empresaId ${empresaId}:`, error);
+        throw error;
+
+    }
+}
+
+export { getAllProjetos, getProjetoById, getProjetosByNome, getProjetosByDescricao, getProjetosByData, getProjetosByClienteId, getProjetosByRecursoId, getProjetosByEmpresaId };
