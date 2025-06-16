@@ -115,13 +115,14 @@ const ClienteHome = () => {
 
     if (!start || !end) return 'Não iniciado';
 
-    // Zera as horas para comparar apenas datas
     today.setHours(0, 0, 0, 0);
     start.setHours(0, 0, 0, 0);
     end.setHours(0, 0, 0, 0);
 
     if (today < start) return 'Não iniciado';
+
     if (today > end) return 'Concluído';
+
     return 'Em andamento';
   };
 

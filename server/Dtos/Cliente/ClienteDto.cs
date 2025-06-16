@@ -7,7 +7,7 @@ namespace server.Dtos.Cliente
         public string? Email { get; set; }
         public string? Telefone { get; set; }
         public int ProjetoId { get; set; }
-        public int IdEmpresa { get; set; }
+        public int EmpresaId { get; set; }
         public int UsuarioId { get; set; }
     }
 }

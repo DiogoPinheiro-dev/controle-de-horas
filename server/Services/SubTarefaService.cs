@@ -48,7 +48,20 @@ namespace server.Services
             return await dbContext.SubTarefas.FindAsync(id);
         }
 
-        public async Task<List<SubTarefa>> ObterProjetosPorIdDeAnalista(int idAnalista)
+        public async Task<List<SubTarefa>> ObterSubTarefaPorIdDeTarefa(int TarefaId)
+        {
+            List<SubTarefa> SubTarefas;
+
+            SubTarefas = await dbContext
+                .SubTarefas
+                .Select(p => p)
+                .Where(p => p.TarefaId == TarefaId)
+                .ToListAsync() ?? throw new Exception("Essa SubTarefa nao tem Tarefas.");
+
+            return SubTarefas;
+        }
+
+        public async Task<List<SubTarefa>> ObterSubTarefaPorIdDeAnalista(int idAnalista)
         {
             List<SubTarefa> SubTarefas;
 

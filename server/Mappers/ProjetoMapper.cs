@@ -25,10 +25,10 @@ namespace server.Mappers
             {
                 Descricao = ProjetoDto.Descricao,
                 Nome = ProjetoDto.Nome,
-                DataInicio = ProjetoDto.DataIni,
-                ClienteId = ProjetoDto.IdCliente,
-                RecursoId = ProjetoDto.IdGerente,
-                EmpresaId = ProjetoDto.IdEmpresa
+                DataInicio = ProjetoDto.DataInicio,
+                ClienteId = ProjetoDto.ClienteId,
+                RecursoId = ProjetoDto.GerenteId,
+                EmpresaId = ProjetoDto.EmpresaId
             };
         }
 
@@ -37,7 +37,7 @@ namespace server.Mappers
             return new Projeto
             {
                 ProjetoId = ProjetoDto.ProjetoId,
-                RecursoId = ProjetoDto.IdGerente
+                RecursoId = ProjetoDto.GerenteId
             };
         }
 
@@ -48,7 +48,7 @@ namespace server.Mappers
                 Descricao = ProjetoDto.Descricao,
                 Nome = ProjetoDto.Nome,
                 DataFim = ProjetoDto.DataFim,
-                EmpresaId = ProjetoDto.IdEmpresa
+                EmpresaId = ProjetoDto.EmpresaId
             };
         }
     }

@@ -24,8 +24,8 @@ namespace server.Mappers
             {
                 Descricao = SubTarefaDto.Descricao,
                 DataInicio = SubTarefaDto.DataInicio,
-                TarefaId = SubTarefaDto.IdTarefa,
-                RecursoId = SubTarefaDto.IdAnalista
+                TarefaId = SubTarefaDto.TarefaId,
+                RecursoId = SubTarefaDto.AnalistaId
             };
         }
 
@@ -35,7 +35,7 @@ namespace server.Mappers
             {
                 Descricao = SubTarefaDto.Descricao,
                 DataFim = SubTarefaDto.DataFim,
-                RecursoId = SubTarefaDto.IdAnalista
+                RecursoId = SubTarefaDto.AnalistaId
             };
         }
 
@@ -44,7 +44,7 @@ namespace server.Mappers
             return new SubTarefa
             {
                 SubTarefaId = SubTarefaDto.SubTarefaId,
-                TarefaId = SubTarefaDto.IdTarefa
+                TarefaId = SubTarefaDto.TarefaId
             };
         }
     }

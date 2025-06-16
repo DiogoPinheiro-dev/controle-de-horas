@@ -40,7 +40,7 @@ namespace server.Mappers
         {
             return new Usuario
             {
-                UsuarioId = usuarioDTO.Id,
+                UsuarioId = usuarioDTO.UsuarioId,
                 Email = "",
                 Senha = ""
             };

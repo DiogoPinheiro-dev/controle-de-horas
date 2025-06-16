@@ -14,8 +14,8 @@ namespace server.Mappers
                 Email = recurso.Email,
                 Tipo = recurso.Tipo,
                 Telefone = recurso.Telefone,
-                IdEmpresa = recurso.IdEmpresa,
-                IdUsuario = recurso.IdUsuario
+                EmpresaId = recurso.IdEmpresa,
+                UsuarioId = recurso.IdUsuario
             };
         }
         
@@ -27,7 +27,7 @@ namespace server.Mappers
                 Tipo = recursoDto.Tipo,
                 Email = recursoDto.Email,
                 Telefone = recursoDto.Telefone,
-                IdEmpresa = recursoDto.IdEmpresa
+                IdEmpresa = recursoDto.EmpresaId
             };
         }
 
@@ -39,8 +39,8 @@ namespace server.Mappers
                 Tipo = recursoDto.Tipo,
                 Email = "",
                 Telefone = recursoDto.Telefone,
-                IdEmpresa = recursoDto.IdEmpresa,
-                IdUsuario = recursoDto.IdUsuario
+                IdEmpresa = recursoDto.EmpresaId,
+                IdUsuario = recursoDto.UsuarioId
             };
         }
 
@@ -49,7 +49,7 @@ namespace server.Mappers
             return new Recurso
             {
                 RecursoId = recursoDto.RecursoId,
-                IdEmpresa = recursoDto.IdEmpresa,
+                IdEmpresa = recursoDto.EmpresaId,
                 Email = ""
             };
         }

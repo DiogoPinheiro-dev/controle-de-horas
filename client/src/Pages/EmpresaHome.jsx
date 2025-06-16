@@ -165,9 +165,7 @@ const EmpresaHome = () => {
   }
 
   const handleAddProject = async (newProject) => {
-    const novoProjeto = await postProjeto(newProject);
-
-    setProjects(prev => [...prev, { ...novoProjeto }]);
+    await postProjeto(newProject);
 
     window.location.reload();
   };

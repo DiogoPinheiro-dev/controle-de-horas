@@ -14,6 +14,8 @@ import ProjectTable from '../Components/ProjectTable';
 import TarefaTable from '../Components/TarefaTable';
 import ProjectDetailsModal from '../Components/ProjectDetailsModal.jsx'
 import Loading from '../Components/Loading.jsx';
+import AddTarefasModal from '../Components/AddTarefasModal.jsx';
+import EditTarefaModal from '../Components/EditTarefaModal.jsx';
 
 const GerenteHome = () => {
     const navigate = useNavigate();
@@ -28,6 +30,10 @@ const GerenteHome = () => {
     const [selectedProject, setSelectedProject] = useState(null);
     const [tarefas, setTarefas] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [isAddTarefasModalOpen, setIsAddTarefasModalOpen] = useState(false);
+    const [isEditTarefaModalOpen, setIsEditTarefaModalOpen] = useState(false);
+    const [tarefaEditando, setTarefaEditando] = useState(null);
+    const [sortConfigTarefas, setSortConfigTarefas] = useState({ key: null, direction: 'ascending' });
 
     useEffect(() => {
         const fetchProjetosEGerente = async () => {
@@ -113,6 +119,15 @@ const GerenteHome = () => {
         });
     };
 
+    const handleSortTarefas = (key) => {
+        let direction = 'ascending';
+        if (sortConfigTarefas.key === key && sortConfigTarefas.direction === 'ascending') {
+            direction = 'descending';
+        }
+        setSortConfigTarefas({ key, direction });
+    };
+
+
     function formatDate(dataInt) {
         if (!dataInt) return '';
         const str = dataInt.toString();
@@ -162,21 +177,37 @@ const GerenteHome = () => {
     };
 
     const handleAddTarefa = async (novaTarefa) => {
-        await postTarefa(selectedProject.projetoId, novaTarefa);
-        const tarefasAtualizadas = await getTarefasByProjetoId(selectedProject.projetoId);
-        setTarefas(tarefasAtualizadas);
+        try {
+            await postTarefa(novaTarefa);
+
+            window.location.reload();
+        } catch (e) {
+            alert("Erro ao adicionar tarefa:", e);
+
+        }
     };
 
-    const handleEditTarefa = async (tarefaId, campos) => {
-        await patchTarefa(tarefaId, campos);
-        const tarefasAtualizadas = await getTarefasByProjetoId(selectedProject.projetoId);
-        setTarefas(tarefasAtualizadas);
+    const handleEditTarefaClick = (tarefa) => {
+        setTarefaEditando(tarefa);
+        setIsEditTarefaModalOpen(true);
+    };
+
+    const handleSaveEditTarefa = async (tarefaEditada) => {
+        try {
+            await patchTarefa(tarefaEditada.tarefaId, tarefaEditada);
+
+            setIsEditTarefaModalOpen(false);
+            setTarefaEditando(null);
+
+            window.location.reload();
+        } catch (e) {
+            alert("Erro ao editar tarefa:", e);
+        }
     };
 
     const handleDeleteTarefa = async (tarefaId) => {
         await deleteTarefa(tarefaId);
-        const tarefasAtualizadas = await getTarefasByProjetoId(selectedProject.projetoId);
-        setTarefas(tarefasAtualizadas);
+        window.location.reload();
     };
 
     if (isLoading) {
@@ -258,8 +289,24 @@ const GerenteHome = () => {
                                     <TarefaTable
                                         tarefas={tarefas}
                                         onAdd={handleAddTarefa}
-                                        onEdit={handleEditTarefa}
+                                        onEdit={handleEditTarefaClick}
                                         onDelete={handleDeleteTarefa}
+                                        onSort={handleSortTarefas}
+                                        sortConfig={sortConfigTarefas}
+                                    />
+
+                                    <AddTarefasModal
+                                        isOpen={isAddTarefasModalOpen}
+                                        onClose={() => setIsAddTarefasModalOpen(false)}
+                                        onAdd={handleAddTarefa}
+                                        projetoId={selectedProject.projetoId}
+                                    />
+
+                                    <EditTarefaModal
+                                        isOpen={isEditTarefaModalOpen}
+                                        onClose={() => setIsEditTarefaModalOpen(false)}
+                                        onEdit={handleSaveEditTarefa}
+                                        tarefa={tarefaEditando}
                                     />
                                 </>
                             ) : (
@@ -282,9 +329,25 @@ const GerenteHome = () => {
                                     </p>
                                 </div>
                             )}
+
+                            <div style={{ marginBottom: 16, textAlign: 'center', width: '100%' }}>
+                                <button className="btn btn-primary" onClick={() => {
+                                    if (selectedProject)
+                                        setIsAddTarefasModalOpen(true)
+
+                                    else {
+                                        alert("Selecione um projeto primeiro, antes de adicionar uma tarefa");
+                                        setIsAddTarefasModalOpen(false);
+
+                                    }
+                                }}>
+                                    <i className="fas fa-plus"></i> Nova Tarefa
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </main>
+
             </div>
             {selectedProject && (
                 <ProjectDetailsModal

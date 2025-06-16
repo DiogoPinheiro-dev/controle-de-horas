@@ -68,23 +68,6 @@ namespace server.Services
             else
                 Cliente.Telefone = Cliente.Telefone;
 
-            // if (Body.ProjetoId > 0)
-            // {
-            //     var projeto = await dbContext
-            //         .Projetos
-            //         .Select(p => p)
-            //         .Where(p => p.ProjetoId == Body.ProjetoId)
-            //         .FirstOrDefaultAsync() ?? throw new Exception("Projeto não encontrado.");
-
-            //     projeto.ClienteId = Cliente.ClienteId;
-            //     await dbContext.SaveChangesAsync();
-
-            //     Cliente.ProjetoId = projeto.ProjetoId;
-            //     await dbContext.SaveChangesAsync();
-            // }
-            // else
-            //     Cliente.ProjetoId = Cliente.ProjetoId;
-
              if (Body.IdUsuario > 0)
             {
                 var usuario = await dbContext

@@ -5,6 +5,6 @@ namespace server.Dtos.Apontamento
         public string? Descricao { get; set; }
         public int HorasFinalizadas { get; set; }
         public int DataFim { get; set; }
-        public int IdAnalista { get; set; }
+        public int AnalistaId { get; set; }
     }
 }

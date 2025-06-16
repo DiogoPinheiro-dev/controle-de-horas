@@ -48,6 +48,18 @@ const getSubTarefasByData = async (dataIni, dataFim) => {
         throw error;
 
     }
-}
+};
 
-export { getAllSubTarefas, getSubTarefaById, getSubTarefasByDescricao, getSubTarefasByData };
+const getSubTarefasByTarefaId = async (TarefaId) => {
+    try {
+        const response = await axios.get(`${API_URL}/ByTarefaId/${TarefaId}`);
+        return response.data;
+
+    } catch (error) {
+        console.error(`Error fetching SubTarefa with TarefaId ${TarefaId}:`, error);
+        throw error;
+
+    }
+};
+
+export { getAllSubTarefas, getSubTarefaById, getSubTarefasByDescricao, getSubTarefasByData, getSubTarefasByTarefaId };

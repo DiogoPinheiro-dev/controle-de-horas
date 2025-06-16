@@ -11,7 +11,7 @@ namespace server.Mappers
             {
                 Custo = servico.Custo,
                 Descricao = servico.Descricao,
-                IdEmpresa = servico.IdEmpresa
+                EmpresaId = servico.IdEmpresa
             };
         }
         
@@ -21,7 +21,7 @@ namespace server.Mappers
             {
                 Descricao = ServicoDto.Descricao,
                 Custo = ServicoDto.Custo,
-                IdEmpresa = ServicoDto.IdEmpresa
+                IdEmpresa = ServicoDto.EmpresaId
             };
         }
 
@@ -30,7 +30,7 @@ namespace server.Mappers
             return new Servico
             {
                 ServicoId = ServicoDto.ServicoId,
-                IdEmpresa = ServicoDto.IdEmpresa
+                IdEmpresa = ServicoDto.EmpresaId
             };
         }
 

@@ -22,10 +22,25 @@ namespace server.Services
             else
                 Tarefa.Descricao = Tarefa.Descricao;
 
+            if (Body.DataInicio > 0)
+                Tarefa.DataInicio = Body.DataInicio;
+            else
+                Tarefa.DataInicio = Tarefa.DataInicio;
+
             if (Body.DataFim > 0)
                 Tarefa.DataFim = Body.DataFim;
             else
                 Tarefa.DataFim = Tarefa.DataFim;
+
+            if (Body.RecursoId > 0)
+                Tarefa.RecursoId = Body.RecursoId;
+            else
+                Tarefa.RecursoId = Tarefa.RecursoId;
+
+            if (Body.ProjetoId > 0)
+                Tarefa.ProjetoId = Body.ProjetoId;
+            else
+                Tarefa.ProjetoId = Tarefa.ProjetoId;
 
             await dbContext.SaveChangesAsync();
             return Tarefa;

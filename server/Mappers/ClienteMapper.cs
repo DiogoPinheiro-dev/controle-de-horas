@@ -12,7 +12,7 @@ namespace server.Mappers
                 Email = cliente.Email,
                 Nome = cliente.Nome,
                 Telefone = cliente.Telefone,
-                IdEmpresa = cliente.IdEmpresa,
+                EmpresaId = cliente.IdEmpresa,
                 UsuarioId = cliente.IdUsuario,
                 ClienteId = cliente.ClienteId
             };
@@ -25,7 +25,7 @@ namespace server.Mappers
                 Email = ClienteDto.Email,
                 Nome = ClienteDto.Nome,
                 Telefone = ClienteDto.Telefone,
-                IdEmpresa = ClienteDto.IdEmpresa
+                IdEmpresa = ClienteDto.EmpresaId
             };
         }
 
@@ -34,7 +34,7 @@ namespace server.Mappers
             return new Cliente
             {
                 ClienteId = ClienteDto.ClienteId,
-                IdEmpresa = ClienteDto.IdEmpresa,
+                IdEmpresa = ClienteDto.EmpresaId,
                 Email = ""
             };
         }
@@ -46,8 +46,8 @@ namespace server.Mappers
                 Email = "",
                 Nome = ClienteDto.Nome,
                 Telefone = ClienteDto.Telefone,
-                IdEmpresa = ClienteDto.IdEmpresa,
-                IdUsuario = ClienteDto.IdUsuario
+                IdEmpresa = ClienteDto.EmpresaId,
+                IdUsuario = ClienteDto.UsuarioId
             };
         }
     }

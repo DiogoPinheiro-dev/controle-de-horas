@@ -4,7 +4,7 @@ namespace server.Dtos.Tarefa
     {
         public string? Descricao { get; set; }
         public int DataInicio { get; set; }
-        public int IdCoordenador { get; set; }
-        public int IdProjeto { get; set; }
+        public int CoordenadorId { get; set; }
+        public int ProjetoId { get; set; }
     }
 }

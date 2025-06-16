@@ -41,7 +41,7 @@ namespace server.Mappers
             {
                 Nome = EmpresaDto.Nome,
                 Email = "",
-                IdUsuario = EmpresaDto.IdUsuario
+                IdUsuario = EmpresaDto.UsuarioId
             };
         }
     }

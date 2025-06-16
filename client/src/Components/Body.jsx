@@ -42,9 +42,6 @@ const Body = ({ isLoggedIn }) => {
         }
     }, [isLoggedIn, email]);
 
-
-    console.log(tipo);
-
     return (
         <>
             {

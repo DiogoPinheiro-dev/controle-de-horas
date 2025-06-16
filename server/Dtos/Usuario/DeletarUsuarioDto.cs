@@ -2,6 +2,7 @@ namespace server.Dtos.Usuario
 {
     public class DeletarUsuarioDto
     {
-        public int Id { get; set; }
+        public int UsuarioId
+        { get; set; }
     }
 }

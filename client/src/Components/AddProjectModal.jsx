@@ -19,14 +19,13 @@ const AddProjectModal = ({ isOpen, onClose, onAdd, user, tipo }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Decide os ids conforme o tipo
     const projeto = {
       nome,
       descricao,
       dataIni: parseInt(dataInicio.replace(/-/g, '')),
-      idEmpresa: tipo === 'empresa' ? user.empresaId : parseInt(empresaId),
-      idGerente: parseInt(recursoId),
-      idCliente: tipo === 'cliente' ? user.clienteId : parseInt(clienteId)
+      empresaId: tipo === 'empresa' ? user.empresaId : parseInt(empresaId),
+      gerenteId: parseInt(recursoId),
+      clienteId: tipo === 'cliente' ? user.clienteId : parseInt(clienteId)
     };
     onAdd(projeto);
     setNome('');

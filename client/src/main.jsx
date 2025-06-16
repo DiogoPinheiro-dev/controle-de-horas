@@ -7,6 +7,7 @@ import Home from './Pages/Home.jsx';
 import ClienteHome from './Pages/ClienteHome.jsx';
 import EmpresaHome from './Pages/EmpresaHome.jsx';
 import GerenteHome from './Pages/GerenteHome.jsx';
+import CoordenadorHome from './Pages/CoordenadorHome.jsx';
 
 const router = createBrowserRouter([
   {
@@ -29,10 +30,10 @@ const router = createBrowserRouter([
         path: '/Recurso/G',
         element: <GerenteHome />
       },
-      // {
-      //   path: '/Recurso/C',
-      //   element: <CoordenadorHome />
-      // },
+      {
+        path: '/Recurso/C',
+        element: <CoordenadorHome />
+      },
       // {
       //   path: '/Recurso/A',
       //   element: <AnalistaHome />

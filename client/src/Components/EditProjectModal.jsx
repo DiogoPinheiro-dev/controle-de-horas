@@ -9,9 +9,9 @@ const EditProjectModal = ({ isOpen, onClose, onEdit, projeto, user, tipo }) => {
   const [descricao, setDescricao] = useState(projeto?.descricao || '');
   const [dataFim, setDataFim] = useState(projeto?.dataFim ? formatDateInput(projeto.dataFim) : '');
 
-  const [empresaId, setEmpresaId] = useState(projeto?.idEmpresa || projeto?.empresaId || '');
-  const [clienteId, setClienteId] = useState(projeto?.idCliente || projeto?.clienteId || '');
-  const [recursoId, setRecursoId] = useState(projeto?.idGerente || projeto?.recursoId || '');
+  const [empresaId, setEmpresaId] = useState(projeto?.empresaId || '');
+  const [clienteId, setClienteId] = useState(projeto?.clienteId || '');
+  const [recursoId, setRecursoId] = useState(projeto?.recursoId || '');
 
   const [empresas, setEmpresas] = useState([]);
   const [recursos, setRecursos] = useState([]);
@@ -24,18 +24,22 @@ const EditProjectModal = ({ isOpen, onClose, onEdit, projeto, user, tipo }) => {
     setNome(projeto?.nome || '');
     setDescricao(projeto?.descricao || '');
     setDataFim(projeto?.dataFim ? formatDateInput(projeto.dataFim) : '');
-    setEmpresaId(projeto?.idEmpresa || projeto?.empresaId || '');
-    setClienteId(projeto?.idCliente || projeto?.clienteId || '');
-    setRecursoId(projeto?.idGerente || projeto?.recursoId || '');
+    setEmpresaId(projeto?.empresaId || '');
+    setClienteId(projeto?.clienteId || '');
+    setRecursoId(projeto?.recursoId || '');
   }, [projeto, isOpen]);
 
   function formatDateInput(dataInt) {
     if (!dataInt) return '';
+
     const str = dataInt.toString();
+
     if (str.length !== 8) return '';
+
     const ano = str.substring(0, 4);
     const mes = str.substring(4, 6);
     const dia = str.substring(6, 8);
+
     return `${ano}-${mes}-${dia}`;
   }
 
@@ -80,14 +84,12 @@ const EditProjectModal = ({ isOpen, onClose, onEdit, projeto, user, tipo }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Decide os ids conforme o tipo
     const projetoEditado = {
       nome,
       descricao,
       dataFim: parseInt(dataFim.replace(/-/g, '')),
-      idEmpresa: tipo === 'empresa' ? user.empresaId : parseInt(empresaId),
-      idGerente: parseInt(recursoId),
-      // idCliente não pode ser alterado, então não envia
+      empresaId: tipo === 'empresa' ? user.empresaId : parseInt(empresaId),
+      gerenteId: parseInt(recursoId),
     };
     onEdit(projetoEditado);
     onClose();
@@ -163,7 +165,6 @@ const EditProjectModal = ({ isOpen, onClose, onEdit, projeto, user, tipo }) => {
               required
             />
           </div>
-          {/* Empresa: só mostra se não for empresa */}
           {tipo !== 'empresa' && (
             <div className="col-md-6">
               <label htmlFor="empresaId" className="form-label">Id da Empresa</label>
@@ -189,7 +190,6 @@ const EditProjectModal = ({ isOpen, onClose, onEdit, projeto, user, tipo }) => {
               </select>
             </div>
           )}
-          {/* Cliente: só mostra se não for cliente */}
           {tipo !== 'cliente' && (
             <div className="col-md-6">
               <label htmlFor="clienteId" className="form-label">Id do Cliente</label>
@@ -200,7 +200,7 @@ const EditProjectModal = ({ isOpen, onClose, onEdit, projeto, user, tipo }) => {
                 onChange={e => setClienteId(e.target.value)}
                 onClick={handleClientesDropdown}
                 required
-                disabled={tipo === "cliente"} // Não pode ser alterado, apenas visualização
+                disabled={tipo === "cliente"}
               >
                 <option value="">Selecione...</option>
                 {isLoadingClientes ? (
@@ -215,7 +215,6 @@ const EditProjectModal = ({ isOpen, onClose, onEdit, projeto, user, tipo }) => {
               </select>
             </div>
           )}
-          {/* Gerente sempre aparece */}
           <div className="col-md-6">
             <label htmlFor="recursoId" className="form-label">Id do Gerente</label>
             <select

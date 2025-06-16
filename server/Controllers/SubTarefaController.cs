@@ -154,6 +154,46 @@ namespace server.Controllers
         }
 
         [HttpGet]
+        [Route("ByTarefaId/{TarefaId}")]
+        public async Task<ActionResult<List<SubTarefa>>> ObterSubTarefaPorIdDeTarefa([FromRoute] int TarefaId)
+        {
+            try
+            {
+                List<SubTarefa> SubTarefas = await service.ObterSubTarefaPorIdDeTarefa(TarefaId);
+                List<SubTarefaDto> SubTarefaDtos = [];
+
+                foreach (var subTarefa in SubTarefas)
+                    SubTarefaDtos.Add(subTarefa.DtoDaSubTarefa());
+
+                return Ok(SubTarefaDtos);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("ByAnalistaId/{AnalistaId}")]
+        public async Task<ActionResult<List<SubTarefa>>> ObterSubTarefaPorIdDeAnalista([FromRoute] int AnalistaId)
+        {
+            try
+            {
+                List<SubTarefa> SubTarefas = await service.ObterSubTarefaPorIdDeAnalista(AnalistaId);
+                List<SubTarefaDto> SubTarefaDtos = [];
+
+                foreach (var subTarefa in SubTarefas)
+                    SubTarefaDtos.Add(subTarefa.DtoDaSubTarefa());
+
+                return Ok(SubTarefaDtos);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
         [Route("ByDescricao/{descricao}")]
         public async Task<ActionResult<List<SubTarefa>>> ObterSubTarefaPorDescricao([FromRoute] string descricao)
         {
