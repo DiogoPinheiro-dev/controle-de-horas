@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { getRecursosByEmail } from '../Services/Recurso/GetServices.Js';
+
 import { getProjetosByRecursoId } from '../Services/Projeto/GetServices.Js';
 
 import { getTarefasByProjetoId } from '../Services/Tarefa/GetServices.js';
@@ -9,13 +10,16 @@ import postTarefa from '../Services/Tarefa/PostServices.js';
 import patchTarefa from '../Services/Tarefa/PatchServices.js';
 import deleteTarefa from '../Services/Tarefa/DeleteServices.js'
 
-import Header from '../Components/Header';
-import ProjectTable from '../Components/ProjectTable';
-import TarefaTable from '../Components/TarefaTable';
-import ProjectDetailsModal from '../Components/ProjectDetailsModal.jsx'
 import Loading from '../Components/Loading.jsx';
-import AddTarefasModal from '../Components/AddTarefasModal.jsx';
-import EditTarefaModal from '../Components/EditTarefaModal.jsx';
+import Header from '../Components/Header';
+
+import ProjectTable from '../Components/Projeto/ProjectTable';
+import ProjectDetailsModal from '../Components/Projeto/ProjectDetailsModal.jsx'
+
+import TarefaTable from '../Components/Tarefa/TarefaTable';
+import AddTarefasModal from '../Components/Tarefa/AddTarefasModal.jsx';
+import EditTarefaModal from '../Components/Tarefa/EditTarefaModal.jsx';
+import TarefaDetailsModal from '../Components/Tarefa/TarefaDetailsModal.jsx';
 
 const GerenteHome = () => {
     const navigate = useNavigate();
@@ -32,8 +36,10 @@ const GerenteHome = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [isAddTarefasModalOpen, setIsAddTarefasModalOpen] = useState(false);
     const [isEditTarefaModalOpen, setIsEditTarefaModalOpen] = useState(false);
+    const [isDetailsTarefaModalOpen, setIsDetailsTarefaModalOpen] = useState(false);
     const [tarefaEditando, setTarefaEditando] = useState(null);
     const [sortConfigTarefas, setSortConfigTarefas] = useState({ key: null, direction: 'ascending' });
+    const [selectedTarefa, setSelectedTarefa] = useState(null);
 
     useEffect(() => {
         const fetchProjetosEGerente = async () => {
@@ -106,6 +112,11 @@ const GerenteHome = () => {
         setIsDetailsModalOpen(true);
     };
 
+    const handleViewTarefaDetails = (tarefa) => {
+        setSelectedTarefa(tarefa);
+        setIsDetailsTarefaModalOpen(true);
+    };
+
     const handleToggleTarefas = (projetoId) => {
         setTarefasSelecionadas(prev => {
             if (prev.includes(projetoId)) {
@@ -145,6 +156,34 @@ const GerenteHome = () => {
             if (!data) return null;
             const str = data.toString();
             if (str.length !== 8) return null;
+            return new Date(`${str.substring(0, 4)}-${str.substring(4, 6)}-${str.substring(6, 8)}`);
+        };
+
+        const today = new Date();
+        const start = toDate(startDate);
+        const end = toDate(endDate);
+
+        if (!start || !end) return 'Não iniciado';
+
+        today.setHours(0, 0, 0, 0);
+        start.setHours(0, 0, 0, 0);
+        end.setHours(0, 0, 0, 0);
+
+        if (today < start) return 'Não iniciado';
+        if (today > end) return 'Concluído';
+        return 'Em andamento';
+    };
+
+    const getTarefaStatus = (startDate, endDate) => {
+        if (!endDate) return 'Sem previsao';
+
+        const toDate = (data) => {
+            if (!data) return null;
+
+            const str = data.toString();
+
+            if (str.length !== 8) return null;
+
             return new Date(`${str.substring(0, 4)}-${str.substring(4, 6)}-${str.substring(6, 8)}`);
         };
 
@@ -293,6 +332,8 @@ const GerenteHome = () => {
                                         onDelete={handleDeleteTarefa}
                                         onSort={handleSortTarefas}
                                         sortConfig={sortConfigTarefas}
+                                        canSelect={false}
+                                        onViewTarefaDetails={handleViewTarefaDetails}
                                     />
 
                                     <AddTarefasModal
@@ -354,10 +395,22 @@ const GerenteHome = () => {
                     project={selectedProject}
                     isOpen={isDetailsModalOpen}
                     user={gerente}
-                    tipo="gerente"
+                    tipo="Gerente"
                     onClose={() => setIsDetailsModalOpen(false)}
                     formatDate={formatDate}
                     getProjectStatus={getProjectStatus}
+                />
+            )}
+
+            {selectedTarefa && (
+                <TarefaDetailsModal
+                    tarefa={selectedTarefa}
+                    isOpen={isDetailsTarefaModalOpen}
+                    user={gerente}
+                    tipo="Gerente"
+                    onClose={() => setIsDetailsTarefaModalOpen(false)}
+                    formatDate={formatDate}
+                    getTarefaStatus={getTarefaStatus}
                 />
             )}
         </div>

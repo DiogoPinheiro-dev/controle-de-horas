@@ -1,4 +1,4 @@
-import '../styles/modal.css';
+import '../../styles/modal.css';
 
 const TarefaDetailsModal = ({ tarefa, isOpen, onClose, formatDate, getTarefaStatus }) => {
   if (!isOpen || !tarefa) return null;

@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 
-import { getAllEmpresas } from '../Services/Empresa/GetServices.Js';
-import { getAllClientes } from '../Services/Cliente/GetServices.js';
-import { getRecursosByTipo } from '../Services/Recurso/GetServices.Js';
+import { getAllEmpresas } from '../../Services/Empresa/GetServices.Js';
+
+import { getAllClientes } from '../../Services/Cliente/GetServices.js';
+
+import { getRecursosByTipo } from '../../Services/Recurso/GetServices.Js';
 
 const EditProjectModal = ({ isOpen, onClose, onEdit, projeto, user, tipo }) => {
   const [nome, setNome] = useState(projeto?.nome || '');

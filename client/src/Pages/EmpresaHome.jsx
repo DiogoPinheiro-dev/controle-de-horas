@@ -1,20 +1,22 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import Header from '../Components/Header';
-import Loading from '../Components/Loading';
-import ProjectDetailsModal from '../Components/ProjectDetailsModal';
-import ProjectTable from '../Components/ProjectTable';
-import AddProjectModal from '../Components/AddProjectModal';
-import EditProjectModal from '../Components/EditProjectModal';
-
 import '../styles/global.css';
 
 import { getEmpresasByEmail } from '../Services/Empresa/GetServices';
+
 import { getProjetosByEmpresaId } from '../Services/Projeto/GetServices';
 import postProjeto from '../Services/Projeto/PostServices';
 import deleteProjeto from '../Services/Projeto/DeleteServices';
 import patchProjeto from '../Services/Projeto/PatchServices';
+
+import Header from '../Components/Header';
+import Loading from '../Components/Loading';
+
+import ProjectDetailsModal from '../Components/Projeto/ProjectDetailsModal';
+import ProjectTable from '../Components/Projeto/ProjectTable';
+import AddProjectModal from '../Components/Projeto/AddProjectModal';
+import EditProjectModal from '../Components/Projeto/EditProjectModal';
 
 const EmpresaHome = () => {
   const navigate = useNavigate();

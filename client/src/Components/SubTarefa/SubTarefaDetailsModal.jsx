@@ -1,5 +1,4 @@
-import React from 'react';
-import '../styles/modal.css';
+import '../../styles/modal.css';
 
 const SubTarefaDetailsModal = ({ subTarefa, isOpen, onClose, formatDate }) => {
   if (!isOpen || !subTarefa) return null;

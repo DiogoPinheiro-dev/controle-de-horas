@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { getAllEmpresas } from '../Services/Empresa/GetServices.Js';
-import { getRecursosByTipo } from '../Services/Recurso/GetServices.Js';
-import { getAllClientes } from '../Services/Cliente/GetServices';
+import { getAllEmpresas } from '../../Services/Empresa/GetServices.Js';
+import { getRecursosByTipo } from '../../Services/Recurso/GetServices.Js';
+import { getAllClientes } from '../../Services/Cliente/GetServices';
 
 const AddProjectModal = ({ isOpen, onClose, onAdd, user, tipo }) => {
   const [nome, setNome] = useState('');

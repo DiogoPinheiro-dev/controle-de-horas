@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { getRecursosByTipo } from '../Services/Recurso/GetServices.Js';
+import { getRecursosByTipo } from '../../Services/Recurso/GetServices.Js';
 
 const AddTarefasModal = ({ isOpen, onClose, onAdd, projetoId }) => {
   const [descricao, setDescricao] = useState('');

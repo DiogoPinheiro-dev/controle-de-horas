@@ -13,13 +13,13 @@ import deleteSubTarefa from '../Services/SubTarefa/DeleteServices.js'
 import Header from '../Components/Header';
 import Loading from '../Components/Loading.jsx';
 
-import TarefaTable from '../Components/TarefaTable.jsx';
-import TarefaDetailsModal from '../Components/TarefaDetailsModal.jsx';
+import TarefaTable from '../Components/Tarefa/TarefaTable.jsx';
+import TarefaDetailsModal from '../Components/Tarefa/TarefaDetailsModal.jsx';
 
-import SubTarefaTable from '../Components/SubTarefaTable';
-import AddSubTarefasModal from '../Components/AddSubTarefasModal.jsx';
-import EditSubTarefaModal from '../Components/EditSubTarefaModal.jsx';
-import SubTarefaDetailsModal from '../Components/SubTarefaDetailsModal.jsx'
+import SubTarefaTable from '../Components/SubTarefa/SubTarefaTable';
+import AddSubTarefasModal from '../Components/SubTarefa/AddSubTarefasModal.jsx';
+import EditSubTarefaModal from '../Components/SubTarefa/EditSubTarefaModal.jsx';
+import SubTarefaDetailsModal from '../Components/SubTarefa/SubTarefaDetailsModal.jsx'
 
 const CoordenadorHome = () => {
     const navigate = useNavigate();
@@ -37,8 +37,8 @@ const CoordenadorHome = () => {
     const [isAddSubTarefasModalOpen, setIsAddSubTarefasModalOpen] = useState(false);
     const [isEditSubTarefaModalOpen, setIsEditSubTarefaModalOpen] = useState(false);
     const [subTarefaEditando, setSubTarefaEditando] = useState(null);
-    const [isSubTarefaDetailsModalOpen, setIsSubTarefaDetailsModalOpen] = useState(false);
-    const [subTarefaDetalhes, handleViewSubTarefaDetails] = useState(null);
+    const [isSubTarefaDetailsModalOpen, setIsSubTarefaDetailsModalOpen] = useState(false); 
+    const [subTarefaDetalhes, setSubTarefaDetalhes] = useState(null);
 
     useEffect(() => {
         const fetchTarefasECoordenador = async () => {
@@ -107,6 +107,11 @@ const CoordenadorHome = () => {
     const handleViewDetails = (project) => {
         setSelectedTarefa(project);
         setIsDetailsModalOpen(true);
+    };
+
+    const handleViewSubTarefaDetails = (subTarefa) => {
+        setIsSubTarefaDetailsModalOpen(true);
+        setSubTarefaDetalhes(subTarefa);
     };
 
     const handleToggleSubTarefas = (tarefaId) => {
@@ -205,7 +210,7 @@ const CoordenadorHome = () => {
     const handleDeleteSubTarefa = async (SubTarefaId) => {
         try {
             await deleteSubTarefa(SubTarefaId);
-            
+
             window.location.reload();
         } catch (e) {
             console.error("Erro ao deletar SubTarefa: ", e);
@@ -279,6 +284,7 @@ const CoordenadorHome = () => {
                                 onAdd={false}
                                 onDelete={false}
                                 onEdit={false}
+                                canSelect={true}
                                 formatDate={formatDate}
                                 getTarefaStatus={getTarefaStatus}
                                 subTarefasSelecionadas={subTarefasSelecionadas}
@@ -292,26 +298,30 @@ const CoordenadorHome = () => {
                                         subTarefas={subTarefas}
                                         onEdit={handleEditSubTarefaClick}
                                         onDelete={handleDeleteSubTarefa}
-                                        onViewDetails={handleViewSubTarefaDetails}
+                                        onViewSubTarefaDetails={handleViewSubTarefaDetails}
                                     />
+
                                     <AddSubTarefasModal
                                         isOpen={isAddSubTarefasModalOpen}
                                         onClose={() => setIsAddSubTarefasModalOpen(false)}
                                         onAdd={handleAddSubTarefa}
                                         tarefaId={selectedTarefa?.tarefaId}
                                     />
+
                                     <EditSubTarefaModal
                                         isOpen={isEditSubTarefaModalOpen}
                                         onClose={() => setIsEditSubTarefaModalOpen(false)}
                                         onEdit={handleSaveEditSubTarefa}
                                         subTarefa={subTarefaEditando}
                                     />
+
                                     <SubTarefaDetailsModal
                                         isOpen={isSubTarefaDetailsModalOpen}
                                         onClose={() => setIsSubTarefaDetailsModalOpen(false)}
                                         subTarefa={subTarefaDetalhes}
                                         formatDate={formatDate}
                                     />
+
                                 </>
                             ) : (
                                 <div

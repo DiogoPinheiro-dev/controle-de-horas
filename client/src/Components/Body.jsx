@@ -37,9 +37,9 @@ const Body = ({ isLoggedIn }) => {
             }
         };
 
-        if (isLoggedIn) {
+        if (isLoggedIn)
             fetchData();
-        }
+
     }, [isLoggedIn, email]);
 
     return (

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
-import { getRecursosByTipo } from '../Services/Recurso/GetServices.Js';
-import { getAllProjetos } from '../Services/Projeto/GetServices.Js';
+import { getRecursosByTipo } from '../../Services/Recurso/GetServices.Js';
+import { getAllProjetos } from '../../Services/Projeto/GetServices.Js';
 
 const EditTarefaModal = ({ isOpen, onClose, onEdit, tarefa }) => {
     const [descricao, setDescricao] = useState(tarefa?.descricao || '');

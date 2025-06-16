@@ -1,4 +1,4 @@
-import '../styles/project-table.css';
+import '../../styles/project-table.css';
 
 const ProjectTable = ({
   projects,

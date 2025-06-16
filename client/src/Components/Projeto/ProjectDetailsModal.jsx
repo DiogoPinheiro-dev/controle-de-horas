@@ -1,4 +1,4 @@
-import '../styles/modal.css';
+import '../../styles/modal.css';
 
 const ProjectDetailsModal = ({ project, isOpen, onClose, formatDate, getProjectStatus }) => {
   if (!isOpen || !project) return null;

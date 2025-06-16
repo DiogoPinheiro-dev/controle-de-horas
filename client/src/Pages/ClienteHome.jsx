@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import '../styles/global.css';
+
 import Header from '../Components/Header';
 import Loading from '../Components/Loading';
-import ProjectDetailsModal from '../Components/ProjectDetailsModal';
-import ProjectTable from '../Components/ProjectTable';
-import AddProjectModal from '../Components/AddProjectModal';
-import EditProjectModal from '../Components/EditProjectModal';
 
-import '../styles/global.css';
+import ProjectDetailsModal from '../Components/Projeto/ProjectDetailsModal';
+import ProjectTable from '../Components/Projeto/ProjectTable';
+import AddProjectModal from '../Components/Projeto/AddProjectModal';
+import EditProjectModal from '../Components/Projeto/EditProjectModal';
 
 import { getClientesByEmail } from '../Services/Cliente/GetServices';
 import { getProjetosByClienteId } from '../Services/Projeto/GetServices';

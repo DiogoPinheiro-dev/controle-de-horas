@@ -1,42 +1,51 @@
 import { useState, useEffect } from 'react';
 
-const EditSubTarefaModal = ({ isOpen, onClose, onEdit, subTarefa }) => {
-  const [descricao, setDescricao] = useState(subTarefa?.descricao || '');
-  const [dataInicio, setDataInicio] = useState(subTarefa?.dataInicio ? formatDateInput(subTarefa.dataInicio) : '');
-  const [dataFim, setDataFim] = useState(subTarefa?.dataFim ? formatDateInput(subTarefa.dataFim) : '');
-  const [analistaId, setAnalistaId] = useState(subTarefa?.analistaId || '');
+import { getRecursosByTipo } from '../../Services/Recurso/GetServices.Js';
+
+const AddSubTarefasModal = ({ isOpen, onClose, onAdd, tarefaId }) => {
+  const [descricao, setDescricao] = useState('');
+  const [dataInicio, setDataInicio] = useState('');
+  const [analistaId, setAnalistaId] = useState('');
+  const [recursos, setRecursos] = useState([]);
+  const [isLoadingRecursos, setIsLoadingRecursos] = useState(false);
 
   useEffect(() => {
-    setDescricao(subTarefa?.descricao || '');
-    setDataInicio(subTarefa?.dataInicio ? formatDateInput(subTarefa.dataInicio) : '');
-    setDataFim(subTarefa?.dataFim ? formatDateInput(subTarefa.dataFim) : '');
-    setAnalistaId(subTarefa?.analistaId || '');
-  }, [subTarefa, isOpen]);
+    if (isOpen) {
+      setDescricao('');
+      setDataInicio('');
+      setAnalistaId('');
+    }
+  }, [isOpen]);
 
-  function formatDateInput(dataInt) {
-    if (!dataInt) return '';
-    const str = dataInt.toString();
-    if (str.length !== 8) return '';
-    const ano = str.substring(0, 4);
-    const mes = str.substring(4, 6);
-    const dia = str.substring(6, 8);
-    return `${ano}-${mes}-${dia}`;
-  }
+  const handleRecursosDropdown = async () => {
+    if (recursos.length === 0 && !isLoadingRecursos) {
+      setIsLoadingRecursos(true);
+      try {
+        // Supondo que 'A' seja o tipo para analista
+        const data = await getRecursosByTipo('A');
+        setRecursos(data);
+      } catch {
+        setRecursos([]);
+      }
+      setIsLoadingRecursos(false);
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const subTarefaEditada = {
-      ...subTarefa,
+    onAdd({
       descricao,
       dataInicio: parseInt(dataInicio.replace(/-/g, '')),
-      dataFim: dataFim ? parseInt(dataFim.replace(/-/g, '')) : null,
-      analistaId: parseInt(analistaId)
-    };
-    onEdit(subTarefaEditada);
+      tarefaId: parseInt(tarefaId),
+      analistaId: parseInt(analistaId),
+    });
+    setDescricao('');
+    setDataInicio('');
+    setAnalistaId('');
     onClose();
   };
 
-  if (!isOpen || !subTarefa) return null;
+  if (!isOpen) return null;
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -55,8 +64,8 @@ const EditSubTarefaModal = ({ isOpen, onClose, onEdit, subTarefa }) => {
       >
         <div className="modal-header" style={{ display: 'flex', alignItems: 'center', marginBottom: 18 }}>
           <h3 className="modal-title" style={{ flex: 1, fontWeight: 700, fontSize: 18, color: '#2d3a4a' }}>
-            <i className="fas fa-edit" style={{ marginRight: 8, color: '#3498db' }}></i>
-            Editar SubTarefa
+            <i className="fas fa-tasks" style={{ marginRight: 8, color: '#3498db' }}></i>
+            Nova SubTarefa
           </h3>
           <button
             onClick={onClose}
@@ -73,6 +82,18 @@ const EditSubTarefaModal = ({ isOpen, onClose, onEdit, subTarefa }) => {
           </button>
         </div>
         <form onSubmit={handleSubmit} className="row g-3">
+          <div className="col-12">
+            <label htmlFor="idTarefa" className="form-label">Id Da Tarefa</label>
+            <input
+              type="integer"
+              className="form-control"
+              id="idTarefa"
+              value={tarefaId}
+              readOnly
+              disabled
+              required
+            />
+          </div>
           <div className="col-12">
             <label htmlFor="descricao" className="form-label">Descrição</label>
             <input
@@ -95,30 +116,31 @@ const EditSubTarefaModal = ({ isOpen, onClose, onEdit, subTarefa }) => {
               required
             />
           </div>
-          <div className="col-md-6">
-            <label htmlFor="dataFim" className="form-label">Data Fim</label>
-            <input
-              type="date"
-              className="form-control"
-              id="dataFim"
-              value={dataFim}
-              onChange={e => setDataFim(e.target.value)}
-            />
-          </div>
           <div className="col-12">
-            <label htmlFor="analistaId" className="form-label">Analista (ID)</label>
-            <input
-              type="number"
-              className="form-control"
+            <label htmlFor="analistaId" className="form-label">Analista</label>
+            <select
               id="analistaId"
+              className="form-select"
               value={analistaId}
               onChange={e => setAnalistaId(e.target.value)}
+              onClick={handleRecursosDropdown}
               required
-            />
+            >
+              <option value="">Selecione...</option>
+              {isLoadingRecursos ? (
+                <option disabled>Carregando...</option>
+              ) : (
+                recursos.map(recurso => (
+                  <option key={recurso.recursoId} value={recurso.recursoId}>
+                    {recurso.nome}
+                  </option>
+                ))
+              )}
+            </select>
           </div>
           <div className="col-12">
             <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>
-              Salvar Alterações
+              Adicionar
             </button>
           </div>
         </form>
@@ -127,4 +149,4 @@ const EditSubTarefaModal = ({ isOpen, onClose, onEdit, subTarefa }) => {
   );
 };
 
-export default EditSubTarefaModal
+export default AddSubTarefasModal;

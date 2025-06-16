@@ -1,13 +1,13 @@
-import '../styles/project-table.css';
+import '../../styles/project-table.css';
 
-const SubTarefaTable = ({ subTarefas, onEdit, onDelete, onViewDetails }) => {
+const SubTarefaTable = ({ subTarefas, onEdit, onDelete, onViewSubTarefaDetails }) => {
   function formatDate(data) {
     if (!data) return '';
 
     const str = data.toString();
 
     if (str.length !== 8) return data;
-    
+
     return `${str.substr(6, 2)}/${str.substr(4, 2)}/${str.substr(0, 4)}`;
   }
 
@@ -30,11 +30,11 @@ const SubTarefaTable = ({ subTarefas, onEdit, onDelete, onViewDetails }) => {
               <tr key={subTarefa.subTarefaId}>
                 <td>
                   <div className="actions">
-                    {onViewDetails !== false ? (
+                    {onViewSubTarefaDetails !== false ? (
                       <button
                         type="button"
                         className="btn btn-info"
-                        onClick={() => onViewDetails && onViewDetails(subTarefa)}
+                        onClick={() => onViewSubTarefaDetails && onViewSubTarefaDetails(subTarefa)}
                       >
                         <i className="fas fa-eye"></i>
                       </button>

@@ -1,14 +1,15 @@
-import '../styles/project-table.css';
+import '../../styles/project-table.css';
 
 const TarefaTable = ({
   tarefas,
   onEdit,
   onDelete,
-  onViewDetails,
+  onViewTarefaDetails,
   onToggleSubTarefas,
   subTarefasSelecionadas = [],
   onSort,
-  sortConfig
+  sortConfig,
+  canSelect
 }) => {
   function formatDate(data) {
     if (!data) return '';
@@ -33,9 +34,9 @@ const TarefaTable = ({
     let bValue = b[sortConfig.key];
 
     if (aValue < bValue) return sortConfig.direction === 'ascending' ? -1 : 1;
-    
+
     if (aValue > bValue) return sortConfig.direction === 'ascending' ? 1 : -1;
-    
+
     return 0;
   });
 
@@ -45,10 +46,10 @@ const TarefaTable = ({
         <thead>
           <tr>
             <th>Selecionar</th>
-            <th onClick={() => onSort && onSort('projetoId')}>
+            <th onClick={() => onSort && onSort('tarefaId')}>
               <div className="table-header">
-                Projeto ID
-                <i className={getSortIcon('projetoId')}></i>
+                Tarefa Id
+                <i className={getSortIcon('tarefaId')}></i>
               </div>
             </th>
             <th onClick={() => onSort && onSort('descricao')}>
@@ -77,14 +78,17 @@ const TarefaTable = ({
             sortedTarefas.map(tarefa => (
               <tr key={tarefa.tarefaId}>
                 <td>
-                  {onToggleSubTarefas !== false ? (
-                    <input
-                      type="checkbox"
-                      checked={subTarefasSelecionadas.includes(tarefa.tarefaId)}
-                      onChange={() => onToggleSubTarefas && onToggleSubTarefas(tarefa.tarefaId)}
-                      className="form-check-input"
-                    />
-                  ) : null}
+                  {
+                    canSelect !== false && onToggleSubTarefas !== false ? (
+                      <input
+                        type="checkbox"
+                        checked={subTarefasSelecionadas.includes(tarefa.tarefaId)}
+                        onChange={() => onToggleSubTarefas && onToggleSubTarefas(tarefa.tarefaId)}
+                        className="form-check-input"
+                      />
+                    ) : null
+                  }
+
                 </td>
                 <td>{tarefa.projetoId}</td>
                 <td>{tarefa.descricao}</td>
@@ -130,8 +134,8 @@ const TarefaTable = ({
                       </button>
                     )}
 
-                    {onViewDetails !== false ? (
-                      <button type="button" className="btn btn-info" onClick={() => onViewDetails(tarefa)}>
+                    {onViewTarefaDetails !== false ? (
+                      <button type="button" className="btn btn-info" onClick={() => onViewTarefaDetails(tarefa)}>
                         <i className="fas fa-eye"></i>
                       </button>
                     ) : (
