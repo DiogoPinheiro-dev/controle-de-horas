@@ -11,8 +11,8 @@ const FeaturesSection = () => {
       />
       <FeatureCard 
         icon="fa-chart-bar" 
-        title="Relatórios" 
-        description="Gere relatórios detalhados para análise de produtividade e gestão." 
+        title="Cadastros e Controle de Projetos" 
+        description="Cadastre seus projetos e todas suas dependências" 
       />
     </section>
   );

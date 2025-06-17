@@ -8,7 +8,13 @@ import ClienteHome from './Pages/ClienteHome.jsx';
 import EmpresaHome from './Pages/EmpresaHome.jsx';
 import GerenteHome from './Pages/GerenteHome.jsx';
 import CoordenadorHome from './Pages/CoordenadorHome.jsx';
-import AnalistaHome from './Pages/AnalistaHome.jsx'
+import AnalistaHome from './Pages/AnalistaHome.jsx';
+
+import AdminHome from './Pages/AdminHome.jsx';
+import CadastroDeRecurso from './Pages/CadastroDeRecurso.jsx';
+import CadastroDeCliente from './Pages/CadastroDeCliente.jsx';
+import CadastroDeEmpresa from './Pages/CadastroDeEmpresa.jsx';
+import CadastroDeUsuario from './Pages/CadastroDeUsuario.jsx';
 
 const router = createBrowserRouter([
   {
@@ -38,6 +44,26 @@ const router = createBrowserRouter([
       {
         path: '/Recurso/A',
         element: <AnalistaHome />
+      },
+      {
+        path: '/Admin',
+        element: <AdminHome />
+      },
+      {
+        path: '/Admin/Cliente',
+        element: <CadastroDeCliente />
+      },
+      {
+        path: '/Admin/Recurso',
+        element: <CadastroDeRecurso />
+      },
+      {
+        path: '/Admin/Empresa',
+        element: <CadastroDeEmpresa />
+      },
+      {
+        path: '/Admin/Usuario',
+        element: <CadastroDeUsuario />
       }
     ],
   },

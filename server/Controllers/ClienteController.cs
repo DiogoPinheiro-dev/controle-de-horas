@@ -85,17 +85,17 @@ namespace server.Controllers
         }
 
         [HttpDelete]
-        [Route("{id}")]
-        public async Task<ActionResult> DeletarCliente([FromRoute] int id)
+        [Route("{clienteId}")]
+        public async Task<ActionResult> DeletarCliente([FromRoute] int clienteId)
         {
             try
             {
-                if (id <= 0)
+                if (clienteId <= 0)
                 {
                     return NoContent();
                 }
 
-                var Cliente = await service.ObterClientePorId(id);
+                var Cliente = await service.ObterClientePorId(clienteId);
 
                 if (Cliente == null)
                 {

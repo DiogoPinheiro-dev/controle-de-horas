@@ -12,8 +12,8 @@ const Header = ({ isLoggedIn, onLoginPress, onLogoutPress }) => {
   const handleHomeClick = () => {
     setLoading(true);
     setTimeout(() => {
-      navigate('/'); // ou o caminho da sua Home
-    }, 800); // tempo para mostrar o loading (ajuste se quiser)
+      navigate('/');
+    }, 800);
   };
 
   return (
