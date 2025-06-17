@@ -61,8 +61,9 @@ const Home = () => {
 
   return (
     <>
-      <div className="gradient-bg">
-        <div className="container">
+
+      <div className="gradient-bg" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <div className="container main-content" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
           <Header
             isLoggedIn={isLoggedIn}
             onLoginPress={() => setLoginModalVisible(true)}
@@ -75,7 +76,6 @@ const Home = () => {
           )}
         </div>
         <Footer />
-
         <LoginModal
           visible={loginModalVisible}
           onClose={() => setLoginModalVisible(false)}

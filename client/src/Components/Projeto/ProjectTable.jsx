@@ -10,7 +10,8 @@ const ProjectTable = ({
   onEdit,
   onViewDetails,
   formatDate,
-  getProjectStatus
+  getProjectStatus,
+  canSelect
 }) => {
   const getSortIcon = (name) => {
     if (!sortConfig) return 'fas fa-sort';
@@ -34,6 +35,13 @@ const ProjectTable = ({
       <table className="project-table">
         <thead>
           <tr>
+            {
+              canSelect ? (
+
+                <th>Selecionar</th>
+
+              ) : null
+            }
             <th>Ações</th>
             <th onClick={() => onSort('nome')}>
               <div className="table-header">
@@ -68,23 +76,25 @@ const ProjectTable = ({
               const status = getProjectStatus(project.dataInicio, project.dataFim);
               return (
                 <tr key={project.projetoId}>
+                  {
+                    canSelect !== false ? (
+                      <td>
+                        <div className="form-check">
+                          <input
+                            type="checkbox"
+                            checked={tarefasSelecionadas.includes(project.projetoId)}
+                            onChange={() => onToggleTarefas && onToggleTarefas(project.projetoId)}
+                            className="form-check-input"
+                          />
+                        </div>
+
+                      </td>
+                    ) : (
+                      null
+                    )
+                  }
                   <td>
                     <div className="actions btn-group btn-group-sm" role="group">
-                      {
-                        onToggleTarefas !== false ? (
-                          <div className="form-check">
-                            <input
-                              type="checkbox"
-                              checked={tarefasSelecionadas.includes(project.projetoId)}
-                              onChange={() => onToggleTarefas && onToggleTarefas(project.projetoId)}
-                              className="form-check-input"
-                            />
-                          </div>
-                        ) : (
-                          null
-                        )
-                      }
-
                       {
                         onViewDetails !== false ? (
                           <button type="button" className="btn btn-info" onClick={() => onViewDetails(project)}>

@@ -28,6 +28,9 @@ const Body = ({ isLoggedIn }) => {
                             if (data[0].telefone) setTipo("Cliente");
                             else setTipo("Empresa");
                         }
+                    } else if (email === "admin@admin.com") {
+                        setTipo("Admin");
+
                     } else setTipo('Nenhum dado encontrado');
 
                 } catch (error) {
@@ -51,7 +54,8 @@ const Body = ({ isLoggedIn }) => {
                             tipo === "C" ? (navigate(`/Recurso/${tipo}`)) :
                                 tipo === "Empresa" ? (navigate(`/${tipo}`)) :
                                     tipo === "Cliente" ? (navigate(`/${tipo}`)) :
-                                        tipo === 'Nenhum dado encontrado' ? (navigate('/')) : null
+                                        tipo === "Admin" ? (navigate(`/${tipo}`)) :
+                                            tipo === 'Nenhum dado encontrado' ? (navigate('/')) : null
                 ) : (
                     <>
                         <Hero />

@@ -8,6 +8,7 @@ import ClienteHome from './Pages/ClienteHome.jsx';
 import EmpresaHome from './Pages/EmpresaHome.jsx';
 import GerenteHome from './Pages/GerenteHome.jsx';
 import CoordenadorHome from './Pages/CoordenadorHome.jsx';
+import AnalistaHome from './Pages/AnalistaHome.jsx'
 
 const router = createBrowserRouter([
   {
@@ -34,10 +35,10 @@ const router = createBrowserRouter([
         path: '/Recurso/C',
         element: <CoordenadorHome />
       },
-      // {
-      //   path: '/Recurso/A',
-      //   element: <AnalistaHome />
-      // }
+      {
+        path: '/Recurso/A',
+        element: <AnalistaHome />
+      }
     ],
   },
 ]);

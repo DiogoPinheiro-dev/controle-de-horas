@@ -6,7 +6,7 @@ const TarefaTable = ({
   onDelete,
   onViewTarefaDetails,
   onToggleSubTarefas,
-  subTarefasSelecionadas = [],
+  tarefasSelecionadas = [],
   onSort,
   sortConfig,
   canSelect
@@ -45,7 +45,21 @@ const TarefaTable = ({
       <table className="project-table">
         <thead>
           <tr>
-            <th>Selecionar</th>
+            {
+              canSelect !== false ?
+                (
+                  <th>
+                    <div className="table-header">
+                      Selecionar
+                    </div>
+                  </th>
+                ) : null
+            }
+            <th>
+              <div className="table-header">
+                Ações
+              </div>
+            </th>
             <th onClick={() => onSort && onSort('tarefaId')}>
               <div className="table-header">
                 Tarefa Id
@@ -70,32 +84,55 @@ const TarefaTable = ({
                 <i className={getSortIcon('dataFim')}></i>
               </div>
             </th>
-            <th>Ações</th>
           </tr>
         </thead>
         <tbody>
           {sortedTarefas.length > 0 ? (
             sortedTarefas.map(tarefa => (
               <tr key={tarefa.tarefaId}>
-                <td>
-                  {
-                    canSelect !== false && onToggleSubTarefas !== false ? (
+                {
+                  canSelect !== false ? (
+                    <td>
                       <input
                         type="checkbox"
-                        checked={subTarefasSelecionadas.includes(tarefa.tarefaId)}
+                        checked={tarefasSelecionadas[0] === tarefa.tarefaId}
                         onChange={() => onToggleSubTarefas && onToggleSubTarefas(tarefa.tarefaId)}
                         className="form-check-input"
                       />
-                    ) : null
-                  }
-
-                </td>
-                <td>{tarefa.projetoId}</td>
-                <td>{tarefa.descricao}</td>
-                <td>{formatDate(tarefa.dataInicio)}</td>
-                <td>{formatDate(tarefa.dataFim)}</td>
+                    </td>
+                  ) : null
+                }
                 <td>
-                  <div className="actions">
+                  <div className="actions btn-group btn-group-sm" role="group">
+
+                    {onViewTarefaDetails !== false ? (
+                      <button type="button" className="btn btn-info" onClick={() => onViewTarefaDetails(tarefa)}>
+                        <i className="fas fa-eye"></i>
+                      </button>
+                    ) : (
+                      <button type="button" disabled className="btn btn-info" >
+                        <i className="fas fa-eye"></i>
+                      </button>
+                    )}
+
+                    {onDelete !== false ? (
+                      <button
+                        type="button"
+                        className="btn btn-danger"
+                        onClick={() => onDelete && onDelete(tarefa.tarefaId)}
+                      >
+                        <i className="fas fa-trash"></i>
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        className="btn btn-danger"
+                        disabled
+                      >
+                        <i className="fas fa-trash"></i>
+                      </button>
+                    )}
+
                     {onEdit !== false ? (
                       <button
                         type="button"
@@ -114,37 +151,12 @@ const TarefaTable = ({
                       </button>
                     )}
 
-                    {onDelete !== false ? (
-                      <button
-                        type="button"
-                        className="btn btn-danger"
-                        onClick={() => onDelete && onDelete(tarefa.tarefaId)}
-                        style={{ marginLeft: 6 }}
-                      >
-                        <i className="fas fa-trash"></i>
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        className="btn btn-danger"
-                        disabled
-                        style={{ marginLeft: 6 }}
-                      >
-                        <i className="fas fa-trash"></i>
-                      </button>
-                    )}
-
-                    {onViewTarefaDetails !== false ? (
-                      <button type="button" className="btn btn-info" onClick={() => onViewTarefaDetails(tarefa)}>
-                        <i className="fas fa-eye"></i>
-                      </button>
-                    ) : (
-                      <button type="button" disabled className="btn btn-info" >
-                        <i className="fas fa-eye"></i>
-                      </button>
-                    )}
                   </div>
                 </td>
+                <td>{tarefa.tarefaId}</td>
+                <td>{tarefa.descricao}</td>
+                <td>{formatDate(tarefa.dataInicio)}</td>
+                <td>{formatDate(tarefa.dataFim)}</td>
               </tr>
             ))
           ) : (

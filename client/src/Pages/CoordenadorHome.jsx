@@ -25,19 +25,22 @@ const CoordenadorHome = () => {
     const navigate = useNavigate();
     const [email] = useState(JSON.parse(sessionStorage.getItem('login')) || JSON.parse(localStorage.getItem('login')));
     const [Coordenador, setCoordenador] = useState();
+
     const [filter, setFilter] = useState('');
     const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
     const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
     const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('login') || sessionStorage.getItem('login') || false);
     const [isLoading, setIsLoading] = useState(true);
-    const [subTarefasSelecionadas, setSubTarefasSelecionadas] = useState([]);
+
     const [tarefas, setTarefas] = useState([]);
+    const [tarefasSelecionadas, setTarefasSelecionadas] = useState([]);
     const [selectedTarefa, setSelectedTarefa] = useState(null);
+
     const [subTarefas, setSubTarefas] = useState([]);
     const [isAddSubTarefasModalOpen, setIsAddSubTarefasModalOpen] = useState(false);
     const [isEditSubTarefaModalOpen, setIsEditSubTarefaModalOpen] = useState(false);
     const [subTarefaEditando, setSubTarefaEditando] = useState(null);
-    const [isSubTarefaDetailsModalOpen, setIsSubTarefaDetailsModalOpen] = useState(false); 
+    const [isSubTarefaDetailsModalOpen, setIsSubTarefaDetailsModalOpen] = useState(false);
     const [subTarefaDetalhes, setSubTarefaDetalhes] = useState(null);
 
     useEffect(() => {
@@ -115,15 +118,9 @@ const CoordenadorHome = () => {
     };
 
     const handleToggleSubTarefas = (tarefaId) => {
-        setSubTarefasSelecionadas(prev => {
-            if (prev.includes(tarefaId)) {
-                setSelectedTarefa(null);
-                return [];
-            }
-            const tarefa = tarefas.find(t => t.tarefaId === tarefaId);
-            setSelectedTarefa(tarefa);
-            return [tarefaId];
-        });
+        setTarefasSelecionadas(prev =>
+            prev.includes(tarefaId) ? [] : [tarefaId]
+        );
     };
 
     function formatDate(dataInt) {
@@ -179,6 +176,7 @@ const CoordenadorHome = () => {
 
     const handleAddSubTarefa = async (novaSubTarefa) => {
         try {
+            // console.log(novaSubTarefa)
             await postSubTarefa(novaSubTarefa);
             setIsAddSubTarefasModalOpen(false);
 
@@ -227,6 +225,7 @@ const CoordenadorHome = () => {
             </ Loading >
         );
     }
+    const selectedTarefas = tarefas.find(t => t.tarefaId === tarefasSelecionadas[0]);
 
     return (
         <div className="gradient-bg">
@@ -278,7 +277,7 @@ const CoordenadorHome = () => {
                         <div style={{ flex: 1, minWidth: 320 }}>
                             <TarefaTable
                                 tarefas={sortedtarefas}
-                                onViewDetails={handleViewDetails}
+                                onViewTarefaDetails={handleViewDetails}
                                 onSort={handleSort}
                                 sortConfig={sortConfig}
                                 onAdd={false}
@@ -287,12 +286,12 @@ const CoordenadorHome = () => {
                                 canSelect={true}
                                 formatDate={formatDate}
                                 getTarefaStatus={getTarefaStatus}
-                                subTarefasSelecionadas={subTarefasSelecionadas}
+                                tarefasSelecionadas={tarefasSelecionadas}
                                 onToggleSubTarefas={handleToggleSubTarefas}
                             />
                         </div>
                         <div style={{ flex: 1, minWidth: 320 }}>
-                            {selectedTarefa && subTarefasSelecionadas.includes(selectedTarefa.tarefaId) ? (
+                            {selectedTarefas ? (
                                 <>
                                     <SubTarefaTable
                                         subTarefas={subTarefas}
@@ -305,7 +304,7 @@ const CoordenadorHome = () => {
                                         isOpen={isAddSubTarefasModalOpen}
                                         onClose={() => setIsAddSubTarefasModalOpen(false)}
                                         onAdd={handleAddSubTarefa}
-                                        tarefaId={selectedTarefa?.tarefaId}
+                                        tarefaId={selectedTarefas?.tarefaId}
                                     />
 
                                     <EditSubTarefaModal
@@ -338,15 +337,12 @@ const CoordenadorHome = () => {
                                     }}
                                 >
                                     <i className="fas fa-tasks" style={{ fontSize: 48, color: '#bdbdbd', marginBottom: 16 }}></i>
-                                    <p style={{ color: '#888', fontSize: 18, textAlign: 'center' }}>
-                                        Selecione um projeto para visualizar as SubSubTarefas.
-                                    </p>
                                 </div>
                             )}
 
                             <div style={{ marginBottom: 16, textAlign: 'center', width: '100%' }}>
                                 <button className="btn btn-primary" onClick={() => {
-                                    if (selectedTarefa)
+                                    if (selectedTarefas)
                                         setIsAddSubTarefasModalOpen(true)
 
                                     else {

@@ -47,8 +47,37 @@ namespace server.Services
         }
         public async Task<Tarefa> DeletarTarefa(Tarefa Tarefa)
         {
+            var subTarefa = await dbContext
+                .SubTarefas
+                .Select(st => st)
+                .Where(st => st.TarefaId == Tarefa.TarefaId)
+                .FirstOrDefaultAsync();
+
+            if (subTarefa != null)
+            {
+                var apontamento = await dbContext
+                    .Apontamentos
+                    .Select(a => a)
+                    .Where(a => a.SubTarefaId == subTarefa.SubTarefaId)
+                    .FirstOrDefaultAsync();
+
+                if (apontamento != null)
+                {
+                    apontamento.SubTarefaId = 0;
+
+                    dbContext.Apontamentos.Remove(apontamento);
+                    await dbContext.SaveChangesAsync();
+                }
+
+                subTarefa.TarefaId = 0;
+
+                dbContext.SubTarefas.Remove(subTarefa);
+                await dbContext.SaveChangesAsync();
+            }
+
             dbContext.Tarefas.Remove(Tarefa);
             await dbContext.SaveChangesAsync();
+
             return Tarefa;
         }
 
@@ -63,14 +92,14 @@ namespace server.Services
             return await dbContext.Tarefas.FindAsync(id);
         }
 
-        public async Task<List<Tarefa>> ObterTarefasPorIdDeCoordenador(int idAnalista)
+        public async Task<List<Tarefa>> ObterTarefasPorIdDeCoordenador(int idCoordenador)
         {
             List<Tarefa> Tarefas;
 
             Tarefas = await dbContext
                 .Tarefas
                 .Select(p => p)
-                .Where(p => p.RecursoId == idAnalista)
+                .Where(p => p.RecursoId == idCoordenador)
                 .ToListAsync() ?? throw new Exception("Esse Coordenador nao tem Tarefas.");
 
             return Tarefas;

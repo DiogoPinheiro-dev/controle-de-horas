@@ -8,14 +8,14 @@ import Loading from '../Components/Loading';
 
 import ProjectDetailsModal from '../Components/Projeto/ProjectDetailsModal';
 import ProjectTable from '../Components/Projeto/ProjectTable';
-import AddProjectModal from '../Components/Projeto/AddProjectModal';
-import EditProjectModal from '../Components/Projeto/EditProjectModal';
+// import AddProjectModal from '../Components/Projeto/AddProjectModal';
+// import EditProjectModal from '../Components/Projeto/EditProjectModal';
 
 import { getClientesByEmail } from '../Services/Cliente/GetServices';
 import { getProjetosByClienteId } from '../Services/Projeto/GetServices';
-import postProjeto from '../Services/Projeto/PostServices';
-import deleteProjeto from '../Services/Projeto/DeleteServices';
-import patchProjeto from '../Services/Projeto/PatchServices';
+// import postProjeto from '../Services/Projeto/PostServices';
+// import deleteProjeto from '../Services/Projeto/DeleteServices';
+// import patchProjeto from '../Services/Projeto/PatchServices';
 
 const ClienteHome = () => {
   const navigate = useNavigate();
@@ -28,9 +28,9 @@ const ClienteHome = () => {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
   const [projects, setProjects] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [editProject, setEditProject] = useState(null);
+  // const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  // const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  // const [editProject, setEditProject] = useState(null);
 
   useEffect(() => {
     const fetchClienteEProjetos = async () => {
@@ -167,48 +167,48 @@ const ClienteHome = () => {
     );
   }
 
-  const handleAddProject = async (newProject) => {
-    const novoProjeto = await postProjeto(newProject);
+  // const handleAddProject = async (newProject) => {
+  //   const novoProjeto = await postProjeto(newProject);
 
-    setProjects(prev => [...prev, { ...novoProjeto }]);
+  //   setProjects(prev => [...prev, { ...novoProjeto }]);
 
-    window.location.reload();
-  };
+  //   window.location.reload();
+  // };
 
-  const handleDeleteProject = async (projetoId) => {
-    if (window.confirm('Tem certeza que deseja deletar este projeto?')) {
-      try {
-        await deleteProjeto(projetoId);
-        setProjects(prev => prev.filter(p => p.projetoId !== projetoId));
-      } catch {
-        alert('Erro ao deletar projeto.');
-      }
-    }
-  };
+  // const handleDeleteProject = async (projetoId) => {
+  //   if (window.confirm('Tem certeza que deseja deletar este projeto?')) {
+  //     try {
+  //       await deleteProjeto(projetoId);
+  //       setProjects(prev => prev.filter(p => p.projetoId !== projetoId));
+  //     } catch {
+  //       alert('Erro ao deletar projeto.');
+  //     }
+  //   }
+  // };
 
-  const handleEditProject = (project) => {
-    setEditProject(project);
-    setIsEditModalOpen(true);
-  };
+  // const handleEditProject = (project) => {
+  //   setEditProject(project);
+  //   setIsEditModalOpen(true);
+  // };
 
-  const handleSaveEditProject = async (editedFields) => {
-    if (!editProject) return;
-    try {
-      await patchProjeto(editProject.projetoId, editedFields);
-      setProjects(prev =>
-        prev.map(p =>
-          p.projetoId === editProject.projetoId
-            ? { ...p, ...editedFields }
-            : p
-        )
-      );
-      setIsEditModalOpen(false);
-      setEditProject(null);
-      window.location.reload();
-    } catch {
-      alert('Erro ao editar projeto.');
-    }
-  };
+  // const handleSaveEditProject = async (editedFields) => {
+  //   if (!editProject) return;
+  //   try {
+  //     await patchProjeto(editProject.projetoId, editedFields);
+  //     setProjects(prev =>
+  //       prev.map(p =>
+  //         p.projetoId === editProject.projetoId
+  //           ? { ...p, ...editedFields }
+  //           : p
+  //       )
+  //     );
+  //     setIsEditModalOpen(false);
+  //     setEditProject(null);
+  //     window.location.reload();
+  //   } catch {
+  //     alert('Erro ao editar projeto.');
+  //   }
+  // };
 
   return (
     <div className="gradient-bg">
@@ -264,23 +264,24 @@ const ClienteHome = () => {
             onSort={handleSort}
             sortConfig={sortConfig}
             onViewDetails={handleViewDetails}
-            onDelete={handleDeleteProject}
-            onEdit={handleEditProject}
+            onDelete={false}
+            onEdit={false}
             formatDate={formatDate}
             getProjectStatus={getProjectStatus}
             tarefasSelecionadas={null}
+            canSelect={false}
             onToggleTarefas={false}
           />
-
+{/* 
           <button
             className="new-project-btn"
             onClick={() => setIsAddModalOpen(true)}
           >
             <i className="fas fa-plus"></i> Novo Projeto
-          </button>
+          </button> */}
         </main>
 
-        <AddProjectModal
+        {/* <AddProjectModal
           isOpen={isAddModalOpen}
           user={cliente}
           tipo="cliente"
@@ -295,7 +296,7 @@ const ClienteHome = () => {
           onClose={() => setIsEditModalOpen(false)}
           onEdit={handleSaveEditProject}
           projeto={editProject}
-        />
+        /> */}
 
       </div>
 

@@ -1,6 +1,16 @@
 import '../../styles/project-table.css';
 
-const SubTarefaTable = ({ subTarefas, onEdit, onDelete, onViewSubTarefaDetails }) => {
+const SubTarefaTable = ({
+  subTarefas,
+  onEdit,
+  onDelete,
+  onViewSubTarefaDetails,
+  canSelect,
+  onToggleApontamentos,
+  subTarefasSelecionadas = [],
+  onSort,
+  sortConfig
+}) => {
   function formatDate(data) {
     if (!data) return '';
 
@@ -11,25 +21,70 @@ const SubTarefaTable = ({ subTarefas, onEdit, onDelete, onViewSubTarefaDetails }
     return `${str.substr(6, 2)}/${str.substr(4, 2)}/${str.substr(0, 4)}`;
   }
 
+  const getSortIcon = (name) => {
+    if (!sortConfig) return 'fas fa-sort';
+    if (sortConfig.key !== name) return 'fas fa-sort';
+    return sortConfig.direction === 'ascending'
+      ? 'fas fa-sort-up'
+      : 'fas fa-sort-down';
+  };
+
   return (
     <div className="table-container">
       <table className="project-table">
         <thead>
           <tr>
-            <th>Ações</th>
-            <th>SubTarefa ID</th>
-            <th>Descrição</th>
-            <th>Data Início</th>
-            <th>Data Fim</th>
-            <th>Analista</th>
+            {canSelect && <th>Selecionar</th>}
+            <th>
+              <div className="table-header">
+                Ações
+              </div>
+            </th>
+            <th onClick={() => onSort && onSort('subTarefaId')}>
+              <div className="table-header">
+                SubTarefa ID <i className={getSortIcon('subTarefaId')}></i>
+              </div>
+            </th>
+            <th onClick={() => onSort && onSort('descricao')}>
+              <div className="table-header">
+                Descrição <i className={getSortIcon('descricao')}></i>
+              </div>
+            </th>
+            <th onClick={() => onSort && onSort('dataInicio')}>
+              <div className="table-header">
+                Data Início <i className={getSortIcon('dataInicio')}></i>
+              </div>
+            </th>
+            <th onClick={() => onSort && onSort('dataFim')}>
+              <div className="table-header">
+                Data Fim <i className={getSortIcon('dataFim')}></i>
+              </div>
+            </th>
+            <th onClick={() => onSort && onSort('analistaId')}>
+              <div className="table-header">
+                Analista <i className={getSortIcon('analistaId')}></i>
+              </div>
+            </th>
           </tr>
         </thead>
         <tbody>
           {subTarefas.length > 0 ? (
             subTarefas.map(subTarefa => (
               <tr key={subTarefa.subTarefaId}>
+                {canSelect && (
+                  <td className="actions btn-group btn-group-sm" role="group">
+                    <input
+                      type="checkbox"
+                      name="subtarefa"
+                      checked={subTarefasSelecionadas[0] === subTarefa.subTarefaId}
+                      onChange={() => onToggleApontamentos(subTarefa.subTarefaId)}
+                      className="form-check-input"
+                    />
+                  </td>
+
+                )}
                 <td>
-                  <div className="actions">
+                  <div className="actions btn-group btn-group-sm" role="group">
                     {onViewSubTarefaDetails !== false ? (
                       <button
                         type="button"

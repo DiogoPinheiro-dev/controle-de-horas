@@ -32,8 +32,23 @@ namespace server.Services
         }
         public async Task<SubTarefa> DeletarSubTarefa(SubTarefa SubTarefa)
         {
+            var apontamento = await dbContext
+                    .Apontamentos
+                    .Select(a => a)
+                    .Where(a => a.SubTarefaId == SubTarefa.SubTarefaId)
+                    .FirstOrDefaultAsync();
+
+            if (apontamento != null)
+            {
+                apontamento.SubTarefaId = 0;
+
+                dbContext.Apontamentos.Remove(apontamento);
+                await dbContext.SaveChangesAsync();
+            }
+
             dbContext.SubTarefas.Remove(SubTarefa);
             await dbContext.SaveChangesAsync();
+            
             return SubTarefa;
         }
 

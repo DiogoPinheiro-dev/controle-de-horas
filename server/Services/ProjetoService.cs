@@ -117,6 +117,48 @@ namespace server.Services
                 .Where(c => c.ClienteId == Projeto.ClienteId)
                 .FirstOrDefaultAsync() ?? throw new Exception("Cliente não encontrado.");
 
+            var tarefa = await dbContext
+                .Tarefas
+                .Select(t => t)
+                .Where(t => t.ProjetoId == Projeto.ProjetoId)
+                .FirstOrDefaultAsync();
+
+            if (tarefa != null)
+            {
+                var subTarefa = await dbContext
+                    .SubTarefas
+                    .Select(st => st)
+                    .Where(st => st.TarefaId == tarefa.TarefaId)
+                    .FirstOrDefaultAsync();
+
+                if (subTarefa != null)
+                {
+                    var apontamento = await dbContext
+                        .Apontamentos
+                        .Select(a => a)
+                        .Where(a => a.SubTarefaId == subTarefa.SubTarefaId)
+                        .FirstOrDefaultAsync();
+
+                    if (apontamento != null)
+                    {
+                        apontamento.SubTarefaId = 0;
+
+                        dbContext.Apontamentos.Remove(apontamento);
+                        await dbContext.SaveChangesAsync();
+                    }
+
+                    subTarefa.TarefaId = 0;
+
+                    dbContext.SubTarefas.Remove(subTarefa);
+                    await dbContext.SaveChangesAsync();
+                }
+
+                tarefa.ProjetoId = 0;
+
+                dbContext.Tarefas.Remove(tarefa);
+                await dbContext.SaveChangesAsync();
+            }
+
             dbContext.Projetos.Remove(Projeto);
 
             await dbContext.SaveChangesAsync();
@@ -159,7 +201,7 @@ namespace server.Services
 
             return Projeto;
         }
-        
+
         public async Task<List<Projeto>> ObterProjetosPorIdDeEmpresa(int idEmpresa)
         {
             List<Projeto> Projeto;
