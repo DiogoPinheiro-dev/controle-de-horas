@@ -319,12 +319,6 @@ D:\Codigos\Cs\POO\controle-de-horas\server\obj\Debug\net9.0\scopedcss\bundle\ser
 D:\Codigos\Cs\POO\controle-de-horas\server\obj\Debug\net9.0\staticwebassets.build.json
 D:\Codigos\Cs\POO\controle-de-horas\server\obj\Debug\net9.0\staticwebassets.development.json
 D:\Codigos\Cs\POO\controle-de-horas\server\obj\Debug\net9.0\staticwebassets.build.endpoints.json
-D:\Codigos\Cs\POO\controle-de-horas\server\obj\Debug\net9.0\staticwebassets\msbuild.server.Microsoft.AspNetCore.StaticWebAssets.props
-D:\Codigos\Cs\POO\controle-de-horas\server\obj\Debug\net9.0\staticwebassets\msbuild.server.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
-D:\Codigos\Cs\POO\controle-de-horas\server\obj\Debug\net9.0\staticwebassets\msbuild.build.server.props
-D:\Codigos\Cs\POO\controle-de-horas\server\obj\Debug\net9.0\staticwebassets\msbuild.buildMultiTargeting.server.props
-D:\Codigos\Cs\POO\controle-de-horas\server\obj\Debug\net9.0\staticwebassets\msbuild.buildTransitive.server.props
-D:\Codigos\Cs\POO\controle-de-horas\server\obj\Debug\net9.0\staticwebassets.pack.json
 D:\Codigos\Cs\POO\controle-de-horas\server\obj\Debug\net9.0\server.csproj.Up2Date
 D:\Codigos\Cs\POO\controle-de-horas\server\obj\Debug\net9.0\server.dll
 D:\Codigos\Cs\POO\controle-de-horas\server\obj\Debug\net9.0\refint\server.dll
@@ -335,3 +329,8 @@ D:\Codigos\Cs\POO\controle-de-horas\server\bin\Debug\net9.0\Microsoft.AspNetCore
 D:\Codigos\Cs\POO\controle-de-horas\server\bin\Debug\net9.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 D:\Codigos\Cs\POO\controle-de-horas\server\bin\Debug\net9.0\Newtonsoft.Json.dll
 D:\Codigos\Cs\POO\controle-de-horas\server\bin\Debug\net9.0\Newtonsoft.Json.Bson.dll
+D:\Codigos\Cs\POO\controle-de-horas\server\obj\Debug\net9.0\rpswa.dswa.cache.json
+D:\Codigos\Cs\POO\controle-de-horas\server\obj\Debug\net9.0\rjimswa.dswa.cache.json
+D:\Codigos\Cs\POO\controle-de-horas\server\obj\Debug\net9.0\rjsmrazor.dswa.cache.json
+D:\Codigos\Cs\POO\controle-de-horas\server\obj\Debug\net9.0\rjsmcshtml.dswa.cache.json
+D:\Codigos\Cs\POO\controle-de-horas\server\obj\Debug\net9.0\staticwebassets.build.json.cache
